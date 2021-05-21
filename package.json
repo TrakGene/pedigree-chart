@@ -1,0 +1,26 @@
+{
+  "name": "pedigree-chart-library",
+  "version": "1.0.0",
+  "description": "React Pedigree Chart Library",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TrakGene/react-pedigree-chart-library.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TrakGene/react-pedigree-chart-library/issues"
+  },
+  "homepage": "https://github.com/TrakGene/react-pedigree-chart-library#readme",
+  "dependencies": {
+    "typescript": "^4.2.4"
+  }
+}
