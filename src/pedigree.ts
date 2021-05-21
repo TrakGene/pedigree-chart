@@ -1,63 +1,87 @@
-interface IPedigreeBuilder {
-    init(): void
-    setType(type: string): void
-    setSex(sex: string): void
-}
+class PedigreeBuilder {
+    protected pedigree: HTMLElement
 
-
-class PedigreeBuilder implements IPedigreeBuilder {
-    pedigree: HTMLElement
-
-    init() {
+    protected init() {
         const pedigreeWrapper = document.createElement('div')
         const upperPart = document.createElement('div')
         const bottomPart = document.createElement('div')
+        pedigreeWrapper.style.width = "100px"
+        pedigreeWrapper.style.height = "100px"
+        pedigreeWrapper.style.border = "3px solid black"
         pedigreeWrapper.appendChild(upperPart)
         pedigreeWrapper.appendChild(bottomPart)
         this.pedigree = pedigreeWrapper
         //TODO Set width and height
     }
-    setType(type: string) {
+    protected setTypeStyle(type: string) {
         switch (type) {
-            case 'individual': this.individual()
-            case 'affectedIndividual': this.affected()
-            case 'multipleIndividual': this.multiple()
-            case 'deceased': this.deceased() 
-            case 'pregnacy': this.pregnacy() 
-            case 'miscarriage': this.miscarriage() 
-            case 'provider': this.provider() 
-            default: this.individual()
+            case 'individual': this.setIndividualType(); break;
+            case 'affectedIndividual': this.setAffectedType(); break;
+            case 'multipleIndividual': this.setMultipleType(); break;
+            case 'deceased': this.setDeceasedType(); break;
+            case 'pregnacy': this.setPregnacyType(); break;
+            case 'miscarriage': this.setMiscarriageType(); break;
+            case 'provider': this.setProviderType(); break;
         }
     }
-    setSex(sex: string) {
+    protected setSexStyle(sex: string) {
+        switch (sex) {
+            case 'male': this.setMaleSex();
+            case 'female': this.setFemaleSex();
+            case 'unknown': this.setUnknownSex();
+        }
+    }
+    private setIndividualType() {
+        console.log("Individual")
+    }
 
+    private setAffectedType() {
+        console.log("Affected")
     }
-    individual() {
-        return document.createElement('div')
+
+    private setMultipleType() {
+        console.log("MultipleType")
     }
-    
-    affected() {
-        return document.createElement('div')
+
+    private setDeceasedType() {
+        console.log("Deceased")
     }
-    
-    multiple() {
-        return document.createElement('div')
+
+    private setPregnacyType() {
+        console.log("Pregnacy")
     }
-    
-    deceased() {
-        return document.createElement('div')
+
+    private setMiscarriageType() {
+        console.log("Miscarriage")
     }
-    
-    pregnacy() {
-        return document.createElement('div')
+
+    private setProviderType() {
+        console.log("Provider")
     }
-    
-    miscarriage() {
-        return document.createElement('div')
+
+    private setMaleSex() {
+        console.log("male")
     }
-    
-    provider() {
-        return document.createElement('div')
+    private setFemaleSex() {
+        console.log("female")
+    }
+    private setUnknownSex() {
+        console.log("unknow")
     }
 }
 
+export class Pedigree extends PedigreeBuilder {
+    create(type: string, sex: string) {
+        this.init()
+        this.setTypeStyle(type)
+        this.setSexStyle(sex)
+    }
+    setType(type: string) {
+        this.init()
+        this.setTypeStyle(type)
+    }
+    setSex(sex: string) {
+        this.init()
+        this.setSexStyle(sex)
+    }
+}
