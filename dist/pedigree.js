@@ -2,17 +2,24 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Pedigree = void 0;
 class PedigreeBuilder {
+    constructor() {
+        this.size = 80;
+    }
     init() {
         const pedigreeWrapper = document.createElement('div');
         const upperPart = document.createElement('div');
         const bottomPart = document.createElement('div');
-        pedigreeWrapper.style.width = "100px";
-        pedigreeWrapper.style.height = "100px";
-        pedigreeWrapper.style.border = "3px solid black";
+        const pedigreeContainer = document.createElement('div');
+        pedigreeWrapper.style.width = `${this.size}px`;
+        pedigreeWrapper.style.height = `${this.size}px`;
+        pedigreeWrapper.style.border = "4px solid black";
+        pedigreeWrapper.style.boxSizing = "border-box";
+        pedigreeWrapper.style.cursor = "pointer";
+        pedigreeWrapper.style.transformOrigin = "center";
         pedigreeWrapper.appendChild(upperPart);
         pedigreeWrapper.appendChild(bottomPart);
-        this.pedigree = pedigreeWrapper;
-        //TODO Set width and height
+        pedigreeContainer.appendChild(pedigreeWrapper);
+        this.pedigree = pedigreeContainer;
     }
     setTypeStyle(type) {
         switch (type) {
@@ -41,9 +48,15 @@ class PedigreeBuilder {
     }
     setSexStyle(sex) {
         switch (sex) {
-            case 'male': this.setMaleSex();
-            case 'female': this.setFemaleSex();
-            case 'unknown': this.setUnknownSex();
+            case 'male':
+                this.setMaleSex();
+                break;
+            case 'female':
+                this.setFemaleSex();
+                break;
+            case 'unknown':
+                this.setUnknownSex();
+                break;
         }
     }
     setIndividualType() {
@@ -68,13 +81,17 @@ class PedigreeBuilder {
         console.log("Provider");
     }
     setMaleSex() {
-        console.log("male");
+        this.pedigree.style.borderRadius = "0";
     }
     setFemaleSex() {
-        console.log("female");
+        this.pedigree.style.borderRadius = "50%";
     }
     setUnknownSex() {
-        console.log("unknow");
+        this.pedigree.style.borderRadius = "0";
+        this.size = this.size / (Math.sqrt(2));
+        this.pedigree.style.width = `${this.size}px`;
+        this.pedigree.style.height = `${this.size}px`;
+        this.pedigree.style.transform = "rotate(45deg)";
     }
 }
 class Pedigree extends PedigreeBuilder {
@@ -90,6 +107,20 @@ class Pedigree extends PedigreeBuilder {
     setSex(sex) {
         this.init();
         this.setSexStyle(sex);
+    }
+    insert(id) {
+        const w = document.querySelector(id);
+        w.appendChild(this.pedigree);
+    }
+    setSize(size) {
+        this.size = size;
+        this.pedigree.style.width = `${size}`;
+        this.pedigree.style.height = `${size}`;
+    }
+    style(style) {
+        Object.keys(style).forEach((styleParam) => {
+            this.pedigree[styleParam] = style[styleParam];
+        });
     }
 }
 exports.Pedigree = Pedigree;
