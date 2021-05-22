@@ -1,17 +1,22 @@
 class PedigreeBuilder {
-    protected pedigree: HTMLElement
+    protected pedigree: HTMLElement;
+    protected size = 80;
 
     protected init() {
         const pedigreeWrapper = document.createElement('div')
         const upperPart = document.createElement('div')
         const bottomPart = document.createElement('div')
-        pedigreeWrapper.style.width = "100px"
-        pedigreeWrapper.style.height = "100px"
-        pedigreeWrapper.style.border = "3px solid black"
+        const pedigreeContainer = document.createElement('div')
+        pedigreeWrapper.style.width = `${this.size}px`
+        pedigreeWrapper.style.height = `${this.size}px`
+        pedigreeWrapper.style.border = "4px solid black"
+        pedigreeWrapper.style.boxSizing = "border-box"
+        pedigreeWrapper.style.cursor = "pointer"
+        pedigreeWrapper.style.transformOrigin = "center"
         pedigreeWrapper.appendChild(upperPart)
         pedigreeWrapper.appendChild(bottomPart)
-        this.pedigree = pedigreeWrapper
-        //TODO Set width and height
+        pedigreeContainer.appendChild(pedigreeWrapper)
+        this.pedigree = pedigreeContainer
     }
     protected setTypeStyle(type: string) {
         switch (type) {
@@ -26,9 +31,9 @@ class PedigreeBuilder {
     }
     protected setSexStyle(sex: string) {
         switch (sex) {
-            case 'male': this.setMaleSex();
-            case 'female': this.setFemaleSex();
-            case 'unknown': this.setUnknownSex();
+            case 'male': this.setMaleSex(); break;
+            case 'female': this.setFemaleSex(); break;
+            case 'unknown': this.setUnknownSex(); break;
         }
     }
     private setIndividualType() {
@@ -60,13 +65,17 @@ class PedigreeBuilder {
     }
 
     private setMaleSex() {
-        console.log("male")
+        this.pedigree.style.borderRadius = "0"
     }
     private setFemaleSex() {
-        console.log("female")
+        this.pedigree.style.borderRadius = "50%"
     }
     private setUnknownSex() {
-        console.log("unknow")
+        this.pedigree.style.borderRadius = "0"
+        this.size = this.size/(Math.sqrt(2))
+        this.pedigree.style.width = `${this.size}px`
+        this.pedigree.style.height = `${this.size}px`
+        this.pedigree.style.transform = "rotate(45deg)"
     }
 }
 
@@ -83,5 +92,19 @@ export class Pedigree extends PedigreeBuilder {
     setSex(sex: string) {
         this.init()
         this.setSexStyle(sex)
+    }
+    insert(id) {
+        const w = document.querySelector(id)
+        w.appendChild(this.pedigree)
+    }
+    setSize(size: number) {
+        this.size = size
+        this.pedigree.style.width = `${size}`
+        this.pedigree.style.height = `${size}`
+    }
+    style(style: Object) {
+        Object.keys(style).forEach((styleParam)=>{
+            this.pedigree[styleParam] = style[styleParam]
+        })
     }
 }

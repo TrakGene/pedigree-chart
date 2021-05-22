@@ -1,5 +1,6 @@
 declare class PedigreeBuilder {
     protected pedigree: HTMLElement;
+    protected size: number;
     protected init(): void;
     protected setTypeStyle(type: string): void;
     protected setSexStyle(sex: string): void;
@@ -18,5 +19,8 @@ export declare class Pedigree extends PedigreeBuilder {
     create(type: string, sex: string): void;
     setType(type: string): void;
     setSex(sex: string): void;
+    insert(id: any): void;
+    setSize(size: number): void;
+    style(style: Object): void;
 }
 export {};
