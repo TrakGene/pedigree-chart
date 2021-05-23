@@ -5,7 +5,7 @@ const idGenerator_1 = require("./idGenerator");
 class PedigreeBuilder {
     constructor() {
         this.size = 80;
-        this.border = 3;
+        this.border = 5;
     }
     init(type, sex) {
         const pedigreeContainer = document.createElement('div');
@@ -30,18 +30,6 @@ class PedigreeBuilder {
         bottomPart.style.borderRight = `${this.border}px solid black`;
         pedigree.appendChild(upperPart);
         pedigree.appendChild(bottomPart);
-        // pedigree.style.overflow = "hidden"
-        // pedigree.style.width = `${this.size}px`
-        // pedigree.style.height = `${this.size}px`
-        // pedigreeContainer.style.width = `${this.size}px`
-        // pedigreeContainer.style.height = `${this.size}px`
-        // pedigreeContainer.style.display = "flex"
-        // pedigreeContainer.style.justifyContent = "center"
-        // pedigreeContainer.style.alignItems = "center"
-        // pedigree.style.border = "4px solid black"
-        // pedigree.style.boxSizing = "border-box"
-        // pedigree.style.cursor = "pointer"
-        // pedigree.style.transformOrigin = "center"
         pedigreeContainer.appendChild(pedigree);
         this.pedigree = pedigreeContainer;
         this.setTypeStyle(type);
@@ -113,28 +101,22 @@ class PedigreeBuilder {
     setFemaleSex() {
         this.pedigree.childNodes.forEach((node) => {
             if (node.className = "pedigree") {
-                node.style.borderRadius = "100%";
+                node.childNodes[0].style.borderRadius = "100px 100px 0% 0%";
+                node.childNodes[1].style.borderRadius = "0% 0% 100px 100px";
             }
         });
     }
     setUnknownSex() {
         this.pedigree.childNodes.forEach((node) => {
             if (node.className = "pedigree") {
-                // node.style.borderRadius = "0"
-                // let x = this.size
-                // x = x/(Math.sqrt(2))
-                // node.style.width = `${x-3}px`
-                // node.style.height = `${x-3}px`
-                // node.style.transform = "rotate(45deg)"
-                // node.display = "flex"
-                // node.style.justifyContent = "center"
-                // node.style.alignItems = "center"
-                node.childNodes.forEach(child => {
-                    // child.style.transform = "rotate(-45deg)"
-                    // child.style.width =  `${this.size-3}px`
-                    // child.style.height = `${(this.size/2)-3}px`
-                    // console.log(child)
-                });
+                let x = this.size;
+                x = x / (Math.sqrt(2));
+                node.style.width = `${x}px`;
+                node.style.height = `${x}px`;
+                node.style.transform = "rotate(45deg)";
+                this.pedigree.style.display = "flex";
+                this.pedigree.style.justifyContent = "center";
+                this.pedigree.style.alignItems = "center";
             }
         });
     }
@@ -150,11 +132,6 @@ class Pedigree {
         const w = document.querySelector(id);
         w.appendChild(this.pedigree);
     }
-    // setSize(size: number) {
-    //     this.size = size
-    //     this.pedigree.style.width = `${size}`
-    //     this.pedigree.style.height = `${size}`
-    // }
     style(style) {
         Object.keys(style).forEach((styleParam) => {
             this.pedigree[styleParam] = style[styleParam];
