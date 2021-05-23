@@ -1,9 +1,4 @@
-interface StyleConfig {
-    type: string;
-    sex: string;
-    size?: number;
-    border?: number;
-}
+import { StyleConfig } from "./interfaces";
 export declare class Pedigree {
     pedigree: HTMLElement;
     id: string;
@@ -12,6 +7,4 @@ export declare class Pedigree {
     constructor(config: StyleConfig);
     insert(id: any): void;
     changeSex(sex: string): void;
-    style(style: Object): void;
 }
-export {};

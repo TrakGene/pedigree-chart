@@ -6,10 +6,19 @@ class PedigreeBuilder {
     constructor() {
         this.size = 80;
         this.border = 5;
+        this.topColor = "white";
+        this.bottomColor = "white";
     }
     init(config) {
+        this.pedigree = this.createPedigree(config);
+        this.setSexStyle(config);
+        return this.pedigree;
+    }
+    createPedigree(config) {
         let size = config.size ? config.size : this.size;
         let border = config.border ? config.border : this.border;
+        let topColor = config.topColor ? config.topColor : this.topColor;
+        let bottomColor = config.bottomColor ? config.bottomColor : this.bottomColor;
         const pedigreeContainer = document.createElement('div');
         pedigreeContainer.style.width = `${size}px`;
         pedigreeContainer.style.height = `${size}px`;
@@ -18,60 +27,25 @@ class PedigreeBuilder {
         pedigree.style.width = "100%";
         pedigree.style.height = "100%";
         pedigree.style.boxSizing = "border-box";
-        const upperPart = document.createElement('div');
-        upperPart.style.height = `calc(50% - ${border}px)`;
-        upperPart.style.backgroundColor = "red";
-        upperPart.style.borderTop = `${border}px solid black`;
-        upperPart.style.borderLeft = `${border}px solid black`;
-        upperPart.style.borderRight = `${border}px solid black`;
+        const topPart = document.createElement('div');
+        topPart.style.height = `calc(50% - ${border}px)`;
+        topPart.style.backgroundColor = topColor;
+        topPart.style.borderTop = `${border}px solid black`;
+        topPart.style.borderLeft = `${border}px solid black`;
+        topPart.style.borderRight = `${border}px solid black`;
         const bottomPart = document.createElement('div');
         bottomPart.style.height = `calc(50% - ${border}px)`;
-        bottomPart.style.backgroundColor = "blue";
+        bottomPart.style.backgroundColor = bottomColor;
         bottomPart.style.borderBottom = `${border}px solid black`;
         bottomPart.style.borderLeft = `${border}px solid black`;
         bottomPart.style.borderRight = `${border}px solid black`;
-        pedigree.appendChild(upperPart);
+        pedigree.appendChild(topPart);
         pedigree.appendChild(bottomPart);
         pedigreeContainer.appendChild(pedigree);
-        this.pedigree = pedigreeContainer;
-        this.setTypeStyle(config);
-        this.setSexStyle(config, config.sex);
-        return this.pedigree;
+        return pedigreeContainer;
     }
-    setTypeStyle(config, pedigree) {
-        if (pedigree) {
-            this.pedigree = pedigree;
-        }
-        switch (config.type) {
-            case 'individual':
-                this.setIndividualType();
-                break;
-            case 'affectedIndividual':
-                this.setAffectedType();
-                break;
-            case 'multipleIndividual':
-                this.setMultipleType();
-                break;
-            case 'deceased':
-                this.setDeceasedType();
-                break;
-            case 'pregnacy':
-                this.setPregnacyType();
-                break;
-            case 'miscarriage':
-                this.setMiscarriageType();
-                break;
-            case 'provider':
-                this.setProviderType();
-                break;
-        }
-        return this.pedigree;
-    }
-    setSexStyle(config, sex, pedigree) {
-        if (pedigree) {
-            this.pedigree = pedigree;
-        }
-        switch (sex) {
+    setSexStyle(config) {
+        switch (config.sex) {
             case 'male':
                 this.setMaleSex(config);
                 break;
@@ -83,27 +57,6 @@ class PedigreeBuilder {
                 break;
         }
         return this.pedigree;
-    }
-    setIndividualType() {
-        console.log("Individual");
-    }
-    setAffectedType() {
-        console.log("Affected");
-    }
-    setMultipleType() {
-        console.log("MultipleType");
-    }
-    setDeceasedType() {
-        console.log("Deceased");
-    }
-    setPregnacyType() {
-        console.log("Pregnacy");
-    }
-    setMiscarriageType() {
-        console.log("Miscarriage");
-    }
-    setProviderType() {
-        console.log("Provider");
     }
     setMaleSex(config) {
         this.pedigree.style.width = `${config.size}px`;
@@ -126,13 +79,11 @@ class PedigreeBuilder {
             }
         });
     }
-    setUnknownSex() {
+    setUnknownSex(config) {
         this.pedigree.childNodes.forEach((node) => {
             if (node.className = "pedigree") {
-                let x = this.size;
-                x = x / (Math.sqrt(2));
-                node.style.width = `${x}px`;
-                node.style.height = `${x}px`;
+                node.style.width = `${config.size / Math.sqrt(2)}px`;
+                node.style.height = `${config.size / Math.sqrt(2)}px`;
                 node.style.transform = "rotate(45deg)";
                 this.pedigree.style.display = "flex";
                 this.pedigree.style.justifyContent = "center";
@@ -155,14 +106,11 @@ class Pedigree {
         w.appendChild(this.pedigree);
     }
     changeSex(sex) {
-        this.pedigree = builder.setSexStyle(this.pedigreeStyleConfig, sex, this.pedigree);
+        this.pedigreeStyleConfig.sex = sex;
+        this.pedigree = builder.init(this.pedigreeStyleConfig);
+        this.pedigree.id = this.id;
         let w = document.querySelector(`#${this.id}`);
         w.replaceWith(this.pedigree);
-    }
-    style(style) {
-        Object.keys(style).forEach((styleParam) => {
-            this.pedigree[styleParam] = style[styleParam];
-        });
     }
 }
 exports.Pedigree = Pedigree;

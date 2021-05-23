@@ -1,13 +1,24 @@
 import generator from "./idGenerator"
+import { StyleConfig } from "./interfaces"
 
 class PedigreeBuilder {
     protected pedigree: HTMLElement;
     protected size = 80;
     protected border = 5;
+    protected topColor = "white"
+    protected bottomColor = "white"
 
     init(config: StyleConfig) {
+        this.pedigree = this.createPedigree(config)
+        this.setSexStyle(config)
+        return this.pedigree
+    }
+
+    createPedigree(config: StyleConfig) {
         let size = config.size ? config.size : this.size
         let border = config.border ? config.border : this.border
+        let topColor = config.topColor ? config.topColor : this.topColor
+        let bottomColor = config.bottomColor ? config.bottomColor : this.bottomColor
 
         const pedigreeContainer = document.createElement('div')
         pedigreeContainer.style.width = `${size}px`
@@ -19,113 +30,64 @@ class PedigreeBuilder {
         pedigree.style.height = "100%"
         pedigree.style.boxSizing = "border-box"
 
-        const upperPart = document.createElement('div')
-        upperPart.style.height = `calc(50% - ${border}px)`
-        upperPart.style.backgroundColor = "red"
-        upperPart.style.borderTop = `${border}px solid black`
-        upperPart.style.borderLeft = `${border}px solid black`
-        upperPart.style.borderRight = `${border}px solid black`        
+        const topPart = document.createElement('div')
+        topPart.style.height = `calc(50% - ${border}px)`
+        topPart.style.backgroundColor = topColor
+        topPart.style.borderTop = `${border}px solid black`
+        topPart.style.borderLeft = `${border}px solid black`
+        topPart.style.borderRight = `${border}px solid black`
 
         const bottomPart = document.createElement('div')
         bottomPart.style.height = `calc(50% - ${border}px)`
-        bottomPart.style.backgroundColor = "blue"
+        bottomPart.style.backgroundColor = bottomColor
         bottomPart.style.borderBottom = `${border}px solid black`
         bottomPart.style.borderLeft = `${border}px solid black`
         bottomPart.style.borderRight = `${border}px solid black`
 
-        pedigree.appendChild(upperPart)
+        pedigree.appendChild(topPart)
         pedigree.appendChild(bottomPart)
 
         pedigreeContainer.appendChild(pedigree)
-        this.pedigree = pedigreeContainer
-        this.setTypeStyle(config)
-        this.setSexStyle(config, config.sex)
-        return this.pedigree
+        return pedigreeContainer
     }
 
-    setTypeStyle(config: StyleConfig, pedigree?: HTMLElement) {
-        if(pedigree) {
-            this.pedigree = pedigree
-        }
-        switch (config.type) {
-            case 'individual': this.setIndividualType(); break;
-            case 'affectedIndividual': this.setAffectedType(); break;
-            case 'multipleIndividual': this.setMultipleType(); break;
-            case 'deceased': this.setDeceasedType(); break;
-            case 'pregnacy': this.setPregnacyType(); break;
-            case 'miscarriage': this.setMiscarriageType(); break;
-            case 'provider': this.setProviderType(); break;
-        }
-        return this.pedigree
-    }
-    setSexStyle(config: StyleConfig, sex: string, pedigree?: HTMLElement) {
-        if(pedigree) {
-            this.pedigree = pedigree
-        }
-        switch (sex) {
+    setSexStyle(config: StyleConfig) {
+        switch (config.sex) {
             case 'male': this.setMaleSex(config); break;
             case 'female': this.setFemaleSex(config); break;
             case 'unknown': this.setUnknownSex(config); break;
         }
         return this.pedigree
     }
-    private setIndividualType() {
-        console.log("Individual")
-    }
-
-    private setAffectedType() {
-        console.log("Affected")
-    }
-
-    private setMultipleType() {
-        console.log("MultipleType")
-    }
-
-    private setDeceasedType() {
-        console.log("Deceased")
-    }
-
-    private setPregnacyType() {
-        console.log("Pregnacy")
-    }
-
-    private setMiscarriageType() {
-        console.log("Miscarriage")
-    }
-
-    private setProviderType() {
-        console.log("Provider")
-    }
 
     private setMaleSex(config: StyleConfig) {
         this.pedigree.style.width = `${config.size}px`
         this.pedigree.style.height = `${config.size}px`
-        this.pedigree.childNodes.forEach((node: any)=>{
-            if(node.className = "pedigree") {
-                node.childNodes[0].style.borderRadius = "0" 
-                node.childNodes[1].style.borderRadius = "0" 
+        this.pedigree.childNodes.forEach((node: any) => {
+            if (node.className = "pedigree") {
+                node.childNodes[0].style.borderRadius = "0"
+                node.childNodes[1].style.borderRadius = "0"
             }
         })
     }
+
     private setFemaleSex(config: StyleConfig) {
         this.pedigree.style.width = `${config.size}px`
         this.pedigree.style.height = `${config.size}px`
-        this.pedigree.childNodes.forEach((node: any)=>{
-            if(node.className = "pedigree") {
-                node.childNodes[0].style.borderRadius = "100px 100px 0% 0%" 
-                node.childNodes[1].style.borderRadius = "0% 0% 100px 100px" 
+        this.pedigree.childNodes.forEach((node: any) => {
+            if (node.className = "pedigree") {
+                node.childNodes[0].style.borderRadius = "100px 100px 0% 0%"
+                node.childNodes[1].style.borderRadius = "0% 0% 100px 100px"
                 node.style.transform = "rotate(0deg)"
             }
-            
         })
     }
-    private setUnknownSex() {
-        this.pedigree.childNodes.forEach((node: any)=>{
-            if(node.className = "pedigree") {
-                let x = this.size
-                x = x/(Math.sqrt(2))
-                node.style.width = `${x}px`
-                node.style.height = `${x}px`
+
+    private setUnknownSex(config: StyleConfig) {
+        this.pedigree.childNodes.forEach((node: any) => {
+            if (node.className = "pedigree") {
+                node.style.width = `${config.size/Math.sqrt(2)}px`
+                node.style.height = `${config.size/Math.sqrt(2)}px`
                 node.style.transform = "rotate(45deg)"
                 this.pedigree.style.display = "flex"
                 this.pedigree.style.justifyContent = "center"
@@ -137,13 +99,6 @@ class PedigreeBuilder {
 }
 
 const builder = new PedigreeBuilder()
-
-interface StyleConfig {
-    type: string;
-    sex: string;
-    size?: number;
-    border?: number;
-}
 
 export class Pedigree {
     pedigree: HTMLElement
@@ -164,14 +119,10 @@ export class Pedigree {
     }
 
     changeSex(sex: string) {
-        this.pedigree = builder.setSexStyle(this.pedigreeStyleConfig, sex,this.pedigree)
+        this.pedigreeStyleConfig.sex = sex
+        this.pedigree = builder.init(this.pedigreeStyleConfig)
+        this.pedigree.id = this.id
         let w = document.querySelector(`#${this.id}`)
         w.replaceWith(this.pedigree)
-    }
-
-    style(style: Object) {
-        Object.keys(style).forEach((styleParam)=>{
-            this.pedigree[styleParam] = style[styleParam]
-        })
     }
 }
