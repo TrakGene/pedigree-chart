@@ -1,4 +1,5 @@
 declare class idGenerator {
+    offset: number;
     characters: string;
     randomId(): string;
 }

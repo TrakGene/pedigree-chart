@@ -1,7 +1,9 @@
 class idGenerator {
+    offset = 0
     characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     randomId() {
-        return this.characters.charAt(2)
+        this.offset += 1
+        return this.characters.charAt(this.offset)
     }
 }
 

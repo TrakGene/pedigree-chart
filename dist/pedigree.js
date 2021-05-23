@@ -7,37 +7,42 @@ class PedigreeBuilder {
         this.size = 80;
         this.border = 5;
     }
-    init(type, sex) {
+    init(config) {
+        let size = config.size ? config.size : this.size;
+        let border = config.border ? config.border : this.border;
         const pedigreeContainer = document.createElement('div');
-        pedigreeContainer.style.width = `${this.size}px`;
-        pedigreeContainer.style.height = `${this.size}px`;
+        pedigreeContainer.style.width = `${size}px`;
+        pedigreeContainer.style.height = `${size}px`;
         const pedigree = document.createElement('div');
         pedigree.classList.add('pedigree');
         pedigree.style.width = "100%";
         pedigree.style.height = "100%";
         pedigree.style.boxSizing = "border-box";
         const upperPart = document.createElement('div');
-        upperPart.style.height = `calc(50% - ${this.border}px)`;
+        upperPart.style.height = `calc(50% - ${border}px)`;
         upperPart.style.backgroundColor = "red";
-        upperPart.style.borderTop = `${this.border}px solid black`;
-        upperPart.style.borderLeft = `${this.border}px solid black`;
-        upperPart.style.borderRight = `${this.border}px solid black`;
+        upperPart.style.borderTop = `${border}px solid black`;
+        upperPart.style.borderLeft = `${border}px solid black`;
+        upperPart.style.borderRight = `${border}px solid black`;
         const bottomPart = document.createElement('div');
-        bottomPart.style.height = `calc(50% - ${this.border}px)`;
+        bottomPart.style.height = `calc(50% - ${border}px)`;
         bottomPart.style.backgroundColor = "blue";
-        bottomPart.style.borderBottom = `${this.border}px solid black`;
-        bottomPart.style.borderLeft = `${this.border}px solid black`;
-        bottomPart.style.borderRight = `${this.border}px solid black`;
+        bottomPart.style.borderBottom = `${border}px solid black`;
+        bottomPart.style.borderLeft = `${border}px solid black`;
+        bottomPart.style.borderRight = `${border}px solid black`;
         pedigree.appendChild(upperPart);
         pedigree.appendChild(bottomPart);
         pedigreeContainer.appendChild(pedigree);
         this.pedigree = pedigreeContainer;
-        this.setTypeStyle(type);
-        this.setSexStyle(sex);
+        this.setTypeStyle(config);
+        this.setSexStyle(config, config.sex);
         return this.pedigree;
     }
-    setTypeStyle(type) {
-        switch (type) {
+    setTypeStyle(config, pedigree) {
+        if (pedigree) {
+            this.pedigree = pedigree;
+        }
+        switch (config.type) {
             case 'individual':
                 this.setIndividualType();
                 break;
@@ -60,19 +65,24 @@ class PedigreeBuilder {
                 this.setProviderType();
                 break;
         }
+        return this.pedigree;
     }
-    setSexStyle(sex) {
+    setSexStyle(config, sex, pedigree) {
+        if (pedigree) {
+            this.pedigree = pedigree;
+        }
         switch (sex) {
             case 'male':
-                this.setMaleSex();
+                this.setMaleSex(config);
                 break;
             case 'female':
-                this.setFemaleSex();
+                this.setFemaleSex(config);
                 break;
             case 'unknown':
-                this.setUnknownSex();
+                this.setUnknownSex(config);
                 break;
         }
+        return this.pedigree;
     }
     setIndividualType() {
         console.log("Individual");
@@ -95,14 +105,24 @@ class PedigreeBuilder {
     setProviderType() {
         console.log("Provider");
     }
-    setMaleSex() {
-        this.pedigree.style.borderRadius = "0";
+    setMaleSex(config) {
+        this.pedigree.style.width = `${config.size}px`;
+        this.pedigree.style.height = `${config.size}px`;
+        this.pedigree.childNodes.forEach((node) => {
+            if (node.className = "pedigree") {
+                node.childNodes[0].style.borderRadius = "0";
+                node.childNodes[1].style.borderRadius = "0";
+            }
+        });
     }
-    setFemaleSex() {
+    setFemaleSex(config) {
+        this.pedigree.style.width = `${config.size}px`;
+        this.pedigree.style.height = `${config.size}px`;
         this.pedigree.childNodes.forEach((node) => {
             if (node.className = "pedigree") {
                 node.childNodes[0].style.borderRadius = "100px 100px 0% 0%";
                 node.childNodes[1].style.borderRadius = "0% 0% 100px 100px";
+                node.style.transform = "rotate(0deg)";
             }
         });
     }
@@ -123,14 +143,21 @@ class PedigreeBuilder {
 }
 const builder = new PedigreeBuilder();
 class Pedigree {
-    constructor(type, sex) {
+    constructor(config) {
         this.id = idGenerator_1.default.randomId();
-        this.pedigree = builder.init(type, sex);
+        this.pedigreeStyleConfig = config;
+        this.pedigree = builder.init(config);
         this.pedigree.id = this.id;
     }
     insert(id) {
+        this.container = id;
         const w = document.querySelector(id);
         w.appendChild(this.pedigree);
+    }
+    changeSex(sex) {
+        this.pedigree = builder.setSexStyle(this.pedigreeStyleConfig, sex, this.pedigree);
+        let w = document.querySelector(`#${this.id}`);
+        w.replaceWith(this.pedigree);
     }
     style(style) {
         Object.keys(style).forEach((styleParam) => {
