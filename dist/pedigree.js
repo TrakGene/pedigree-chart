@@ -3,42 +3,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Pedigree = void 0;
 const idGenerator_1 = require("./idGenerator");
 class PedigreeBuilder {
-    constructor() {
-        this.size = 80;
-        this.border = 5;
-        this.topColor = "white";
-        this.bottomColor = "white";
-    }
     init(config) {
         this.pedigree = this.createPedigree(config);
         this.setSexStyle(config);
         return this.pedigree;
     }
     createPedigree(config) {
-        let size = config.size ? config.size : this.size;
-        let border = config.border ? config.border : this.border;
-        let topColor = config.topColor ? config.topColor : this.topColor;
-        let bottomColor = config.bottomColor ? config.bottomColor : this.bottomColor;
         const pedigreeContainer = document.createElement('div');
-        pedigreeContainer.style.width = `${size}px`;
-        pedigreeContainer.style.height = `${size}px`;
+        pedigreeContainer.style.width = `${config.size}px`;
+        pedigreeContainer.style.height = `${config.size}px`;
         const pedigree = document.createElement('div');
         pedigree.classList.add('pedigree');
         pedigree.style.width = "100%";
         pedigree.style.height = "100%";
         pedigree.style.boxSizing = "border-box";
         const topPart = document.createElement('div');
-        topPart.style.height = `calc(50% - ${border}px)`;
-        topPart.style.backgroundColor = topColor;
-        topPart.style.borderTop = `${border}px solid black`;
-        topPart.style.borderLeft = `${border}px solid black`;
-        topPart.style.borderRight = `${border}px solid black`;
+        topPart.style.height = `calc(50% - ${config.border}px)`;
+        topPart.style.backgroundColor = config.topColor;
+        topPart.style.borderTop = `${config.border}px solid black`;
+        topPart.style.borderLeft = `${config.border}px solid black`;
+        topPart.style.borderRight = `${config.border}px solid black`;
         const bottomPart = document.createElement('div');
-        bottomPart.style.height = `calc(50% - ${border}px)`;
-        bottomPart.style.backgroundColor = bottomColor;
-        bottomPart.style.borderBottom = `${border}px solid black`;
-        bottomPart.style.borderLeft = `${border}px solid black`;
-        bottomPart.style.borderRight = `${border}px solid black`;
+        bottomPart.style.height = `calc(50% - ${config.border}px)`;
+        bottomPart.style.backgroundColor = config.bottomColor;
+        bottomPart.style.borderBottom = `${config.border}px solid black`;
+        bottomPart.style.borderLeft = `${config.border}px solid black`;
+        bottomPart.style.borderRight = `${config.border}px solid black`;
         pedigree.appendChild(topPart);
         pedigree.appendChild(bottomPart);
         pedigreeContainer.appendChild(pedigree);
@@ -92,12 +82,33 @@ class PedigreeBuilder {
         });
     }
 }
-const builder = new PedigreeBuilder();
+const pedigreeBuilder = new PedigreeBuilder();
 class Pedigree {
     constructor(config) {
         this.id = idGenerator_1.default.randomId();
+        this.pedigreeStyleConfig = {
+            type: "individual",
+            sex: "unknow",
+            size: 100,
+            border: 5,
+            topColor: "white",
+            bottomColor: "white"
+        };
+        this.handler = {
+            get: function (target) {
+                return target;
+            },
+            set: (obj) => {
+                this.pedigree = pedigreeBuilder.init(obj);
+                this.pedigree.id = this.id;
+                let oldPedigree = document.querySelector(`#${this.id}`);
+                oldPedigree.replaceWith(this.pedigree);
+                return true;
+            }
+        };
+        this.styleProxy = new Proxy(this.pedigreeStyleConfig, this.handler);
         this.pedigreeStyleConfig = config;
-        this.pedigree = builder.init(config);
+        this.pedigree = pedigreeBuilder.init(this.styleProxy.target);
         this.pedigree.id = this.id;
     }
     insert(id) {
@@ -105,12 +116,10 @@ class Pedigree {
         const w = document.querySelector(id);
         w.appendChild(this.pedigree);
     }
-    changeSex(sex) {
-        this.pedigreeStyleConfig.sex = sex;
-        this.pedigree = builder.init(this.pedigreeStyleConfig);
-        this.pedigree.id = this.id;
-        let w = document.querySelector(`#${this.id}`);
-        w.replaceWith(this.pedigree);
+    setAttribiute(prop, value) {
+        let obj = this.styleProxy.target;
+        obj[prop] = value;
+        this.styleProxy.target = obj;
     }
 }
 exports.Pedigree = Pedigree;

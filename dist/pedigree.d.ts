@@ -4,7 +4,12 @@ export declare class Pedigree {
     id: string;
     container?: string;
     pedigreeStyleConfig: StyleConfig;
+    handler: {
+        get: (target: StyleConfig) => StyleConfig;
+        set: (obj: any) => boolean;
+    };
+    styleProxy: any;
     constructor(config: StyleConfig);
     insert(id: any): void;
-    changeSex(sex: string): void;
+    setAttribiute(prop: string, value: string | number): void;
 }
