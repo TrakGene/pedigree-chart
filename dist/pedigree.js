@@ -1,18 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PedigreeIcon = void 0;
 const idGenerator_1 = require("./idGenerator");
-const pedigreeBuilders_1 = require("./builders/pedigreeBuilders");
-const pedigreeIconBuilder = new pedigreeBuilders_1.PedigreeIconBuilder();
-// const pedigreeNodeBuilder = new PedigreeIconBuilder()
-class PedigreeIcon {
-    constructor(config) {
+const pedigreeBuilder_1 = require("./builders/pedigreeBuilder");
+class Pedigree {
+    constructor(userConfig) {
         this.id = idGenerator_1.default.randomId();
-        this.pedigreeStyleConfig = {
+        this.builder = new pedigreeBuilder_1.PedigreeCreator();
+        // dragHandler: ClassDeclaration = null
+        this.config = {
             type: "individual",
             sex: "unknow",
             size: 100,
             border: 5,
+            mode: "node",
+            x: 0,
+            y: 0,
             topColor: "white",
             bottomColor: "white"
         };
@@ -21,18 +23,17 @@ class PedigreeIcon {
                 return target;
             },
             set: (obj) => {
-                this.pedigree = pedigreeIconBuilder.init(obj);
+                this.pedigree = this.builder.init(obj);
                 this.pedigree.id = this.id;
                 let oldPedigree = document.querySelector(`#${this.id}`);
                 oldPedigree.replaceWith(this.pedigree);
                 return true;
             }
         };
-        this.styleProxy = new Proxy(this.pedigreeStyleConfig, this.handler);
-        this.pedigreeStyleConfig = config;
-        this.pedigree = pedigreeIconBuilder.init(this.styleProxy.target);
+        this.styleProxy = new Proxy(this.config, this.handler);
+        this.config = userConfig;
+        this.pedigree = this.builder.init(this.styleProxy.target);
         this.pedigree.id = this.id;
-        this.pedigree.style.position = "absolute";
     }
     insert(id) {
         this.container = id;
@@ -45,4 +46,4 @@ class PedigreeIcon {
         this.styleProxy.target = obj;
     }
 }
-exports.PedigreeIcon = PedigreeIcon;
+exports.default = Pedigree;

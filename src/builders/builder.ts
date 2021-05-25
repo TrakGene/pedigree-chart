@@ -1,9 +1,9 @@
-import { IconStyleConfig, NodeStyleConfig } from "../interfaces"
+import { StyleConfig } from "../interfaces"
 
 export abstract class PedigreeBuilder {
     protected pedigree: HTMLElement;
 
-    init(config: IconStyleConfig | NodeStyleConfig): HTMLElement {
+    init(config: StyleConfig ): HTMLElement {
         this.pedigree = this.createPedigree(config)
         this.setSexStyle(config)
         return this.pedigree
@@ -11,7 +11,7 @@ export abstract class PedigreeBuilder {
 
     abstract createPedigree(StyleConfig)
 
-    setSexStyle(config: IconStyleConfig | NodeStyleConfig) {
+    setSexStyle(config: StyleConfig) {
         switch (config.sex) {
             case 'male': this.setMaleSex(config); break;
             case 'female': this.setFemaleSex(config); break;
@@ -20,7 +20,7 @@ export abstract class PedigreeBuilder {
         return this.pedigree
     }
 
-    private setMaleSex(config: IconStyleConfig | NodeStyleConfig) {
+    private setMaleSex(config: StyleConfig) {
         this.pedigree.style.width = `${config.size}px`
         this.pedigree.style.height = `${config.size}px`
         this.pedigree.childNodes.forEach((node: any) => {
@@ -31,7 +31,7 @@ export abstract class PedigreeBuilder {
         })
     }
 
-    private setFemaleSex(config: IconStyleConfig | NodeStyleConfig) {
+    private setFemaleSex(config: StyleConfig) {
         this.pedigree.style.width = `${config.size}px`
         this.pedigree.style.height = `${config.size}px`
         this.pedigree.childNodes.forEach((node: any) => {
@@ -43,7 +43,7 @@ export abstract class PedigreeBuilder {
         })
     }
 
-    private setUnknownSex(config: IconStyleConfig | NodeStyleConfig) {
+    private setUnknownSex(config: StyleConfig) {
         this.pedigree.childNodes.forEach((node: any) => {
             if (node.className = "pedigree") {
                 node.style.width = `${config.size/Math.sqrt(2)}px`

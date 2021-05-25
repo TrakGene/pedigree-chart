@@ -1,19 +1,12 @@
-export interface NodeStyleConfig {
+export interface StyleConfig {
     type: string;
     sex: string;
     size?: number;
     border?: number;
+    mode?: "node" | "icon";
+    drag?: boolean;
     x?: number;
     y?: number;
-    topColor?: string;
-    bottomColor?: string;
-}
-
-export interface IconStyleConfig {
-    type: string;
-    sex: string;
-    size?: number;
-    border?: number;
     topColor?: string;
     bottomColor?: string;
 }

@@ -1,20 +1,23 @@
 import generator from "./idGenerator"
 import { StyleConfig } from './interfaces'
-import { PedigreeIconBuilder } from "./builders/pedigreeBuilders"
+import { PedigreeCreator } from "./builders/pedigreeBuilder"
+import { ClassDeclaration } from "typescript"
 
-const pedigreeIconBuilder = new PedigreeIconBuilder()
-// const pedigreeNodeBuilder = new PedigreeIconBuilder()
-
-export class PedigreeIcon {
+export default class Pedigree {
     pedigree: HTMLElement
     id = generator.randomId()
     container?: string;
+    builder = new PedigreeCreator()
+    // dragHandler: ClassDeclaration = null
 
-    pedigreeStyleConfig: StyleConfig = {
+    config: StyleConfig = {
         type: "individual", 
         sex: "unknow",
         size: 100,
         border: 5,
+        mode: "node",
+        x: 0,
+        y: 0,
         topColor: "white",
         bottomColor: "white"
     }
@@ -24,7 +27,7 @@ export class PedigreeIcon {
           return target;
         },
         set: (obj) => {
-            this.pedigree = pedigreeIconBuilder.init(obj)
+            this.pedigree = this.builder.init(obj)
             this.pedigree.id = this.id
 
             let oldPedigree = document.querySelector(`#${this.id}`)
@@ -33,13 +36,12 @@ export class PedigreeIcon {
         }
       };
       
-    styleProxy = new Proxy(this.pedigreeStyleConfig, this.handler);
+    styleProxy = new Proxy(this.config, this.handler);
 
-    constructor(config: StyleConfig) {
-        this.pedigreeStyleConfig = config
-        this.pedigree = pedigreeIconBuilder.init(this.styleProxy.target)
+    constructor(userConfig: StyleConfig) {
+        this.config = userConfig
+        this.pedigree = this.builder.init(this.styleProxy.target)
         this.pedigree.id = this.id
-        this.pedigree.style.position = "absolute"
     }
 
     insert(id) {
@@ -53,4 +55,8 @@ export class PedigreeIcon {
         obj[prop] = value
         this.styleProxy.target = obj
     }
+
+    // install(plugin: string, func: Function) {
+
+    // }
 }
