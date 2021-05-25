@@ -1,15 +1,17 @@
-import { StyleConfig } from "./interfaces";
-export declare class Pedigree {
+import { StyleConfig } from './interfaces';
+import { PedigreeCreator } from "./builders/pedigreeBuilder";
+export default class Pedigree {
     pedigree: HTMLElement;
     id: string;
     container?: string;
-    pedigreeStyleConfig: StyleConfig;
+    builder: PedigreeCreator;
+    config: StyleConfig;
     handler: {
         get: (target: StyleConfig) => StyleConfig;
         set: (obj: any) => boolean;
     };
     styleProxy: any;
-    constructor(config: StyleConfig);
+    constructor(userConfig: StyleConfig);
     insert(id: any): void;
     setAttribiute(prop: string, value: string | number): void;
 }

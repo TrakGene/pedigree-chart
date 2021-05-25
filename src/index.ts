@@ -1,3 +1,3 @@
-import { Pedigree } from "./pedigree"
+import Pedigree from "./pedigree"
 
 export { Pedigree }
