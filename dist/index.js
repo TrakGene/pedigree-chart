@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Pedigree = void 0;
-const pedigree_1 = require("./pedigree");
-Object.defineProperty(exports, "Pedigree", { enumerable: true, get: function () { return pedigree_1.Pedigree; } });
+exports.PedigreeNode = exports.PedigreeIcon = void 0;
+const PedigreeIcon_1 = require("./pedigree/PedigreeIcon");
+exports.PedigreeIcon = PedigreeIcon_1.default;
+const PedigreeNode_1 = require("./pedigree/PedigreeNode");
+exports.PedigreeNode = PedigreeNode_1.default;

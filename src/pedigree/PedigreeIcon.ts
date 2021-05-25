@@ -1,16 +1,15 @@
-import generator from "./idGenerator"
-import { StyleConfig } from './interfaces'
-import { PedigreeIconBuilder } from "./builders/pedigreeBuilders"
+import generator from "../idGenerator"
+import { IconStyleConfig } from '../interfaces'
+import { PedigreeIconBuilder } from "../builders/pedigreeBuilders"
 
 const pedigreeIconBuilder = new PedigreeIconBuilder()
-// const pedigreeNodeBuilder = new PedigreeIconBuilder()
 
-export class PedigreeIcon {
+export default class PedigreeIcon {
     pedigree: HTMLElement
     id = generator.randomId()
     container?: string;
 
-    pedigreeStyleConfig: StyleConfig = {
+    pedigreeStyleConfig: IconStyleConfig = {
         type: "individual", 
         sex: "unknow",
         size: 100,
@@ -20,7 +19,7 @@ export class PedigreeIcon {
     }
       
     handler = {
-        get: function(target: StyleConfig) {
+        get: function(target: IconStyleConfig) {
           return target;
         },
         set: (obj) => {
@@ -35,7 +34,7 @@ export class PedigreeIcon {
       
     styleProxy = new Proxy(this.pedigreeStyleConfig, this.handler);
 
-    constructor(config: StyleConfig) {
+    constructor(config: IconStyleConfig) {
         this.pedigreeStyleConfig = config
         this.pedigree = pedigreeIconBuilder.init(this.styleProxy.target)
         this.pedigree.id = this.id

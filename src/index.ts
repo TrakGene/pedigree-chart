@@ -1,3 +1,4 @@
-import { Pedigree } from "./pedigree"
+import PedigreeIcon from "./pedigree/PedigreeIcon"
+import PedigreeNode from "./pedigree/PedigreeNode"
 
-export { Pedigree }
+export { PedigreeIcon, PedigreeNode }

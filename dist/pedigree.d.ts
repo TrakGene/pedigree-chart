@@ -1,11 +1,11 @@
-import { StyleConfig } from "./interfaces";
-export declare class Pedigree {
+import { StyleConfig } from './interfaces';
+export declare class PedigreeIcon {
     pedigree: HTMLElement;
     id: string;
     container?: string;
     pedigreeStyleConfig: StyleConfig;
     handler: {
-        get: (target: StyleConfig) => StyleConfig;
+        get: (target: any) => any;
         set: (obj: any) => boolean;
     };
     styleProxy: any;
