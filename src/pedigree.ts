@@ -35,8 +35,8 @@ export default class Pedigree {
     styleProxy = new Proxy(this.config, this.changesDetector);
 
     constructor(userConfig: StyleConfig) {
-        this.config = userConfig
-        this.builder = new PedigreeBuilderDirector(userConfig)
+        this.updateConfig(userConfig)
+        this.builder = new PedigreeBuilderDirector(this.config)
         this.pedigree = this.builder.createPedigree()
     }
 
@@ -44,6 +44,14 @@ export default class Pedigree {
         this.container = id
         const w = document.querySelector(id)
         w.appendChild(this.pedigree)
+    }
+
+    updateConfig(userConfig: StyleConfig) {
+        Object.keys(this.config).forEach((key)=>{
+            if(userConfig[key]) {
+                this.config[key] = userConfig[key]
+            }
+        })
     }
 
     setAttribiute(prop: string, value: string | number) {

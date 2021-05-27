@@ -12,5 +12,6 @@ export default class Pedigree {
     styleProxy: any;
     constructor(userConfig: StyleConfig);
     insert(id: any): void;
+    updateConfig(userConfig: StyleConfig): void;
     setAttribiute(prop: string, value: string | number): void;
 }

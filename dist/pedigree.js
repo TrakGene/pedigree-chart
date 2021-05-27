@@ -28,14 +28,21 @@ class Pedigree {
             }
         };
         this.styleProxy = new Proxy(this.config, this.changesDetector);
-        this.config = userConfig;
-        this.builder = new builder_1.PedigreeBuilderDirector(userConfig);
+        this.updateConfig(userConfig);
+        this.builder = new builder_1.PedigreeBuilderDirector(this.config);
         this.pedigree = this.builder.createPedigree();
     }
     insert(id) {
         this.container = id;
         const w = document.querySelector(id);
         w.appendChild(this.pedigree);
+    }
+    updateConfig(userConfig) {
+        Object.keys(this.config).forEach((key) => {
+            if (userConfig[key]) {
+                this.config[key] = userConfig[key];
+            }
+        });
     }
     setAttribiute(prop, value) {
         let obj = this.styleProxy.target;

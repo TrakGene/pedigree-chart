@@ -5,7 +5,9 @@ import generator from "../idGenerator"
 abstract class Builder {
     utils = new PedigreeUtils()
     abstract createPedigree()
-    abstract setPregnacy()
+    setPregnacy() {
+        
+    }
 }
 
 export class PedigreeBuilderDirector {
@@ -78,7 +80,10 @@ class MaleBuilder extends Builder {
     createPedigree() {
         this.pedigree = this.utils.createPedigree(this.config)
         this.setMaleSex()
-        this.setPregnacy()
+        switch(this.config.type) {
+            case 'pregnacy': this.setPregnacy(); break;
+            // case 'affecte': this.setPregnacy(); break;
+        }
         return this.pedigree
     }
 }
