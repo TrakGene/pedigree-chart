@@ -5,6 +5,7 @@ import generator from "../idGenerator"
 abstract class Builder {
     utils = new PedigreeUtils()
     abstract createPedigree()
+    abstract setPregnacy()
 }
 
 export class PedigreeBuilderDirector {
@@ -64,9 +65,20 @@ class MaleBuilder extends Builder {
         })
     }
 
+    setPregnacy() {
+        const pregnacyIcon = document.createElement("p")
+        pregnacyIcon.textContent = "P"
+        pregnacyIcon.style.position = "absolute"
+        pregnacyIcon.style.lineHeight = "0rem"
+        pregnacyIcon.style.top = `36%`
+        pregnacyIcon.style.left = `44%`
+        this.pedigree.childNodes[0].appendChild(pregnacyIcon)
+    }
+
     createPedigree() {
         this.pedigree = this.utils.createPedigree(this.config)
         this.setMaleSex()
+        this.setPregnacy()
         return this.pedigree
     }
 }

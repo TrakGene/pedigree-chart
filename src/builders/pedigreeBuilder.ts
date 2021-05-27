@@ -18,6 +18,7 @@ export class PedigreeUtils {
         pedigree.style.width = "100%"
         pedigree.style.height = "100%"
         pedigree.style.boxSizing = "border-box"
+        pedigree.style.position = "relative"
 
         const topPart = document.createElement('div')
         topPart.style.height = `calc(50% - ${config.border}px)`
