@@ -16,6 +16,33 @@ abstract class Builder {
         pedigree.childNodes[0].appendChild(pregnacyIcon)
         return pedigree
     }
+
+    setAffected(pedigree: HTMLElement, config: StyleConfig): HTMLElement {
+        const affectedLine = document.createElement("span")
+        affectedLine.style.display = "block"
+        affectedLine.style.height = `${config.border}px`
+        if(config.sex === 'unknown') {
+            affectedLine.style.width = `${(config.size / Math.sqrt(2)) + 30}px`
+        }
+        else if(config.sex === 'male') {
+            affectedLine.style.width = `${(config.size * Math.sqrt(2)) + 30}px`
+        } 
+        else {
+            affectedLine.style.width = `${config.size + 30}px`
+        }
+        affectedLine.style.backgroundColor = "black"
+        affectedLine.style.position = "absolute"
+        affectedLine.style.top = `calc(50% - ${config.border}px)`
+        affectedLine.style.left = `-15px`
+        affectedLine.style.transformOrigin = `center`
+        if(config.sex === 'unknown') {
+            affectedLine.style.transform = `rotate(0deg)`
+        } else {
+            affectedLine.style.transform = `rotate(45deg)`
+        }
+        pedigree.childNodes[0].appendChild(affectedLine)
+        return pedigree
+    }
 }
 
 export class PedigreeBuilderDirector {
@@ -82,7 +109,7 @@ class MaleBuilder extends Builder {
             case 'pregnacy': 
             this.pedigree = this.setPregnacy(this.pedigree); 
             break;
-            // case 'affecte': this.setPregnacy(); break;
+            case 'affected': this.setAffected(this.pedigree, this.config); break;
         }
         return this.pedigree
     }
@@ -115,6 +142,9 @@ class FemaleBuilder extends Builder {
         switch(this.config.type) {
             case 'pregnacy': 
             this.pedigree = this.setPregnacy(this.pedigree); 
+            break;
+            case 'affected': 
+            this.pedigree = this.setAffected(this.pedigree, this.config); 
             break;
             // case 'affecte': this.setPregnacy(); break;
         }
@@ -151,7 +181,9 @@ class UnknownBuilder extends Builder {
             case 'pregnacy': 
             this.pedigree = this.setPregnacy(this.pedigree); 
             break;
-            // case 'affecte': this.setPregnacy(); break;
+            case 'affected': 
+            this.pedigree = this.setAffected(this.pedigree, this.config); 
+            break;
         }
         return this.pedigree
     }
