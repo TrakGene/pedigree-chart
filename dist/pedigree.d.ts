@@ -1,12 +1,11 @@
 import { StyleConfig } from './interfaces';
-import { PedigreeCreator } from "./builders/pedigreeBuilder";
+import { PedigreeBuilderDirector } from "./builders/builder";
 export default class Pedigree {
     pedigree: HTMLElement;
-    id: string;
     container?: string;
-    builder: PedigreeCreator;
+    builder: PedigreeBuilderDirector;
     config: StyleConfig;
-    handler: {
+    changesDetector: {
         get: (target: StyleConfig) => StyleConfig;
         set: (obj: any) => boolean;
     };

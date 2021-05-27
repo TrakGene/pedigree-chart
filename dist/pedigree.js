@@ -1,39 +1,36 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const idGenerator_1 = require("./idGenerator");
-const pedigreeBuilder_1 = require("./builders/pedigreeBuilder");
+const builder_1 = require("./builders/builder");
 class Pedigree {
     constructor(userConfig) {
-        this.id = idGenerator_1.default.randomId();
-        this.builder = new pedigreeBuilder_1.PedigreeCreator();
-        // dragHandler: ClassDeclaration = null
         this.config = {
             type: "individual",
-            sex: "unknow",
+            sex: "male",
             size: 100,
             border: 5,
-            mode: "node",
+            mode: "icon",
             x: 0,
             y: 0,
             topColor: "white",
             bottomColor: "white"
         };
-        this.handler = {
+        this.changesDetector = {
             get: function (target) {
                 return target;
             },
             set: (obj) => {
-                this.pedigree = this.builder.init(obj);
-                this.pedigree.id = this.id;
-                let oldPedigree = document.querySelector(`#${this.id}`);
+                const recreatedPedigree = this.builder.recreatePedigree(obj);
+                this.pedigree = recreatedPedigree.pedigree;
+                const id = recreatedPedigree.id;
+                let oldPedigree = document.querySelector(`#${id}`);
                 oldPedigree.replaceWith(this.pedigree);
                 return true;
             }
         };
-        this.styleProxy = new Proxy(this.config, this.handler);
+        this.styleProxy = new Proxy(this.config, this.changesDetector);
         this.config = userConfig;
-        this.pedigree = this.builder.init(this.styleProxy.target);
-        this.pedigree.id = this.id;
+        this.builder = new builder_1.PedigreeBuilderDirector(userConfig);
+        this.pedigree = this.builder.createPedigree();
     }
     insert(id) {
         this.container = id;

@@ -1,47 +1,43 @@
-import generator from "./idGenerator"
 import { StyleConfig } from './interfaces'
-import { PedigreeCreator } from "./builders/pedigreeBuilder"
-import { ClassDeclaration } from "typescript"
+import { PedigreeBuilderDirector } from "./builders/builder"
 
 export default class Pedigree {
     pedigree: HTMLElement
-    id = generator.randomId()
     container?: string;
-    builder = new PedigreeCreator()
-    // dragHandler: ClassDeclaration = null
+    builder: PedigreeBuilderDirector
 
     config: StyleConfig = {
         type: "individual", 
-        sex: "unknow",
+        sex: "male",
         size: 100,
         border: 5,
-        mode: "node",
+        mode: "icon",
         x: 0,
         y: 0,
         topColor: "white",
         bottomColor: "white"
     }
       
-    handler = {
+    changesDetector = {
         get: function(target: StyleConfig) {
           return target;
         },
         set: (obj) => {
-            this.pedigree = this.builder.init(obj)
-            this.pedigree.id = this.id
-
-            let oldPedigree = document.querySelector(`#${this.id}`)
+            const recreatedPedigree = this.builder.recreatePedigree(obj)
+            this.pedigree = recreatedPedigree.pedigree
+            const id = recreatedPedigree.id
+            let oldPedigree = document.querySelector(`#${id}`)
             oldPedigree.replaceWith(this.pedigree)
             return true;
         }
       };
       
-    styleProxy = new Proxy(this.config, this.handler);
+    styleProxy = new Proxy(this.config, this.changesDetector);
 
     constructor(userConfig: StyleConfig) {
         this.config = userConfig
-        this.pedigree = this.builder.init(this.styleProxy.target)
-        this.pedigree.id = this.id
+        this.builder = new PedigreeBuilderDirector(userConfig)
+        this.pedigree = this.builder.createPedigree()
     }
 
     insert(id) {
@@ -55,8 +51,4 @@ export default class Pedigree {
         obj[prop] = value
         this.styleProxy.target = obj
     }
-
-    // install(plugin: string, func: Function) {
-
-    // }
 }
