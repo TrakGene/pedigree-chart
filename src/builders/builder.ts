@@ -5,8 +5,16 @@ import generator from "../idGenerator"
 abstract class Builder {
     utils = new PedigreeUtils()
     abstract createPedigree()
-    setPregnacy() {
-        
+    
+    setPregnacy(pedigree: HTMLElement): HTMLElement {
+        const pregnacyIcon = document.createElement("p")
+        pregnacyIcon.textContent = "P"
+        pregnacyIcon.style.position = "absolute"
+        pregnacyIcon.style.lineHeight = "0rem"
+        pregnacyIcon.style.top = `34%`
+        pregnacyIcon.style.left = `44%`
+        pedigree.childNodes[0].appendChild(pregnacyIcon)
+        return pedigree
     }
 }
 
@@ -67,21 +75,13 @@ class MaleBuilder extends Builder {
         })
     }
 
-    setPregnacy() {
-        const pregnacyIcon = document.createElement("p")
-        pregnacyIcon.textContent = "P"
-        pregnacyIcon.style.position = "absolute"
-        pregnacyIcon.style.lineHeight = "0rem"
-        pregnacyIcon.style.top = `36%`
-        pregnacyIcon.style.left = `44%`
-        this.pedigree.childNodes[0].appendChild(pregnacyIcon)
-    }
-
     createPedigree() {
         this.pedigree = this.utils.createPedigree(this.config)
         this.setMaleSex()
         switch(this.config.type) {
-            case 'pregnacy': this.setPregnacy(); break;
+            case 'pregnacy': 
+            this.pedigree = this.setPregnacy(this.pedigree); 
+            break;
             // case 'affecte': this.setPregnacy(); break;
         }
         return this.pedigree
@@ -112,6 +112,12 @@ class FemaleBuilder extends Builder {
     createPedigree() {
         this.pedigree = this.utils.createPedigree(this.config)
         this.setFemaleSex()
+        switch(this.config.type) {
+            case 'pregnacy': 
+            this.pedigree = this.setPregnacy(this.pedigree); 
+            break;
+            // case 'affecte': this.setPregnacy(); break;
+        }
         return this.pedigree
     }
 }
@@ -141,6 +147,12 @@ class UnknownBuilder extends Builder {
     createPedigree() {
         this.pedigree = this.utils.createPedigree(this.config)
         this.setUnknownSex()
+        switch(this.config.type) {
+            case 'pregnacy': 
+            this.pedigree = this.setPregnacy(this.pedigree); 
+            break;
+            // case 'affecte': this.setPregnacy(); break;
+        }
         return this.pedigree
     }
 }
