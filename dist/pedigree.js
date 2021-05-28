@@ -1,44 +1,48 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const idGenerator_1 = require("./idGenerator");
-const pedigreeBuilder_1 = require("./builders/pedigreeBuilder");
+const builder_1 = require("./builders/builder");
 class Pedigree {
     constructor(userConfig) {
-        this.id = idGenerator_1.default.randomId();
-        this.builder = new pedigreeBuilder_1.PedigreeCreator();
-        // dragHandler: ClassDeclaration = null
         this.config = {
             type: "individual",
-            sex: "unknow",
+            sex: "male",
             size: 100,
             border: 5,
-            mode: "node",
+            mode: "icon",
             x: 0,
             y: 0,
             topColor: "white",
             bottomColor: "white"
         };
-        this.handler = {
+        this.changesDetector = {
             get: function (target) {
                 return target;
             },
             set: (obj) => {
-                this.pedigree = this.builder.init(obj);
-                this.pedigree.id = this.id;
-                let oldPedigree = document.querySelector(`#${this.id}`);
+                const recreatedPedigree = this.builder.recreatePedigree(obj);
+                this.pedigree = recreatedPedigree.pedigree;
+                const id = recreatedPedigree.id;
+                let oldPedigree = document.querySelector(`#${id}`);
                 oldPedigree.replaceWith(this.pedigree);
                 return true;
             }
         };
-        this.styleProxy = new Proxy(this.config, this.handler);
-        this.config = userConfig;
-        this.pedigree = this.builder.init(this.styleProxy.target);
-        this.pedigree.id = this.id;
+        this.styleProxy = new Proxy(this.config, this.changesDetector);
+        this.updateConfig(userConfig);
+        this.builder = new builder_1.PedigreeBuilderDirector(this.config);
+        this.pedigree = this.builder.createPedigree();
     }
     insert(id) {
         this.container = id;
         const w = document.querySelector(id);
         w.appendChild(this.pedigree);
+    }
+    updateConfig(userConfig) {
+        Object.keys(this.config).forEach((key) => {
+            if (userConfig[key]) {
+                this.config[key] = userConfig[key];
+            }
+        });
     }
     setAttribiute(prop, value) {
         let obj = this.styleProxy.target;
