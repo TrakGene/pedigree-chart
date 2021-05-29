@@ -5,44 +5,8 @@ import generator from "../idGenerator"
 abstract class Builder {
     utils = new PedigreeUtils()
     abstract createPedigree()
-    
-    setPregnacy(pedigree: HTMLElement): HTMLElement {
-        const pregnacyIcon = document.createElement("p")
-        pregnacyIcon.textContent = "P"
-        pregnacyIcon.style.position = "absolute"
-        pregnacyIcon.style.lineHeight = "0rem"
-        pregnacyIcon.style.top = `34%`
-        pregnacyIcon.style.left = `44%`
-        pedigree.childNodes[0].appendChild(pregnacyIcon)
-        return pedigree
-    }
-
-    setAffected(pedigree: HTMLElement, config: StyleConfig): HTMLElement {
-        const affectedLine = document.createElement("span")
-        affectedLine.style.display = "block"
-        affectedLine.style.height = `${config.border}px`
-        if(config.sex === 'unknown') {
-            affectedLine.style.width = `${(config.size / Math.sqrt(2)) + 30}px`
-        }
-        else if(config.sex === 'male') {
-            affectedLine.style.width = `${(config.size * Math.sqrt(2)) + 30}px`
-        } 
-        else {
-            affectedLine.style.width = `${config.size + 30}px`
-        }
-        affectedLine.style.backgroundColor = "black"
-        affectedLine.style.position = "absolute"
-        affectedLine.style.top = `calc(50% - ${config.border}px)`
-        affectedLine.style.left = `-15px`
-        affectedLine.style.transformOrigin = `center`
-        if(config.sex === 'unknown') {
-            affectedLine.style.transform = `rotate(0deg)`
-        } else {
-            affectedLine.style.transform = `rotate(45deg)`
-        }
-        pedigree.childNodes[0].appendChild(affectedLine)
-        return pedigree
-    }
+    abstract setAffected()
+    abstract setPregnacy()
 }
 
 export class PedigreeBuilderDirector {
@@ -102,14 +66,26 @@ class MaleBuilder extends Builder {
         })
     }
 
+    setAffected() {
+        const lineWidth = this.config.size * Math.sqrt(2) *1.2
+        const affectedLine = this.utils.createAffectedLine(this.config, lineWidth)
+        affectedLine.style.transform = `rotate(45deg)`
+        this.pedigree.childNodes[0].appendChild(affectedLine)
+    }
+
+    setPregnacy() {
+        const pregnacyIcon = this.utils.createPregnacyIcon(this.config)
+        this.pedigree.childNodes[0].appendChild(pregnacyIcon)
+    }
+
     createPedigree() {
         this.pedigree = this.utils.createPedigree(this.config)
         this.setMaleSex()
         switch(this.config.type) {
             case 'pregnacy': 
-            this.pedigree = this.setPregnacy(this.pedigree); 
-            break;
-            case 'affected': this.setAffected(this.pedigree, this.config); break;
+            this.setPregnacy(); break;
+            case 'affected': 
+            this.setAffected(); break;
         }
         return this.pedigree
     }
@@ -136,17 +112,26 @@ class FemaleBuilder extends Builder {
         })
     }
 
+    setAffected() {
+        const lineWidth = this.config.size * Math.sqrt(2) *1.2
+        const affectedLine = this.utils.createAffectedLine(this.config, lineWidth)
+        affectedLine.style.transform = `rotate(45deg)`
+        this.pedigree.childNodes[0].appendChild(affectedLine)
+    }
+
+    setPregnacy() {
+        const pregnacyIcon = this.utils.createPregnacyIcon(this.config)
+        this.pedigree.childNodes[0].appendChild(pregnacyIcon)
+    }
+
     createPedigree() {
         this.pedigree = this.utils.createPedigree(this.config)
         this.setFemaleSex()
         switch(this.config.type) {
             case 'pregnacy': 
-            this.pedigree = this.setPregnacy(this.pedigree); 
-            break;
+            this.setPregnacy(); break;
             case 'affected': 
-            this.pedigree = this.setAffected(this.pedigree, this.config); 
-            break;
-            // case 'affecte': this.setPregnacy(); break;
+            this.setAffected(); break;
         }
         return this.pedigree
     }
@@ -174,16 +159,28 @@ class UnknownBuilder extends Builder {
         })
     }
 
+    setAffected() {
+        const lineWidth = this.config.size * Math.sqrt(2) *1.2
+        const affectedLine = this.utils.createAffectedLine(this.config, lineWidth)
+        affectedLine.style.transform = `rotate(0deg)`
+        affectedLine.style.top = `calc(50% - ${this.config.border/2}px)`
+        affectedLine.style.left = `-${(lineWidth/4) + this.config.border}px`
+        this.pedigree.childNodes[0].appendChild(affectedLine)
+    }
+
+    setPregnacy() {
+        const pregnacyIcon = this.utils.createPregnacyIcon(this.config)
+        pregnacyIcon.style.transform = 'rotate(-45deg)'
+        this.pedigree.childNodes[0].appendChild(pregnacyIcon)
+    }
     createPedigree() {
         this.pedigree = this.utils.createPedigree(this.config)
         this.setUnknownSex()
         switch(this.config.type) {
             case 'pregnacy': 
-            this.pedigree = this.setPregnacy(this.pedigree); 
-            break;
+            this.setPregnacy(); break;
             case 'affected': 
-            this.pedigree = this.setAffected(this.pedigree, this.config); 
-            break;
+            this.setAffected(); break;
         }
         return this.pedigree
     }
