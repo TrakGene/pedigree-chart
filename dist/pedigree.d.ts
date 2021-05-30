@@ -1,10 +1,12 @@
 import { StyleConfig } from './interfaces';
 import { PedigreeBuilderDirector } from "./builders/builder";
+import DragPlugin from "./dragPlugin";
 export default class Pedigree {
-    pedigree: HTMLElement;
     container?: string;
-    builder: PedigreeBuilderDirector;
     config: StyleConfig;
+    builder: PedigreeBuilderDirector;
+    pedigree: HTMLElement;
+    dragPlugin: DragPlugin;
     changesDetector: {
         get: (target: StyleConfig) => StyleConfig;
         set: (obj: any) => boolean;
@@ -12,6 +14,7 @@ export default class Pedigree {
     styleProxy: any;
     constructor(userConfig: StyleConfig);
     insert(id: any): void;
+    injectDependencies(): void;
     updateConfig(userConfig: StyleConfig): void;
     setAttribiute(prop: string, value: string | number): void;
 }
