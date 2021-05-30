@@ -1,23 +1,15 @@
-import { StyleConfig } from './interfaces'
+import { StyleConfig, initialConfig } from './interfaces'
 import { PedigreeBuilderDirector } from "./builders/builder"
+import DragPlugin from "./dragPlugin"
+import {} from './'
 
 export default class Pedigree {
-    pedigree: HTMLElement
     container?: string;
-    builder: PedigreeBuilderDirector
+    config: StyleConfig = initialConfig
+    builder = new PedigreeBuilderDirector(this.config)
+    pedigree: HTMLElement = this.builder.createPedigree()
+    dragPlugin: DragPlugin = new DragPlugin(this.pedigree)
 
-    config: StyleConfig = {
-        type: "individual", 
-        sex: "male",
-        size: 100,
-        border: 5,
-        mode: "icon",
-        x: 0,
-        y: 0,
-        topColor: "white",
-        bottomColor: "white"
-    }
-      
     changesDetector = {
         get: function(target: StyleConfig) {
           return target;
@@ -26,6 +18,7 @@ export default class Pedigree {
             const recreatedPedigree = this.builder.recreatePedigree(obj)
             this.pedigree = recreatedPedigree.pedigree
             const id = recreatedPedigree.id
+            this.dragPlugin.reattach(this.pedigree, this.config)
             let oldPedigree = document.querySelector(`#${id}`)
             oldPedigree.replaceWith(this.pedigree)
             return true;
@@ -36,14 +29,19 @@ export default class Pedigree {
 
     constructor(userConfig: StyleConfig) {
         this.updateConfig(userConfig)
-        this.builder = new PedigreeBuilderDirector(this.config)
-        this.pedigree = this.builder.createPedigree()
+        this.injectDependencies()
     }
 
     insert(id) {
         this.container = id
         const w = document.querySelector(id)
         w.appendChild(this.pedigree)
+    }
+
+    injectDependencies() {
+        this.builder = new PedigreeBuilderDirector(this.config)
+        this.pedigree = this.builder.createPedigree()
+        this.dragPlugin = new DragPlugin(this.pedigree)
     }
 
     updateConfig(userConfig: StyleConfig) {
