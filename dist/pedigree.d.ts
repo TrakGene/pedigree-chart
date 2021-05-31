@@ -7,6 +7,7 @@ export default class Pedigree {
     builder: PedigreeBuilderDirector;
     pedigree: HTMLElement;
     dragPlugin: DragPlugin;
+    pedigreeId: string;
     changesDetector: {
         get: (target: StyleConfig) => StyleConfig;
         set: (obj: any) => boolean;

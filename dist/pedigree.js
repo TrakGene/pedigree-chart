@@ -23,9 +23,9 @@ let Pedigree = class Pedigree {
             set: (obj) => {
                 const recreatedPedigree = this.builder.recreatePedigree(obj);
                 this.pedigree = recreatedPedigree.pedigree;
-                const id = recreatedPedigree.id;
+                this.pedigreeId = recreatedPedigree.id;
                 this.dragPlugin.reattach(this.pedigree, this.config);
-                let oldPedigree = document.querySelector(`#${id}`);
+                let oldPedigree = document.querySelector(`#${this.pedigreeId}`);
                 oldPedigree.replaceWith(this.pedigree);
                 return true;
             }
@@ -33,6 +33,10 @@ let Pedigree = class Pedigree {
         this.styleProxy = new Proxy(this.config, this.changesDetector);
         this.updateConfig(userConfig);
         this.injectDependencies();
+        const trackObj = Object.assign(this.config, { id: this.pedigree.id });
+        this.pedigree.addEventListener("click", () => {
+            this.emit("click", trackObj);
+        });
     }
     insert(id) {
         this.container = id;
@@ -58,6 +62,6 @@ let Pedigree = class Pedigree {
     }
 };
 Pedigree = __decorate([
-    eventPlugin_1.EventBusWrapper
+    eventPlugin_1.EventBus
 ], Pedigree);
 exports.default = Pedigree;
