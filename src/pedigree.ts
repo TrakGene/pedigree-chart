@@ -21,6 +21,7 @@ export default class Pedigree {
             this.pedigree = recreatedPedigree.pedigree
             this.pedigreeId = recreatedPedigree.id
             this.dragPlugin.reattach(this.pedigree, this.config)
+            this.trackPedigree()
             let oldPedigree = document.querySelector(`#${this.pedigreeId}`)
             oldPedigree.replaceWith(this.pedigree)
             return true;
@@ -33,11 +34,18 @@ export default class Pedigree {
         this.updateConfig(userConfig)
         this.injectDependencies()
 
-        const trackObj = Object.assign(
-            this.config, 
-            {id: this.pedigree.id})
+        this.trackPedigree()
+    }
+
+    trackPedigree() {
         this.pedigree.addEventListener("click", ()=> {
-            this.emit("click", trackObj)
+            this.emit("click",  Object.assign(
+                this.config, 
+                {
+                    id: this.pedigree.id,
+                    position: this.pedigree.getBoundingClientRect()
+                }
+            ))
         }) 
     }
 

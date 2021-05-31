@@ -14,6 +14,7 @@ export default class Pedigree {
     };
     styleProxy: any;
     constructor(userConfig: StyleConfig);
+    trackPedigree(): void;
     insert(id: any): void;
     injectDependencies(): void;
     updateConfig(userConfig: StyleConfig): void;
