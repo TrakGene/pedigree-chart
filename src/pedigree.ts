@@ -1,8 +1,9 @@
 import { StyleConfig, initialConfig } from './interfaces'
 import { PedigreeBuilderDirector } from "./builders/builder"
 import DragPlugin from "./dragPlugin"
-import {} from './'
+import {EventBusWrapper} from './eventPlugin'
 
+@EventBusWrapper
 export default class Pedigree {
     container?: string;
     config: StyleConfig = initialConfig
