@@ -1,18 +1,14 @@
 import { StyleConfig } from './interfaces';
 import { PedigreeBuilderDirector } from "./builders/builder";
 import DragPlugin from "./dragPlugin";
+import { EventHandler } from './eventPlugin';
 export default class Pedigree {
     container?: string;
     config: StyleConfig;
     builder: PedigreeBuilderDirector;
     pedigree: HTMLElement;
+    event: EventHandler;
     dragPlugin: DragPlugin;
-    pedigreeId: string;
-    changesDetector: {
-        get: (target: StyleConfig) => StyleConfig;
-        set: (obj: any) => boolean;
-    };
-    styleProxy: any;
     constructor(userConfig: StyleConfig);
     trackPedigree(): void;
     insert(id: any): void;

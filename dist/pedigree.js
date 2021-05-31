@@ -1,44 +1,33 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const interfaces_1 = require("./interfaces");
 const builder_1 = require("./builders/builder");
 const dragPlugin_1 = require("./dragPlugin");
 const eventPlugin_1 = require("./eventPlugin");
-let Pedigree = class Pedigree {
+class Pedigree {
     constructor(userConfig) {
-        this.config = interfaces_1.initialConfig;
+        this.config = {
+            type: "individual",
+            sex: "male",
+            size: 100,
+            border: 5,
+            mode: "icon",
+            drag: false,
+            x: 0,
+            y: 0,
+            topColor: "white",
+            bottomColor: "white"
+        };
         this.builder = new builder_1.PedigreeBuilderDirector(this.config);
         this.pedigree = this.builder.createPedigree();
-        this.dragPlugin = new dragPlugin_1.default(this.pedigree);
-        this.changesDetector = {
-            get: function (target) {
-                return target;
-            },
-            set: (obj) => {
-                const recreatedPedigree = this.builder.recreatePedigree(obj);
-                this.pedigree = recreatedPedigree.pedigree;
-                this.pedigreeId = recreatedPedigree.id;
-                this.dragPlugin.reattach(this.pedigree, this.config);
-                this.trackPedigree();
-                let oldPedigree = document.querySelector(`#${this.pedigreeId}`);
-                oldPedigree.replaceWith(this.pedigree);
-                return true;
-            }
-        };
-        this.styleProxy = new Proxy(this.config, this.changesDetector);
+        this.event = new eventPlugin_1.EventHandler();
+        this.dragPlugin = new dragPlugin_1.default(this.pedigree, this.event);
         this.updateConfig(userConfig);
         this.injectDependencies();
         this.trackPedigree();
     }
     trackPedigree() {
         this.pedigree.addEventListener("click", () => {
-            this.emit("click", Object.assign(this.config, {
+            this.event.emit("click", Object.assign(this.config, {
                 id: this.pedigree.id,
                 position: this.pedigree.getBoundingClientRect()
             }));
@@ -52,7 +41,7 @@ let Pedigree = class Pedigree {
     injectDependencies() {
         this.builder = new builder_1.PedigreeBuilderDirector(this.config);
         this.pedigree = this.builder.createPedigree();
-        this.dragPlugin = new dragPlugin_1.default(this.pedigree);
+        this.dragPlugin = new dragPlugin_1.default(this.pedigree, this.event);
     }
     updateConfig(userConfig) {
         Object.keys(this.config).forEach((key) => {
@@ -62,12 +51,13 @@ let Pedigree = class Pedigree {
         });
     }
     setAttribiute(prop, value) {
-        let obj = this.styleProxy.target;
-        obj[prop] = value;
-        this.styleProxy.target = obj;
+        this.config[prop] = value;
+        const recreatedPedigree = this.builder.recreatePedigree(this.config);
+        this.pedigree = recreatedPedigree.pedigree;
+        this.dragPlugin.reattach(this.pedigree, this.config);
+        this.trackPedigree();
+        let oldPedigree = document.querySelector(`#${this.pedigree.id}`);
+        oldPedigree.replaceWith(this.pedigree);
     }
-};
-Pedigree = __decorate([
-    eventPlugin_1.EventBus
-], Pedigree);
+}
 exports.default = Pedigree;

@@ -1,30 +1,27 @@
-import { EventBus } from "./eventPlugin"
 import { StyleConfig } from "./interfaces"
 
-@EventBus
 export default class DragPlugin {
     private x: number
     private y: number
-    constructor(pedigree) {
+    event
+
+    constructor(pedigree, eventHandler) {
         this.startDragDriver(pedigree)
+        this.event = eventHandler
     }
 
-    startDragDriver(pedigree) {
+    startDragDriver(pedigree: HTMLElement) {
         pedigree.onmousedown = (event) => {
             const shiftX = event.clientX - pedigree.getBoundingClientRect().left
             const shiftY = event.clientY - pedigree.getBoundingClientRect().top
 
             pedigree.onmousemove = (event) => {
                 move(event, pedigree, shiftX, shiftY)
-                this.emit("drag")
+                this.event.emit("drag", pedigree.getBoundingClientRect())
             }
-            
+
             pedigree.onmouseup = () => {
                 pedigree.onmousemove = null
-                this.emit("dragend", {
-                    id: pedigree.id,
-                    position: pedigree.getBoundingClientRect() 
-                })
             }
         }
 
@@ -42,6 +39,7 @@ export default class DragPlugin {
     }
 
     reattach(pedigree: HTMLElement, config: StyleConfig) {
+        this.stopDragDriver(pedigree)
         if(config.drag) {
             pedigree.style.left = this.x + 'px';
             pedigree.style.top = this.y + 'px';

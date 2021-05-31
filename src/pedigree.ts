@@ -1,51 +1,44 @@
-import { StyleConfig, initialConfig } from './interfaces'
+import { StyleConfig } from './interfaces'
 import { PedigreeBuilderDirector } from "./builders/builder"
 import DragPlugin from "./dragPlugin"
-import {EventBus} from './eventPlugin'
+import { EventHandler } from './eventPlugin'
 
-@EventBus
 export default class Pedigree {
     container?: string;
-    config: StyleConfig = initialConfig
+    config: StyleConfig = {
+        type: "individual", 
+        sex: "male",
+        size: 100,
+        border: 5,
+        mode: "icon",
+        drag: false,
+        x: 0,
+        y: 0,
+        topColor: "white",
+        bottomColor: "white"
+    }
     builder = new PedigreeBuilderDirector(this.config)
     pedigree: HTMLElement = this.builder.createPedigree()
-    dragPlugin: DragPlugin = new DragPlugin(this.pedigree)
-    pedigreeId: string
-
-    changesDetector = {
-        get: function(target: StyleConfig) {
-          return target;
-        },
-        set: (obj) => {
-            const recreatedPedigree = this.builder.recreatePedigree(obj)
-            this.pedigree = recreatedPedigree.pedigree
-            this.pedigreeId = recreatedPedigree.id
-            this.dragPlugin.reattach(this.pedigree, this.config)
-            this.trackPedigree()
-            let oldPedigree = document.querySelector(`#${this.pedigreeId}`)
-            oldPedigree.replaceWith(this.pedigree)
-            return true;
-        }
-      };
-      
-    styleProxy = new Proxy(this.config, this.changesDetector);
+    event: EventHandler = new EventHandler()
+    dragPlugin: DragPlugin = new DragPlugin(this.pedigree, this.event)
 
     constructor(userConfig: StyleConfig) {
         this.updateConfig(userConfig)
         this.injectDependencies()
-
         this.trackPedigree()
     }
 
     trackPedigree() {
-        this.pedigree.addEventListener("click", ()=> {
-            this.emit("click",  Object.assign(
-                this.config, {
+        this.pedigree.addEventListener("click", () => {
+            this.event.emit(
+                "click",
+                Object.assign(
+                    this.config, {
                     id: this.pedigree.id,
                     position: this.pedigree.getBoundingClientRect()
                 }
             ))
-        }) 
+        })
     }
 
     insert(id) {
@@ -57,20 +50,24 @@ export default class Pedigree {
     injectDependencies() {
         this.builder = new PedigreeBuilderDirector(this.config)
         this.pedigree = this.builder.createPedigree()
-        this.dragPlugin = new DragPlugin(this.pedigree)
+        this.dragPlugin = new DragPlugin(this.pedigree, this.event)
     }
 
     updateConfig(userConfig: StyleConfig) {
-        Object.keys(this.config).forEach((key)=>{
-            if(userConfig[key]) {
+        Object.keys(this.config).forEach((key) => {
+            if (userConfig[key]) {
                 this.config[key] = userConfig[key]
             }
         })
     }
 
     setAttribiute(prop: string, value: string | number) {
-        let obj = this.styleProxy.target
-        obj[prop] = value
-        this.styleProxy.target = obj
+        this.config[prop] = value
+        const recreatedPedigree = this.builder.recreatePedigree(this.config)
+        this.pedigree = recreatedPedigree.pedigree
+        this.dragPlugin.reattach(this.pedigree, this.config)
+        this.trackPedigree()
+        let oldPedigree = document.querySelector(`#${this.pedigree.id}`)
+        oldPedigree.replaceWith(this.pedigree)
     }
 }
