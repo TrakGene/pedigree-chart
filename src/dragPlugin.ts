@@ -1,5 +1,7 @@
+import { EventBus } from "./eventPlugin"
 import { StyleConfig } from "./interfaces"
 
+@EventBus
 export default class DragPlugin {
     private x: number
     private y: number
@@ -8,15 +10,21 @@ export default class DragPlugin {
     }
 
     startDragDriver(pedigree) {
-        pedigree.onmousedown = function(event) {
-            this.shiftX = event.clientX - pedigree.getBoundingClientRect().left
-            this.shiftY = event.clientY - pedigree.getBoundingClientRect().top
+        pedigree.onmousedown = (event) => {
+            const shiftX = event.clientX - pedigree.getBoundingClientRect().left
+            const shiftY = event.clientY - pedigree.getBoundingClientRect().top
 
-            pedigree.onmousemove = function(event) {
-                move(event, pedigree, this.shiftX, this.shiftY)
+            pedigree.onmousemove = (event) => {
+                move(event, pedigree, shiftX, shiftY)
+                this.emit("drag")
             }
-            pedigree.onmouseup = function() {
+            
+            pedigree.onmouseup = () => {
                 pedigree.onmousemove = null
+                this.emit("dragend", {
+                    id: pedigree.id,
+                    position: pedigree.getBoundingClientRect() 
+                })
             }
         }
 

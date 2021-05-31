@@ -40,8 +40,7 @@ export default class Pedigree {
     trackPedigree() {
         this.pedigree.addEventListener("click", ()=> {
             this.emit("click",  Object.assign(
-                this.config, 
-                {
+                this.config, {
                     id: this.pedigree.id,
                     position: this.pedigree.getBoundingClientRect()
                 }

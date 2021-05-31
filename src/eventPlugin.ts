@@ -9,6 +9,7 @@ export function EventBus(classToWrap: Function) {
             this.eventHandlers[eventName] = []
         }
         this.eventHandlers[eventName].push(eventHandler)
+        console.log(this.eventHandlers)
     }
     classToWrap.prototype.off = (eventName: string) =>{
         if(this.eventHandlers[eventName]) {
