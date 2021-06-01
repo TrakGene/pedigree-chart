@@ -4,16 +4,11 @@ export class EventHandler {
         'drag': []
     }
 
-    on(eventName, eventHandler) {
-        if(!this.eventHandlers[eventName]) {
-            this.eventHandlers[eventName] = []
-            this.eventHandlers[eventName].push(eventHandler)
-        } else {
-            this.eventHandlers[eventName].push(eventHandler)
-        }
+    on(eventName, eventHandler: Function) {
+        this.eventHandlers[eventName].push(eventHandler)
     }
-    
-    emit(eventName, props) {
+
+    emit(eventName, props = "") {
         this.eventHandlers[eventName].forEach((func)=>{
             func(props)
         })

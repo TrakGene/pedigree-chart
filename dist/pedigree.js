@@ -26,11 +26,8 @@ class Pedigree {
         this.trackPedigree();
     }
     trackPedigree() {
-        this.pedigree.addEventListener("click", () => {
-            this.event.emit("click", Object.assign(this.config, {
-                id: this.pedigree.id,
-                position: this.pedigree.getBoundingClientRect()
-            }));
+        this.pedigree.addEventListener("mousedown", () => {
+            this.event.emit("click");
         });
     }
     insert(id) {
