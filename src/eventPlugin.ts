@@ -8,7 +8,7 @@ export class EventHandler {
         this.eventHandlers[eventName].push(eventHandler)
     }
 
-    emit(eventName, props = "") {
+    emit(eventName, props = {}) {
         this.eventHandlers[eventName].forEach((func)=>{
             func(props)
         })
