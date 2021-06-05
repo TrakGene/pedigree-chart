@@ -1,4 +1,5 @@
 import { Pedigree } from './Pedigree'
+import EventBus from './EventBus'
 
 interface PedigreeDragShape {
     pedigree: Pedigree
@@ -62,6 +63,7 @@ export class MouseEventsHandler {
                 this.pedigrees[i].pedigree.x = x - this.offsetX
                 this.pedigrees[i].pedigree.y = y - this.offsetY
                 // this.drawfunc()
+                EventBus.emit('redraw')
                 this.pedigrees[i].pedigree.draw()
             }
         }

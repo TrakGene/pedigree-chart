@@ -1,5 +1,6 @@
 import { MalePedigree } from './Pedigree'
 import { MouseEventsHandler } from "./DragHandler"
+import eventBus from './EventBus'
 
 export default class Engine {
     shapes = []
@@ -13,6 +14,7 @@ export default class Engine {
         this.diagram = document.getElementById(id);
         this.ctx = this.diagram.getContext("2d");
         this.dragHandler = new MouseEventsHandler(this.diagram)
+        eventBus.on("redraw", ()=>this.draw())
     }
     add() {
         const x = new MalePedigree(this.diagram, {})
