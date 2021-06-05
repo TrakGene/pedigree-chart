@@ -20,7 +20,6 @@ export class MouseEventsHandler {
     initClickHandler() {
         this.pedigreeDiagram.onmousedown = (e) => {
             this.handleMouseDown(e)
-            EventBus.emit('click')
         }
         this.pedigreeDiagram.onmousemove = (e) => {
             this.dragPedigree(e)
@@ -39,8 +38,10 @@ export class MouseEventsHandler {
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
         this.pedigrees.forEach((pedigree)=>{
+            pedigree.pedigree.initShape()
             if(ctx.isPointInPath(mouseX, mouseY)) {
                 pedigree.dragEnabled = true
+                EventBus.emit(`click${pedigree.pedigree.id}`)
                 this.mouseOffsetX = mouseX - pedigree.pedigree.x
                 this.mouseOffsetY = mouseY - pedigree.pedigree.y
             }

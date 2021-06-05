@@ -1,22 +1,19 @@
 import { MalePedigree } from './Pedigree'
 import { MouseEventsHandler } from "./DragHandler"
-import LinesRenderer from "./LinesRenderer"
+import ConnectionCreator from "./LinesRenderer"
 import eventBus from './EventBus'
 
 export default class RenderEngine {
     shapes = []
-    connections = [{
-        type: "x",
-
-    }]
     diagram
     dragHandler: MouseEventsHandler
-    lineRenderer: LinesRenderer
+    connectionCreator: ConnectionCreator
+    newx = 0
 
     constructor(id) {
         this.diagram = document.getElementById(id);
         this.dragHandler = new MouseEventsHandler(this.diagram)
-        this.lineRenderer = new LinesRenderer(this.diagram)
+        this.connectionCreator = new ConnectionCreator(this.diagram)
         eventBus.on("redraw", ()=>this.draw())
     }
     create(sex, type) {
@@ -24,10 +21,24 @@ export default class RenderEngine {
         switch(sex) {
             case "male": pedigree = new MalePedigree(this.diagram)
         }
+        pedigree.x = this.newx
+        this.newx = this.newx + 120
         this.shapes.push(pedigree)
         this.dragHandler.appendPedigrees(pedigree)
         this.draw()
         return pedigree
+    }
+    connect(pedigreeA, pedigreeB, lineType) {
+        if(lineType === "marriage") {
+            pedigreeA.isMarried = true
+            pedigreeB.isMarried = true
+        }
+        this.connectionCreator.createConnection(
+            pedigreeA,
+            pedigreeB,
+            lineType
+        )
+        this.connectionCreator.drawConnections()
     }
     draw() {
         const ctx = this.diagram.getContext('2d')
@@ -35,13 +46,6 @@ export default class RenderEngine {
         this.shapes.forEach(shape => {
             shape.draw()
         })
+        this.connectionCreator.drawConnections()
     }
 }
-    // renderLines() {
-    //     this.ctx.beginPath();
-    //     var ctx = this.diagram.getContext("2d");
-    //     ctx.moveTo(this.shapes[1].calculateMiddle().x, this.shapes[1].calculateMiddle().y);
-    //     ctx.lineTo(this.shapes[2].calculateMiddle().x, this.shapes[2].calculateMiddle().y);
-    //     ctx.lineWidth = 3
-    //     ctx.stroke();
-    // }

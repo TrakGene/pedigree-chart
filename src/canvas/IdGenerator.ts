@@ -1,5 +1,5 @@
 class IdGenerator {
-    offset = 0
+    offset = -1
     characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     randomId() {
         this.offset += 1
