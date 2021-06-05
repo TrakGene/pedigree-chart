@@ -1,5 +1,8 @@
 class EventBus {
     eventHandlers = {}
+    constructor() {
+        this.initBuiltInEvents()
+    }
     on(eventName, eventHandler) {
         if(!this.eventHandlers[eventName]) {
             this.eventHandlers[eventName] = []
@@ -14,6 +17,9 @@ class EventBus {
                 func()
             });
         }
+    }
+    initBuiltInEvents() {
+        this.eventHandlers['click'] = []
     }
 }
 const eventBus = new EventBus()

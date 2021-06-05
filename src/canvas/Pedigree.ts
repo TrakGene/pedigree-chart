@@ -1,3 +1,5 @@
+import EventBus from './EventBus'
+
 export interface Pedigree {
     x: number
     y: number
@@ -5,18 +7,15 @@ export interface Pedigree {
     // abstract setPregnacy()
     // abstract initShape()
     draw()
-    // abstract create()
+    calculateMiddle()
 }
 export class MalePedigree implements Pedigree {
     canvasDiagram: HTMLCanvasElement
-    config
     size = 100
-    dragEnabled = false
     x = 0
     y = 0
-    constructor(canvasDiagram, config) {
+    constructor(canvasDiagram) {
         this.canvasDiagram = canvasDiagram
-        this.config = config
     }
     calculateMiddle() {
         return { 
@@ -28,12 +27,11 @@ export class MalePedigree implements Pedigree {
         const ctx = this.canvasDiagram.getContext('2d')
         ctx.beginPath();
         ctx.rect(this.x, this.y, this.size, this.size);
-        ctx.lineWidth = 5
-        ctx.fill()
+        ctx.lineWidth = 4
         ctx.stroke();
         ctx.closePath();
     }
-    // updatePosition(x, y) {
-
-    // }
+    on(eventName, eventHandler) {
+        EventBus.on(eventName, ()=>eventHandler(this.size))
+    }
 }

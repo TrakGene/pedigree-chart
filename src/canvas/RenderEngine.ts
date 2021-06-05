@@ -1,29 +1,37 @@
 import { MalePedigree } from './Pedigree'
 import { MouseEventsHandler } from "./DragHandler"
+import LinesRenderer from "./LinesRenderer"
 import eventBus from './EventBus'
 
-export default class Engine {
+export default class RenderEngine {
     shapes = []
+    connections = [{
+        type: "x",
+
+    }]
     diagram
-    ctx
-    offsetX = 0
-    offsetY = 0
-    marriageLines = []
     dragHandler: MouseEventsHandler
+    lineRenderer: LinesRenderer
+
     constructor(id) {
         this.diagram = document.getElementById(id);
-        this.ctx = this.diagram.getContext("2d");
         this.dragHandler = new MouseEventsHandler(this.diagram)
+        this.lineRenderer = new LinesRenderer(this.diagram)
         eventBus.on("redraw", ()=>this.draw())
     }
-    add() {
-        const x = new MalePedigree(this.diagram, {})
-        this.shapes.push(x)
-        this.dragHandler.appendPedigrees(x)
+    create(sex, type) {
+        let pedigree;
+        switch(sex) {
+            case "male": pedigree = new MalePedigree(this.diagram)
+        }
+        this.shapes.push(pedigree)
+        this.dragHandler.appendPedigrees(pedigree)
         this.draw()
+        return pedigree
     }
     draw() {
-        this.ctx.clearRect(0, 0, 1000, 1000)
+        const ctx = this.diagram.getContext('2d')
+        ctx.clearRect(0, 0, 1000, 1000)
         this.shapes.forEach(shape => {
             shape.draw()
         })

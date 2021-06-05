@@ -9,63 +9,59 @@ interface PedigreeDragShape {
 export class MouseEventsHandler {
     pedigreeDiagram: HTMLCanvasElement
     pedigrees: Array<PedigreeDragShape> = []
-    offsetX = 0
-    offsetY = 0
+    mouseOffsetX = 0
+    mouseOffsetY = 0
 
     constructor(diagram) {
         this.pedigreeDiagram = diagram
         this.initClickHandler()
     }
 
-    appendPedigrees(pedigree) {
-        this.pedigrees.push({
-            pedigree: pedigree,
-            dragEnabled: false
-        })
-    }
-
     initClickHandler() {
         this.pedigreeDiagram.onmousedown = (e) => {
             this.handleMouseDown(e)
+            EventBus.emit('click')
         }
         this.pedigreeDiagram.onmousemove = (e) => {
             this.dragPedigree(e)
         }
         this.pedigreeDiagram.onmouseup = (e) => {
-            for (var i = 0; i < this.pedigrees.length; i++) {
-                var shape = this.pedigrees[i];
-                shape.dragEnabled = false
-            }
+            this.pedigrees.forEach((pedigree)=>{
+                pedigree.dragEnabled = false
+            })
         }
     }
+
     handleMouseDown(e) {
         e.preventDefault();
         const ctx = this.pedigreeDiagram.getContext('2d')
-        for (var i = 0; i < this.pedigrees.length; i++) {
-            var shape = this.pedigrees[i];
-            var rect = this.pedigreeDiagram.getBoundingClientRect();
-            var x = e.clientX - rect.left;
-            var y = e.clientY - rect.top;
-            // shape.pedigree.draw()
-            if (ctx.isPointInPath(x, y)) {
-                shape.dragEnabled = true
-                this.offsetX = x - shape.pedigree.x
-                this.offsetY = y - shape.pedigree.y
+        const rect = this.pedigreeDiagram.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        this.pedigrees.forEach((pedigree)=>{
+            if(ctx.isPointInPath(mouseX, mouseY)) {
+                pedigree.dragEnabled = true
+                this.mouseOffsetX = mouseX - pedigree.pedigree.x
+                this.mouseOffsetY = mouseY - pedigree.pedigree.y
             }
-        }
+        })
     }
     dragPedigree(e) {
-        var rect = this.pedigreeDiagram.getBoundingClientRect();
-        var x = e.clientX - rect.left;
-        var y = e.clientY - rect.top;
-        for (var i = 0; i < this.pedigrees.length; i++) {
-            if(this.pedigrees[i].dragEnabled) {
-                this.pedigrees[i].pedigree.x = x - this.offsetX
-                this.pedigrees[i].pedigree.y = y - this.offsetY
-                // this.drawfunc()
+        const rect = this.pedigreeDiagram.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        this.pedigrees.forEach((pedigree)=>{
+            if(pedigree.dragEnabled) {
+                pedigree.pedigree.x = mouseX - this.mouseOffsetX
+                pedigree.pedigree.y = mouseY - this.mouseOffsetY
                 EventBus.emit('redraw')
-                this.pedigrees[i].pedigree.draw()
             }
-        }
+        })
+    }
+    appendPedigrees(pedigree) {
+        this.pedigrees.push({
+            pedigree: pedigree,
+            dragEnabled: false
+        })
     }
 }
