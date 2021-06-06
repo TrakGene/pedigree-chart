@@ -1,9 +1,10 @@
+import { EventHandler } from "./eventPlugin"
 import { StyleConfig } from "./interfaces"
 
 export default class DragPlugin {
     private x: number
     private y: number
-    event
+    event: EventHandler
 
     constructor(pedigree, eventHandler) {
         this.startDragDriver(pedigree)
