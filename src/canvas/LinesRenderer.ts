@@ -6,6 +6,12 @@ interface Connection {
     type: string,
 }
 
+interface Marriage {
+    marriedA: Pedigree
+    marriedB: Pedigree
+}
+
+
 export default class ConnectionCreator {
     pedigreeDiagram: HTMLCanvasElement
     connections: Array<Connection> = []
@@ -23,7 +29,6 @@ export default class ConnectionCreator {
     }
 
     drawConnections() {
-        const ctx = this.pedigreeDiagram.getContext("2d");
         this.connections.forEach(connection => {
             if (connection.type == "marriage") {
                 this.drawMarriageLines(connection)
@@ -33,6 +38,7 @@ export default class ConnectionCreator {
             }
         })
     }
+
     drawMarriageLines(connection: Connection) {
         const ctx = this.pedigreeDiagram.getContext("2d");
         ctx.beginPath();
@@ -42,18 +48,27 @@ export default class ConnectionCreator {
         ctx.stroke();
         ctx.closePath();
     }
+
     drawSiblingLines(connection: Connection) {
+        const nodeA = connection.pedigreeA
+        const nodeB = connection.pedigreeB
 
-        const x1 = connection.pedigreeA.x + connection.pedigreeA.size / 2
+        const x1 = nodeA.x + nodeA.size / 2
+        const y1 = nodeA.y + nodeA.size / 2
+
+        // Distance beetwen pedigreeA and B
         let x2
-        if (connection.pedigreeA.isMarried || connection.pedigreeB.isMarried) {
-            const shift = (connection.pedigreeA.x - (connection.pedigreeB.x + connection.pedigreeB.size)) / 2
-            x2 = (connection.pedigreeB.x + connection.pedigreeB.size) + shift
-        }
-
-
-        const y1 = connection.pedigreeA.y + connection.pedigreeA.size / 2
-        const y2 = y1
+        let shift = (nodeA.x - (nodeB.x + nodeB.size)) / 2
+        x2 = (nodeB.x + nodeB.size) + shift
+        if(nodeA.marriagePartner) {
+            shift = (nodeA.marriagePartner.x - (nodeA.marriagePartner.x + nodeA.marriagePartner.size))/2
+            x2 =  (nodeA.marriagePartner.x + nodeA.marriagePartner.size) + shift
+        } 
+        if(nodeB.marriagePartner) {
+            shift = (nodeB.x - (nodeB.marriagePartner.x + nodeB.marriagePartner.size))/2
+            x2 = (nodeB.marriagePartner.x + nodeB.marriagePartner.size) + shift
+        } 
+        const y2 = nodeA.y + nodeA.size / 2
 
         const ctx = this.pedigreeDiagram.getContext("2d");
         ctx.beginPath();

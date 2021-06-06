@@ -4,6 +4,7 @@ import IdGenerator from './IdGenerator'
 export interface Pedigree {
     id: string
     isMarried: boolean
+    marriagePartner: Pedigree
     size: number
     x: number
     y: number
@@ -14,6 +15,7 @@ export interface Pedigree {
 export class MalePedigree implements Pedigree {
     canvasDiagram: HTMLCanvasElement
     isMarried = false
+    marriagePartner = null;
     id = IdGenerator.randomId()
     size = 80
     x = 0
@@ -33,6 +35,7 @@ export class MalePedigree implements Pedigree {
         ctx.rect(this.x, this.y, this.size, this.size);
         ctx.lineWidth = 4
         ctx.stroke();
+        ctx.fillText(this.id, this.x, this.y);
         ctx.closePath();
     }
     initShape() {
@@ -41,6 +44,7 @@ export class MalePedigree implements Pedigree {
         ctx.rect(this.x, this.y, this.size, this.size);
         ctx.lineWidth = 4
         ctx.stroke();
+        ctx.fillText(this.id, this.x, this.y);
         ctx.closePath();
     }
     on(eventName, eventHandler) {

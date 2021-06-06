@@ -30,8 +30,8 @@ export default class RenderEngine {
     }
     connect(pedigreeA, pedigreeB, lineType) {
         if(lineType === "marriage") {
-            pedigreeA.isMarried = true
-            pedigreeB.isMarried = true
+            pedigreeA.marriagePartner = pedigreeB
+            pedigreeB.marriagePartner = pedigreeA
         }
         this.connectionCreator.createConnection(
             pedigreeA,
