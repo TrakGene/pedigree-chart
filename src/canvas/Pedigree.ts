@@ -20,6 +20,7 @@ export class MalePedigree implements Pedigree {
     size = 80
     x = 0
     y = 0
+    border = 4
     constructor(canvasDiagram) {
         this.canvasDiagram = canvasDiagram
     }
@@ -33,7 +34,7 @@ export class MalePedigree implements Pedigree {
         const ctx = this.canvasDiagram.getContext('2d')
         ctx.beginPath();
         ctx.rect(this.x, this.y, this.size, this.size);
-        ctx.lineWidth = 4
+        ctx.lineWidth = this.border
         ctx.stroke();
         ctx.fillText(this.id, this.x, this.y);
         ctx.closePath();
@@ -42,7 +43,7 @@ export class MalePedigree implements Pedigree {
         const ctx = this.canvasDiagram.getContext('2d')
         ctx.beginPath();
         ctx.rect(this.x, this.y, this.size, this.size);
-        ctx.lineWidth = 4
+        ctx.lineWidth = this.border
         ctx.stroke();
         ctx.fillText(this.id, this.x, this.y);
         ctx.closePath();

@@ -48,4 +48,11 @@ export default class RenderEngine {
         })
         this.connectionCreator.drawConnections()
     }
+    resize() {
+        this.shapes.forEach(shape => {
+            shape.size = shape.size * 0.5
+            shape.border = shape.border * 0.5
+        })
+        this.draw()
+    }
 }
