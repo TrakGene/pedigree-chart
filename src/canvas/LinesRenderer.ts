@@ -1,4 +1,5 @@
 import { Pedigree } from "./Pedigree"
+import { SiblingLine, MarriageLine } from "./Lines"
 
 interface Connection {
     pedigreeA: Pedigree
@@ -13,15 +14,19 @@ interface Marriage {
 
 
 export default class ConnectionCreator {
-    pedigreeDiagram: HTMLCanvasElement
-    connections: Array<Connection> = []
+    pedigreeDiagram: HTMLCanvasElement 
+    ctx: HTMLCanvasElement
+    linesToRender: Array<Connection> = []
+    renderedLines: Array<SiblingLine | MarriageLine> = []
+    scale: 1
 
     constructor(diagram) {
         this.pedigreeDiagram = diagram
+        this.ctx = diagram.getContext("2d");
     }
 
     createConnection(pedigreeA, pedigreeB, lineType) {
-        this.connections.push({
+        this.linesToRender.push({
             pedigreeA: pedigreeA,
             pedigreeB: pedigreeB,
             type: lineType
@@ -29,7 +34,7 @@ export default class ConnectionCreator {
     }
 
     drawConnections() {
-        this.connections.forEach(connection => {
+        this.linesToRender.forEach(connection => {
             if (connection.type == "marriage") {
                 this.drawMarriageLines(connection)
             }
@@ -40,13 +45,14 @@ export default class ConnectionCreator {
     }
 
     drawMarriageLines(connection: Connection) {
-        const ctx = this.pedigreeDiagram.getContext("2d");
-        ctx.beginPath();
-        ctx.moveTo(connection.pedigreeA.calculateMiddle().x, connection.pedigreeA.calculateMiddle().y);
-        ctx.lineTo(connection.pedigreeB.calculateMiddle().x, connection.pedigreeB.calculateMiddle().y);
-        ctx.lineWidth = 3;
-        ctx.stroke();
-        ctx.closePath();
+        const points = {
+            x1: connection.pedigreeA.calculateMiddle().x,
+            y1: connection.pedigreeA.calculateMiddle().y,
+            x2: connection.pedigreeB.calculateMiddle().x,
+            y2: connection.pedigreeB.calculateMiddle().y,
+        }
+        const line = new MarriageLine(this.ctx, points, 3)
+        this.renderedLines.push(line)
     }
 
     drawSiblingLines(connection: Connection) {
@@ -57,8 +63,8 @@ export default class ConnectionCreator {
         const y1 = nodeA.y + nodeA.size / 2
 
         // Distance beetwen pedigreeA and B
-        let x2
         let shift = (nodeA.x - (nodeB.x + nodeB.size)) / 2
+        let x2
         x2 = (nodeB.x + nodeB.size) + shift
         if(nodeA.marriagePartner) {
             shift = (nodeA.marriagePartner.x - (nodeA.marriagePartner.x + nodeA.marriagePartner.size))/2
@@ -70,18 +76,18 @@ export default class ConnectionCreator {
         } 
         const y2 = nodeA.y + nodeA.size / 2
 
-        const ctx = this.pedigreeDiagram.getContext("2d");
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.moveTo(x2, y2);
-        ctx.lineTo(x2, connection.pedigreeB.y + connection.pedigreeB.size / 2);
+        const y3 = nodeB.y + nodeB.size / 2
+        const x3 = nodeB.x + nodeB.size / 2
 
-        ctx.moveTo(x2, connection.pedigreeB.y + connection.pedigreeB.size / 2);
-        ctx.lineTo(connection.pedigreeB.x + connection.pedigreeB.size / 2, connection.pedigreeB.y + connection.pedigreeB.size / 2);
-
-        ctx.lineWidth = 3
-        ctx.stroke();
-        ctx.closePath();
+        const points = {
+            x1: x1,
+            y1: y1,
+            x2: x2,
+            y2: y2,
+            x3: x3,
+            y3: y3,
+        }
+        const line = new SiblingLine(this.ctx, points, 3)
+        this.renderedLines.push(line)
     }
 }
