@@ -13,7 +13,7 @@ interface Marriage {
 }
 
 
-export default class ConnectionCreator {
+export default class ConnectionsManager {
     pedigreeDiagram: HTMLCanvasElement 
     ctx: HTMLCanvasElement
     linesToRender: Array<Connection> = []

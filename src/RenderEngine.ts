@@ -1,19 +1,19 @@
 import { MalePedigree } from './Pedigree'
 import { MouseEventsHandler } from "./DragHandler"
-import ConnectionCreator from "./LinesRenderer"
+import ConnectionManager from "./ConnectionManager"
 import eventBus from './EventBus'
 
 export default class RenderEngine {
     shapes = []
     diagram
     dragHandler: MouseEventsHandler
-    connectionCreator: ConnectionCreator
+    connectionManager: ConnectionManager
     newx = 0
 
     constructor(id) {
         this.diagram = document.getElementById(id);
         this.dragHandler = new MouseEventsHandler(this.diagram)
-        this.connectionCreator = new ConnectionCreator(this.diagram)
+        this.connectionManager = new ConnectionManager(this.diagram)
         eventBus.on("redraw", ()=>this.draw())
     }
     create(sex, type) {
@@ -33,12 +33,12 @@ export default class RenderEngine {
             pedigreeA.marriagePartner = pedigreeB
             pedigreeB.marriagePartner = pedigreeA
         }
-        this.connectionCreator.createConnection(
+        this.connectionManager.createConnection(
             pedigreeA,
             pedigreeB,
             lineType
         )
-        this.connectionCreator.drawConnections()
+        this.connectionManager.drawConnections()
     }
     draw() {
         const ctx = this.diagram.getContext('2d')
@@ -46,7 +46,7 @@ export default class RenderEngine {
         this.shapes.forEach(shape => {
             shape.draw()
         })
-        this.connectionCreator.drawConnections()
+        this.connectionManager.drawConnections()
     }
     resize() {
         this.shapes.forEach(shape => {

@@ -1,4 +1,3 @@
-import Pedigree from "./pedigree";
-import CanvasPedigree from "./canvas/Pedigree";
-import Engine from "./canvas/RenderEngine";
-export { Pedigree, CanvasPedigree, Engine };
+import { Pedigree } from "./Pedigree";
+import Engine from "./RenderEngine";
+export { Pedigree, Engine };
