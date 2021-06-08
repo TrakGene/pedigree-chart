@@ -1,35 +1,35 @@
 import { MalePedigree } from './Pedigree'
 import { MouseEventsHandler } from "./DragHandler"
-import ConnectionManager from "./ConnectionManager"
+import ConnectionManager from "./ConnectionsManager"
 import eventBus from './EventBus'
+import PedigreeManager from "./PedigreeManager"
 
 export default class RenderEngine {
     shapes = []
-    diagram
+    diagram: HTMLCanvasElement
+    ctx: CanvasRenderingContext2D
     dragHandler: MouseEventsHandler
     connectionManager: ConnectionManager
-    newx = 0
+    pedigreeManager: PedigreeManager
 
     constructor(id) {
-        this.diagram = document.getElementById(id);
-        this.dragHandler = new MouseEventsHandler(this.diagram)
+        this.diagram = document.getElementById(id) as HTMLCanvasElement;
+        this.ctx = this.diagram.getContext('2d')
+        this.dragHandler = new MouseEventsHandler(this.diagram, this.ctx)
         this.connectionManager = new ConnectionManager(this.diagram)
-        eventBus.on("redraw", ()=>this.draw())
+        this.pedigreeManager = new PedigreeManager(this.diagram)
+        eventBus.on("redraw", () => this.draw())
     }
-    create(sex, type) {
-        let pedigree;
-        switch(sex) {
-            case "male": pedigree = new MalePedigree(this.diagram)
-        }
-        pedigree.x = this.newx
-        this.newx = this.newx + 120
-        this.shapes.push(pedigree)
-        this.dragHandler.appendPedigrees(pedigree)
-        this.draw()
+    private draw() {
+        this.pedigreeManager.drawPedigrees()
+        this.connectionManager.drawConnections()
+    }
+    public create(sex, type) {
+        const pedigree = this.pedigreeManager.createPedigree(sex, type)
         return pedigree
     }
-    connect(pedigreeA, pedigreeB, lineType) {
-        if(lineType === "marriage") {
+    public connect(pedigreeA, pedigreeB, lineType) {
+        if (lineType === "marriage") {
             pedigreeA.marriagePartner = pedigreeB
             pedigreeB.marriagePartner = pedigreeA
         }
@@ -39,20 +39,5 @@ export default class RenderEngine {
             lineType
         )
         this.connectionManager.drawConnections()
-    }
-    draw() {
-        const ctx = this.diagram.getContext('2d')
-        ctx.clearRect(0, 0, 1000, 1000)
-        this.shapes.forEach(shape => {
-            shape.draw()
-        })
-        this.connectionManager.drawConnections()
-    }
-    resize() {
-        this.shapes.forEach(shape => {
-            shape.size = shape.size * 0.5
-            shape.border = shape.border * 0.5
-        })
-        this.draw()
     }
 }

@@ -12,7 +12,6 @@ interface Marriage {
     marriedB: Pedigree
 }
 
-
 export default class ConnectionsManager {
     pedigreeDiagram: HTMLCanvasElement 
     ctx: HTMLCanvasElement
