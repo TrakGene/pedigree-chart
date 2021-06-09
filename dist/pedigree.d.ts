@@ -3,6 +3,7 @@ export interface Pedigree {
     isMarried: boolean;
     marriagePartner: Pedigree;
     size: number;
+    border: number;
     x: number;
     y: number;
     draw(): any;
@@ -15,9 +16,9 @@ export declare class MalePedigree implements Pedigree {
     marriagePartner: any;
     id: string;
     size: number;
+    border: number;
     x: number;
     y: number;
-    border: number;
     constructor(canvasDiagram: any);
     calculateMiddle(): {
         x: number;

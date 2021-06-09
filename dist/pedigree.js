@@ -9,9 +9,9 @@ class MalePedigree {
         this.marriagePartner = null;
         this.id = IdGenerator_1.default.randomId();
         this.size = 80;
+        this.border = 4;
         this.x = 0;
         this.y = 0;
-        this.border = 4;
         this.canvasDiagram = canvasDiagram;
     }
     calculateMiddle() {

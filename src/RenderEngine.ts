@@ -7,15 +7,31 @@ import PedigreeManager from "./PedigreeManager"
 export default class RenderEngine {
     shapes = []
     diagram: HTMLCanvasElement
-    ctx: CanvasRenderingContext2D
+    diagramWrapper: HTMLElement
     dragHandler: MouseEventsHandler
     connectionManager: ConnectionManager
     pedigreeManager: PedigreeManager
+    // lastX = 0
 
     constructor(id) {
-        this.diagram = document.getElementById(id) as HTMLCanvasElement;
-        this.ctx = this.diagram.getContext('2d')
-        this.dragHandler = new MouseEventsHandler(this.diagram, this.ctx)
+        const diagramWrapper = document.getElementById(id) as HTMLElement;
+        const diagram = document.createElement('canvas')
+        diagram.width = window.innerWidth
+        diagram.height = window.innerHeight
+        diagramWrapper.style.border = "3px solid black"
+        diagramWrapper.style.overflow = "hidden"
+        diagramWrapper.appendChild(diagram)
+        window.addEventListener("resize", ()=>{
+            this.resizeDiagram()
+        })
+        // diagram.addEventListener("mousedown", (e)=>{
+        //     const rect = diagram.getBoundingClientRect();
+        //     const mouseX = e.clientX - rect.left;
+        //     this.lastX = mouseX
+        //     diagram.style.marginLeft += `${this.lastX}px`
+        // })
+        this.diagram = diagram
+        this.dragHandler = new MouseEventsHandler(this.diagram)
         this.connectionManager = new ConnectionManager(this.diagram)
         this.pedigreeManager = new PedigreeManager(this.diagram)
         eventBus.on("redraw", () => this.draw())
@@ -28,6 +44,12 @@ export default class RenderEngine {
         const pedigree = this.pedigreeManager.createPedigree(sex, type)
         return pedigree
     }
+    public resizeDiagram() {
+        this.diagram.width = window.innerWidth
+        this.diagram.height = window.innerHeight
+        this.pedigreeManager.drawPedigrees()
+        this.connectionManager.drawConnections()
+    }
     public connect(pedigreeA, pedigreeB, lineType) {
         if (lineType === "marriage") {
             pedigreeA.marriagePartner = pedigreeB
@@ -39,5 +61,9 @@ export default class RenderEngine {
             lineType
         )
         this.connectionManager.drawConnections()
+    }
+    public scale(scale) {
+        this.pedigreeManager.scalePedigrees(scale)
+        this.connectionManager.scaleConnections(scale)
     }
 }

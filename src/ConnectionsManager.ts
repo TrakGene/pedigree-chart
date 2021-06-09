@@ -17,7 +17,7 @@ export default class ConnectionsManager {
     ctx: HTMLCanvasElement
     linesToRender: Array<Connection> = []
     renderedLines: Array<SiblingLine | MarriageLine> = []
-    scale: 1
+    lineWidth = 3
 
     constructor(diagram) {
         this.pedigreeDiagram = diagram
@@ -42,6 +42,11 @@ export default class ConnectionsManager {
             }
         })
     }
+    
+    scaleConnections(scale) {
+        this.lineWidth = this.lineWidth * scale
+        this.drawConnections()
+    }
 
     drawMarriageLines(connection: Connection) {
         const points = {
@@ -50,7 +55,7 @@ export default class ConnectionsManager {
             x2: connection.pedigreeB.calculateMiddle().x,
             y2: connection.pedigreeB.calculateMiddle().y,
         }
-        const line = new MarriageLine(this.ctx, points, 3)
+        const line = new MarriageLine(this.ctx, points, this.lineWidth)
         this.renderedLines.push(line)
     }
 
@@ -86,7 +91,7 @@ export default class ConnectionsManager {
             x3: x3,
             y3: y3,
         }
-        const line = new SiblingLine(this.ctx, points, 3)
+        const line = new SiblingLine(this.ctx, points, this.lineWidth)
         this.renderedLines.push(line)
     }
 }

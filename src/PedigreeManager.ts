@@ -29,8 +29,19 @@ export default class PedigreeManager {
     }
     drawPedigrees() {
         const ctx = this.pedigreeDiagram.getContext('2d')
-        ctx.clearRect(0, 0, 1000, 1000)
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
         this.pedigrees.forEach(pedigree => {
+            pedigree.draw()
+        })
+    }
+    scalePedigrees(scale) {
+        const ctx = this.pedigreeDiagram.getContext('2d')
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+        this.pedigrees.forEach(pedigree => {
+            pedigree.size *= scale 
+            pedigree.border *= scale
+            pedigree.x *= scale
+            pedigree.y *= scale
             pedigree.draw()
         })
     }

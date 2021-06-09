@@ -6,6 +6,7 @@ export interface Pedigree {
     isMarried: boolean
     marriagePartner: Pedigree
     size: number
+    border: number
     x: number
     y: number
     draw()
@@ -18,9 +19,9 @@ export class MalePedigree implements Pedigree {
     marriagePartner = null;
     id = IdGenerator.randomId()
     size = 80
+    border = 4
     x = 0
     y = 0
-    border = 4
     constructor(canvasDiagram) {
         this.canvasDiagram = canvasDiagram
     }

@@ -8,14 +8,12 @@ interface PedigreeDragShape {
 
 export class MouseEventsHandler {
     pedigreeDiagram: HTMLCanvasElement
-    ctx: CanvasRenderingContext2D
     pedigrees: Array<PedigreeDragShape> = []
     mouseOffsetX = 0
     mouseOffsetY = 0
 
-    constructor(diagram, ctx) {
+    constructor(diagram) {
         this.pedigreeDiagram = diagram
-        this.ctx = ctx
         this.initClickHandler()
     }
 
@@ -34,12 +32,13 @@ export class MouseEventsHandler {
     }
 
     handleMouseDown(e) {
+        const ctx = this.pedigreeDiagram.getContext('2d')
         const rect = this.pedigreeDiagram.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
         this.pedigrees.forEach((pedigree)=>{
             pedigree.pedigree.initShape()
-            if(this.ctx.isPointInPath(mouseX, mouseY)) {
+            if(ctx.isPointInPath(mouseX, mouseY)) {
                 pedigree.dragEnabled = true
                 EventBus.emit(`click${pedigree.pedigree.id}`)
                 this.mouseOffsetX = mouseX - pedigree.pedigree.x
