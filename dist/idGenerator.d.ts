@@ -1,7 +1,7 @@
-declare class idGenerator {
+declare class IdGenerator {
     offset: number;
     characters: string;
     randomId(): string;
 }
-declare const generator: idGenerator;
+declare const generator: IdGenerator;
 export default generator;

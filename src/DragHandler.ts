@@ -32,7 +32,6 @@ export class MouseEventsHandler {
     }
 
     handleMouseDown(e) {
-        e.preventDefault();
         const ctx = this.pedigreeDiagram.getContext('2d')
         const rect = this.pedigreeDiagram.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;

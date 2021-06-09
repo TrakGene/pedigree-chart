@@ -1,66 +1,58 @@
-import { StyleConfig } from './interfaces'
-import { PedigreeBuilderDirector } from "./builders/builder"
-import DragPlugin from "./dragPlugin"
-import { EventHandler } from './eventPlugin'
+import EventBus from './EventBus'
+import IdGenerator from './IdGenerator'
 
-export default class Pedigree {
-    container?: string;
-    config: StyleConfig = {
-        type: "individual", 
-        sex: "male",
-        size: 100,
-        border: 5,
-        mode: "icon",
-        drag: false,
-        x: 0,
-        y: 0,
-        topColor: "white",
-        bottomColor: "white"
+export interface Pedigree {
+    id: string
+    isMarried: boolean
+    marriagePartner: Pedigree
+    size: number
+    border: number
+    x: number
+    y: number
+    draw()
+    initShape()
+    calculateMiddle()
+}
+export class MalePedigree implements Pedigree {
+    canvasDiagram: HTMLCanvasElement
+    isMarried = false
+    marriagePartner = null;
+    id = IdGenerator.randomId()
+    size = 80
+    border = 4
+    x = 0
+    y = 0
+    constructor(canvasDiagram) {
+        this.canvasDiagram = canvasDiagram
     }
-    builder = new PedigreeBuilderDirector(this.config)
-    pedigree: HTMLElement = this.builder.createPedigree()
-    event: EventHandler = new EventHandler()
-    dragPlugin: DragPlugin = new DragPlugin(this.pedigree, this.event)
-
-    constructor(userConfig: StyleConfig) {
-        this.updateConfig(userConfig)
-        this.injectDependencies()
-        this.trackPedigree()
+    calculateMiddle() {
+        return { 
+            x: this.x + this.size/2,
+            y: this.y + this.size/2
+        }
     }
-
-    trackPedigree() {
-        this.pedigree.addEventListener("mousedown", () => {
-            this.event.emit("click")
-        })
+    draw() {
+        const ctx = this.canvasDiagram.getContext('2d')
+        ctx.beginPath();
+        ctx.rect(this.x, this.y, this.size, this.size);
+        ctx.lineWidth = this.border
+        ctx.stroke();
+        ctx.fillText(this.id, this.x, this.y);
+        ctx.closePath();
     }
-
-    insert(id) {
-        this.container = id
-        const w = document.querySelector(id)
-        w.appendChild(this.pedigree)
+    initShape() {
+        const ctx = this.canvasDiagram.getContext('2d')
+        ctx.beginPath();
+        ctx.rect(this.x, this.y, this.size, this.size);
+        ctx.lineWidth = this.border
+        ctx.stroke();
+        ctx.fillText(this.id, this.x, this.y);
+        ctx.closePath();
     }
-
-    injectDependencies() {
-        this.builder = new PedigreeBuilderDirector(this.config)
-        this.pedigree = this.builder.createPedigree()
-        this.dragPlugin = new DragPlugin(this.pedigree, this.event)
-    }
-
-    updateConfig(userConfig: StyleConfig) {
-        Object.keys(this.config).forEach((key) => {
-            if (userConfig[key]) {
-                this.config[key] = userConfig[key]
-            }
-        })
-    }
-
-    setAttribiute(prop: string, value: string | number) {
-        this.config[prop] = value
-        const recreatedPedigree = this.builder.recreatePedigree(this.config)
-        this.pedigree = recreatedPedigree.pedigree
-        this.dragPlugin.reattach(this.pedigree, this.config)
-        this.trackPedigree()
-        let oldPedigree = document.querySelector(`#${this.pedigree.id}`)
-        oldPedigree.replaceWith(this.pedigree)
+    on(eventName, eventHandler) {
+        EventBus.on(
+            `${eventName}${this.id}`, 
+            ()=>eventHandler(this.id)
+        )
     }
 }
