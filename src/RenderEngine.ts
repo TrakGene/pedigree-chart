@@ -11,7 +11,6 @@ export default class RenderEngine {
     dragHandler: MouseEventsHandler
     connectionManager: ConnectionManager
     pedigreeManager: PedigreeManager
-    // lastX = 0
 
     constructor(id) {
         const diagramWrapper = document.getElementById(id) as HTMLElement;
@@ -24,12 +23,6 @@ export default class RenderEngine {
         window.addEventListener("resize", ()=>{
             this.resizeDiagram()
         })
-        // diagram.addEventListener("mousedown", (e)=>{
-        //     const rect = diagram.getBoundingClientRect();
-        //     const mouseX = e.clientX - rect.left;
-        //     this.lastX = mouseX
-        //     diagram.style.marginLeft += `${this.lastX}px`
-        // })
         this.diagram = diagram
         this.dragHandler = new MouseEventsHandler(this.diagram)
         this.connectionManager = new ConnectionManager(this.diagram)
