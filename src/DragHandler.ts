@@ -11,6 +11,8 @@ export class MouseEventsHandler {
     pedigrees: Array<PedigreeDragShape> = []
     mouseOffsetX = 0
     mouseOffsetY = 0
+    lastCursorXPosition = 0
+    lastCursorYPosition = 0
 
     constructor(diagram) {
         this.pedigreeDiagram = diagram
@@ -43,6 +45,7 @@ export class MouseEventsHandler {
                 EventBus.emit(`click${pedigree.pedigree.id}`)
                 this.mouseOffsetX = mouseX - pedigree.pedigree.x
                 this.mouseOffsetY = mouseY - pedigree.pedigree.y
+                pedigree.pedigree.draw()
             }
         })
     }
@@ -52,8 +55,10 @@ export class MouseEventsHandler {
         const mouseY = e.clientY - rect.top;
         this.pedigrees.forEach((pedigree)=>{
             if(pedigree.dragEnabled) {
-                pedigree.pedigree.x = mouseX - this.mouseOffsetX
-                pedigree.pedigree.y = mouseY - this.mouseOffsetY
+                pedigree.pedigree.x = Math.round((mouseX - this.mouseOffsetX)/15)*15
+                pedigree.pedigree.y = Math.round((mouseY - this.mouseOffsetY)/15)*15
+                // pedigree.pedigree.x = mouseX - this.mouseOffsetX
+                // pedigree.pedigree.y = mouseY - this.mouseOffsetY
                 EventBus.emit('redraw')
                 pedigree.pedigree.draw()
             }

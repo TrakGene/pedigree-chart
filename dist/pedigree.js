@@ -24,7 +24,7 @@ class MalePedigree {
         const ctx = this.canvasDiagram.getContext('2d');
         ctx.beginPath();
         ctx.rect(this.x, this.y, this.size, this.size);
-        ctx.fillStyle = "black";
+        ctx.fillStyle = "white";
         ctx.fill();
         ctx.lineWidth = this.border;
         ctx.strokeStyle = "black";
@@ -56,8 +56,8 @@ class FemalePedigree {
     draw() {
         const ctx = this.canvasDiagram.getContext('2d');
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size / 2, 0, 2 * Math.PI);
-        ctx.fillStyle = "#8ED6FF";
+        ctx.arc(this.x + this.size / 2, this.y + this.size / 2, this.size / 2, 0, 2 * Math.PI);
+        ctx.fillStyle = "white";
         ctx.fill();
         ctx.lineWidth = this.border;
         ctx.strokeStyle = "black";

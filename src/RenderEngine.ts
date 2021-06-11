@@ -1,4 +1,3 @@
-import { MalePedigree } from './Pedigree'
 import { MouseEventsHandler } from "./DragHandler"
 import ConnectionManager from "./ConnectionsManager"
 import eventBus from './EventBus'
@@ -28,10 +27,15 @@ export default class RenderEngine {
         this.connectionManager = new ConnectionManager(this.diagram)
         this.pedigreeManager = new PedigreeManager(this.diagram)
         eventBus.on("redraw", () => this.draw())
+        setTimeout(()=>{
+            this.draw()
+        }, 1)
     }
     private draw() {
-        this.pedigreeManager.drawPedigrees()
+        const ctx = this.diagram.getContext("2d")
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
         this.connectionManager.drawConnections()
+        this.pedigreeManager.drawPedigrees()
     }
     public create(sex, type) {
         const pedigree = this.pedigreeManager.createPedigree(sex, type)

@@ -25,12 +25,9 @@ export default class PedigreeManager {
         this.newx = this.newx + 120
         this.pedigrees.push(pedigree)
         this.dragHandler.appendPedigrees(pedigree)
-        pedigree.draw()
         return pedigree
     }
     drawPedigrees() {
-        const ctx = this.pedigreeDiagram.getContext('2d')
-        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
         this.pedigrees.forEach(pedigree => {
             pedigree.draw()
         })
