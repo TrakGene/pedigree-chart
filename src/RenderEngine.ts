@@ -42,8 +42,8 @@ export default class RenderEngine {
         this.connectionManager.drawConnections()
         this.pedigreeManager.drawPedigrees()
     }
-    public create(sex, type) {
-        const pedigree = this.pedigreeManager.createPedigree(sex, type)
+    public create(sex, type, x = 0, y = 0) {
+        const pedigree = this.pedigreeManager.createPedigree(sex, type, x, y)
         return pedigree
     }
     public connect(pedigreeA, pedigreeB, lineType) {

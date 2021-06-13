@@ -59,7 +59,6 @@ export default class ConnectionsManager {
                 this.drawSiblingLines(connection)
             }
         })
-        console.log("drawing lines")
     }
 
     drawMarriageLines(connection: Connection) {
