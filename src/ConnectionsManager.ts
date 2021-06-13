@@ -17,7 +17,7 @@ export default class ConnectionsManager {
     ctx: HTMLCanvasElement
     linesToRender: Array<Connection> = []
     renderedLines: Array<SiblingLine | MarriageLine> = []
-    lineWidth = 3
+    lineWidth = 2
 
     constructor(diagram) {
         this.pedigreeDiagram = diagram
@@ -30,6 +30,21 @@ export default class ConnectionsManager {
             pedigreeB: pedigreeB,
             type: lineType
         })
+    }
+
+    removeConnection(id) {
+        for (let index = 0; index < this.linesToRender.length; index++) {
+            const element = this.linesToRender[index];
+            if((id == element.pedigreeA.id) || (id == element.pedigreeB.id)) {
+                this.linesToRender.splice(index, 1)
+            }
+        }
+        for (let index = 0; index < this.linesToRender.length; index++) {
+            const element = this.linesToRender[index];
+            if((id == element.pedigreeA.id) || (id == element.pedigreeB.id)) {
+                this.linesToRender.splice(index, 1)
+            }
+        }
     }
 
     scaleConnections(scale) {

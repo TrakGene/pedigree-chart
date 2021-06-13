@@ -70,4 +70,13 @@ export class MouseEventsHandler {
             dragEnabled: false
         })
     }
+    deletePedigree(id) {
+        for (let index = 0; index < this.pedigrees.length; index++) {
+            const element = this.pedigrees[index].pedigree;
+            if(id === element.id) {
+                this.pedigrees.splice(index, 1)
+            }
+            element.marriagePartner = null
+        }
+    }
 }

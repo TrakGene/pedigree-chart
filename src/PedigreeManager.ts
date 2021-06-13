@@ -1,6 +1,5 @@
 import { Pedigree, MalePedigree, FemalePedigree } from "./Pedigree"
 import { MouseEventsHandler } from "./DragHandler"
-import eventBus from './EventBus'
 
 export default class PedigreeManager {
     pedigreeDiagram: HTMLCanvasElement
@@ -27,11 +26,26 @@ export default class PedigreeManager {
         this.dragHandler.appendPedigrees(pedigree)
         return pedigree
     }
+    deletePedigree(id) {
+        for (let index = 0; index < this.pedigrees.length; index++) {
+            const element = this.pedigrees[index];
+            if(id === element.id) {
+                this.pedigrees.splice(index, 1)
+            }
+            element.marriagePartner = null
+        }
+        this.dragHandler.deletePedigree(id)
+        this.drawPedigrees()
+    }
     drawPedigrees() {
         this.pedigrees.forEach(pedigree => {
             pedigree.draw()
         })
     }
+    // updatePedigree(id) {
+    //     this.pedigrees.filter(pedigree=>{
+    //     })
+    // }
     scalePedigrees(scale) {
         const ctx = this.pedigreeDiagram.getContext('2d')
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
