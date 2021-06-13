@@ -1,12 +1,11 @@
-import { Pedigree, MalePedigree, FemalePedigree } from "./Pedigree"
+import { BasePedigree, MalePedigree, FemalePedigree } from "./Pedigree"
 import { MouseEventsHandler } from "./DragHandler"
 
 export default class PedigreeManager {
     pedigreeDiagram: HTMLCanvasElement
     dragHandler: MouseEventsHandler
     ctx: HTMLCanvasElement
-    pedigrees: Array<Pedigree> = []
-    newx = 0
+    pedigrees: Array<BasePedigree> = []
 
     constructor(diagram) {
         this.pedigreeDiagram = diagram
@@ -14,14 +13,14 @@ export default class PedigreeManager {
         this.ctx = diagram.getContext("2d");
     }
 
-    createPedigree(sex, type) {
+    createPedigree(sex, type, x, y) {
         let pedigree;
         switch (sex) {
             case "male": pedigree = new MalePedigree(this.pedigreeDiagram); break;
             case "female": pedigree = new FemalePedigree(this.pedigreeDiagram); break;
         }
-        pedigree.x = this.newx
-        this.newx = this.newx + 120
+        pedigree.x = x
+        pedigree.y = y
         this.pedigrees.push(pedigree)
         this.dragHandler.appendPedigrees(pedigree)
         return pedigree
@@ -32,20 +31,14 @@ export default class PedigreeManager {
             if(id === element.id) {
                 this.pedigrees.splice(index, 1)
             }
-            element.marriagePartner = null
         }
         this.dragHandler.deletePedigree(id)
-        this.drawPedigrees()
     }
     drawPedigrees() {
         this.pedigrees.forEach(pedigree => {
-            pedigree.draw()
+            pedigree.initShape()
         })
     }
-    // updatePedigree(id) {
-    //     this.pedigrees.filter(pedigree=>{
-    //     })
-    // }
     scalePedigrees(scale) {
         const ctx = this.pedigreeDiagram.getContext('2d')
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
@@ -54,7 +47,7 @@ export default class PedigreeManager {
             pedigree.border *= scale
             pedigree.x *= scale
             pedigree.y *= scale
-            pedigree.draw()
+            pedigree.initShape()
         })
     }
 }

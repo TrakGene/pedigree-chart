@@ -1,19 +1,7 @@
 import EventBus from './EventBus'
 import IdGenerator from './IdGenerator'
 
-export interface Pedigree {
-    id: string
-    isMarried: boolean
-    marriagePartner: Pedigree
-    storage: any
-    size: number
-    border: number
-    x: number
-    y: number
-    draw()
-    calculateMiddle()
-}
-export class UnknownPedigree implements Pedigree {
+export abstract class BasePedigree {
     canvasDiagram: HTMLCanvasElement
     isMarried = false
     marriagePartner = null;
@@ -32,7 +20,16 @@ export class UnknownPedigree implements Pedigree {
             y: this.y + this.size/2
         }
     }
-    draw() {
+    on(eventName, eventHandler) {
+        EventBus.on(
+            `${eventName}${this.id}`, 
+            ()=>eventHandler(this.id)
+        )
+    }
+    abstract initShape()
+}
+export class UnknownPedigree extends BasePedigree {
+    initShape() {
         const ctx = this.canvasDiagram.getContext('2d')
         ctx.beginPath();
         ctx.lineWidth = this.border
@@ -48,34 +45,10 @@ export class UnknownPedigree implements Pedigree {
         ctx.fill();
         ctx.closePath();
     }
-    on(eventName, eventHandler) {
-        EventBus.on(
-            `${eventName}${this.id}`, 
-            ()=>eventHandler(this.id)
-        )
-    }
 }
 
-export class MalePedigree implements Pedigree {
-    canvasDiagram: HTMLCanvasElement
-    isMarried = false
-    marriagePartner = null;
-    storage: any
-    id = IdGenerator.randomId()
-    size = 60
-    border = 3
-    x = 0
-    y = 0
-    constructor(canvasDiagram) {
-        this.canvasDiagram = canvasDiagram
-    }
-    calculateMiddle() {
-        return { 
-            x: this.x + this.size/2,
-            y: this.y + this.size/2
-        }
-    }
-    draw() {
+export class MalePedigree extends BasePedigree {
+    initShape() {
         const ctx = this.canvasDiagram.getContext('2d')
         ctx.beginPath();
         ctx.rect(this.x, this.y, this.size, this.size);
@@ -86,34 +59,10 @@ export class MalePedigree implements Pedigree {
         ctx.fill();
         ctx.closePath();
     }
-    on(eventName, eventHandler) {
-        EventBus.on(
-            `${eventName}${this.id}`, 
-            ()=>eventHandler(this.id)
-        )
-    }
 }
 
-export class FemalePedigree implements Pedigree {
-    canvasDiagram: HTMLCanvasElement
-    isMarried = false
-    marriagePartner = null;
-    storage: any
-    id = IdGenerator.randomId()
-    size = 60
-    border = 3
-    x = 0
-    y = 0
-    constructor(canvasDiagram) {
-        this.canvasDiagram = canvasDiagram
-    }
-    calculateMiddle() {
-        return { 
-            x: this.x + this.size/2,
-            y: this.y + this.size/2
-        }
-    }
-    draw() {
+export class FemalePedigree extends BasePedigree {
+    initShape() {
         const ctx = this.canvasDiagram.getContext('2d')
         ctx.beginPath();
         ctx.arc(this.x + this.size/2, this.y+this.size/2, this.size/2, 0,2*Math.PI);
@@ -123,11 +72,5 @@ export class FemalePedigree implements Pedigree {
         ctx.strokeStyle = "black";
         ctx.stroke();   
         ctx.closePath();
-    }
-    on(eventName, eventHandler) {
-        EventBus.on(
-            `${eventName}${this.id}`, 
-            ()=>eventHandler(this.id)
-        )
     }
 }

@@ -5,28 +5,6 @@ interface MarriageLinePoints {
     y2: number
 }
 
-export class MarriageLine {
-    type = "marriage"
-    points: MarriageLinePoints
-    lineWidth = 0
-    ctx: CanvasRenderingContext2D
-
-    constructor(ctx, points, lineWidth) {
-        this.ctx = ctx
-        this.points = points
-        this.lineWidth = lineWidth
-        this.init()
-    }   
-    init() {
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.points.x1, this.points.y1);
-        this.ctx.lineTo(this.points.x2, this.points.y2);
-        this.ctx.lineWidth = this.lineWidth
-        this.ctx.stroke();
-        this.ctx.closePath();
-    }
-}
-
 interface SiblingLinePoints {
     x1: number
     y1: number
@@ -36,27 +14,27 @@ interface SiblingLinePoints {
     y3: number
 }
 
-export class SiblingLine {
-    type = "sibling"
-    points: SiblingLinePoints
-    lineWidth = 0
-    ctx: CanvasRenderingContext2D
+export class MarriageLine {
+    static init(ctx: CanvasRenderingContext2D, points: MarriageLinePoints, lineWidth: number) {
+        ctx.beginPath();
+        ctx.moveTo(points.x1, points.y1);
+        ctx.lineTo(points.x2, points.y2);
+        ctx.lineWidth = lineWidth
+        ctx.stroke();
+        ctx.closePath();
+    }
+}
 
-    constructor(ctx, points, lineWidth) {
-        this.ctx = ctx
-        this.points = points
-        this.lineWidth = lineWidth
-        this.init()
-    }   
-    init() {
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.points.x1, this.points.y1);
-        this.ctx.lineTo(this.points.x2, this.points.y2);
-        this.ctx.lineTo(this.points.x2, this.points.y3-80);
-        this.ctx.lineTo(this.points.x3, this.points.y3-80);
-        this.ctx.lineTo(this.points.x3, this.points.y3);
-        this.ctx.lineWidth = this.lineWidth
-        this.ctx.stroke();
-        this.ctx.closePath();
+export class SiblingLine {
+    static init(ctx: CanvasRenderingContext2D, points: SiblingLinePoints, lineWidth: number) {
+        ctx.beginPath();
+        ctx.moveTo(points.x1, points.y1);
+        ctx.lineTo(points.x2, points.y2);
+        ctx.lineTo(points.x2, points.y3-80);
+        ctx.lineTo(points.x3, points.y3-80);
+        ctx.lineTo(points.x3, points.y3);
+        ctx.lineWidth = lineWidth
+        ctx.stroke();
+        ctx.closePath();
     }
 }
