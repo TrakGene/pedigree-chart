@@ -1,18 +1,16 @@
-import { Pedigree } from "./Pedigree"
+import { BasePedigree } from "./Pedigree"
 import { SiblingLine, MarriageLine } from "./Lines"
 
 interface Connection {
-    pedigreeA: Pedigree
-    pedigreeB: Pedigree
+    pedigreeA: BasePedigree
+    pedigreeB: BasePedigree
     type: string,
 }
 
 export default class ConnectionsManager {
     pedigreeDiagram: HTMLCanvasElement 
-    ctx: HTMLCanvasElement
+    ctx: CanvasRenderingContext2D
     linesToRender: Array<Connection> = []
-    mariageLines: Array<MarriageLine> = []
-    siblingLines: Array<SiblingLine> = []
     lineWidth = 2
 
     constructor(diagram) {
@@ -49,8 +47,6 @@ export default class ConnectionsManager {
     }
 
     drawConnections() {
-        this.mariageLines = []
-        this.siblingLines = []
         this.linesToRender.forEach(connection => {
             if (connection.type == "marriage") {
                 this.drawMarriageLines(connection)
@@ -68,8 +64,7 @@ export default class ConnectionsManager {
             x2: connection.pedigreeB.calculateMiddle().x,
             y2: connection.pedigreeB.calculateMiddle().y,
         }
-        const line = new MarriageLine(this.ctx, points, this.lineWidth)
-        this.mariageLines.push(line)
+        MarriageLine.init(this.ctx, points, this.lineWidth)
     }
 
     drawSiblingLines(connection: Connection) {
@@ -87,10 +82,10 @@ export default class ConnectionsManager {
             shift = (nodeA.x - (nodeA.marriagePartner.x + nodeA.marriagePartner.size))/2
             x2 =  (nodeA.marriagePartner.x + nodeA.marriagePartner.size) + shift
         } 
-        if(nodeB.marriagePartner) {
-            shift = (nodeB.x - (nodeB.marriagePartner.x + nodeB.marriagePartner.size))/2
-            x2 = (nodeB.marriagePartner.x + nodeB.marriagePartner.size) + shift
-        } 
+        // if(nodeB.marriagePartner) {
+        //     shift = (nodeB.x - (nodeB.marriagePartner.x + nodeB.marriagePartner.size))/2
+        //     x2 = (nodeB.marriagePartner.x + nodeB.marriagePartner.size) + shift
+        // } 
         const y2 = nodeA.y + nodeA.size / 2
 
         const y3 = nodeB.y + nodeB.size / 2
@@ -104,7 +99,6 @@ export default class ConnectionsManager {
             x3: x3,
             y3: y3,
         }
-        const line = new SiblingLine(this.ctx, points, this.lineWidth)
-        this.siblingLines.push(line)
+        SiblingLine.init(this.ctx, points, this.lineWidth)
     }
 }

@@ -1,8 +1,8 @@
-import { Pedigree } from './Pedigree'
+import { BasePedigree } from './Pedigree'
 import EventBus from './EventBus'
 
 interface PedigreeDragShape {
-    pedigree: Pedigree
+    pedigree: BasePedigree
     dragEnabled: Boolean
 }
 
