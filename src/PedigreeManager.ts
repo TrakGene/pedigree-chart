@@ -32,20 +32,14 @@ export default class PedigreeManager {
             if(id === element.id) {
                 this.pedigrees.splice(index, 1)
             }
-            element.marriagePartner = null
         }
         this.dragHandler.deletePedigree(id)
-        this.drawPedigrees()
     }
     drawPedigrees() {
         this.pedigrees.forEach(pedigree => {
             pedigree.draw()
         })
     }
-    // updatePedigree(id) {
-    //     this.pedigrees.filter(pedigree=>{
-    //     })
-    // }
     scalePedigrees(scale) {
         const ctx = this.pedigreeDiagram.getContext('2d')
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)

@@ -7,16 +7,12 @@ interface Connection {
     type: string,
 }
 
-interface Marriage {
-    marriedA: Pedigree
-    marriedB: Pedigree
-}
-
 export default class ConnectionsManager {
     pedigreeDiagram: HTMLCanvasElement 
     ctx: HTMLCanvasElement
     linesToRender: Array<Connection> = []
-    renderedLines: Array<SiblingLine | MarriageLine> = []
+    mariageLines: Array<MarriageLine> = []
+    siblingLines: Array<SiblingLine> = []
     lineWidth = 2
 
     constructor(diagram) {
@@ -53,6 +49,8 @@ export default class ConnectionsManager {
     }
 
     drawConnections() {
+        this.mariageLines = []
+        this.siblingLines = []
         this.linesToRender.forEach(connection => {
             if (connection.type == "marriage") {
                 this.drawMarriageLines(connection)
@@ -61,6 +59,7 @@ export default class ConnectionsManager {
                 this.drawSiblingLines(connection)
             }
         })
+        console.log("drawing lines")
     }
 
     drawMarriageLines(connection: Connection) {
@@ -71,7 +70,7 @@ export default class ConnectionsManager {
             y2: connection.pedigreeB.calculateMiddle().y,
         }
         const line = new MarriageLine(this.ctx, points, this.lineWidth)
-        this.renderedLines.push(line)
+        this.mariageLines.push(line)
     }
 
     drawSiblingLines(connection: Connection) {
@@ -107,6 +106,6 @@ export default class ConnectionsManager {
             y3: y3,
         }
         const line = new SiblingLine(this.ctx, points, this.lineWidth)
-        this.renderedLines.push(line)
+        this.siblingLines.push(line)
     }
 }

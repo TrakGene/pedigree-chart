@@ -42,10 +42,10 @@ export class MouseEventsHandler {
             pedigree.pedigree.draw()
             if(ctx.isPointInPath(mouseX, mouseY)) {
                 pedigree.dragEnabled = true
-                EventBus.emit(`click${pedigree.pedigree.id}`)
                 this.mouseOffsetX = mouseX - pedigree.pedigree.x
                 this.mouseOffsetY = mouseY - pedigree.pedigree.y
-                pedigree.pedigree.draw()
+                EventBus.emit('redraw')
+                EventBus.emit(`click${pedigree.pedigree.id}`)
             }
         })
     }
@@ -60,7 +60,6 @@ export class MouseEventsHandler {
                 // pedigree.pedigree.x = mouseX - this.mouseOffsetX
                 // pedigree.pedigree.y = mouseY - this.mouseOffsetY
                 EventBus.emit('redraw')
-                pedigree.pedigree.draw()
             }
         })
     }
@@ -76,7 +75,6 @@ export class MouseEventsHandler {
             if(id === element.id) {
                 this.pedigrees.splice(index, 1)
             }
-            element.marriagePartner = null
         }
     }
 }
