@@ -1,9 +1,8 @@
-import { Pedigree, MalePedigree } from "./Pedigree"
+import { Pedigree, MalePedigree, FemalePedigree } from "./Pedigree"
 import { MouseEventsHandler } from "./DragHandler"
-import eventBus from './EventBus'
 
 export default class PedigreeManager {
-    pedigreeDiagram: HTMLCanvasElement 
+    pedigreeDiagram: HTMLCanvasElement
     dragHandler: MouseEventsHandler
     ctx: HTMLCanvasElement
     pedigrees: Array<Pedigree> = []
@@ -17,28 +16,41 @@ export default class PedigreeManager {
 
     createPedigree(sex, type) {
         let pedigree;
-        switch(sex) {
-            case "male": pedigree = new MalePedigree(this.pedigreeDiagram)
+        switch (sex) {
+            case "male": pedigree = new MalePedigree(this.pedigreeDiagram); break;
+            case "female": pedigree = new FemalePedigree(this.pedigreeDiagram); break;
         }
         pedigree.x = this.newx
         this.newx = this.newx + 120
         this.pedigrees.push(pedigree)
         this.dragHandler.appendPedigrees(pedigree)
-        pedigree.draw()
         return pedigree
     }
+    deletePedigree(id) {
+        for (let index = 0; index < this.pedigrees.length; index++) {
+            const element = this.pedigrees[index];
+            if(id === element.id) {
+                this.pedigrees.splice(index, 1)
+            }
+            element.marriagePartner = null
+        }
+        this.dragHandler.deletePedigree(id)
+        this.drawPedigrees()
+    }
     drawPedigrees() {
-        const ctx = this.pedigreeDiagram.getContext('2d')
-        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
         this.pedigrees.forEach(pedigree => {
             pedigree.draw()
         })
     }
+    // updatePedigree(id) {
+    //     this.pedigrees.filter(pedigree=>{
+    //     })
+    // }
     scalePedigrees(scale) {
         const ctx = this.pedigreeDiagram.getContext('2d')
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
         this.pedigrees.forEach(pedigree => {
-            pedigree.size *= scale 
+            pedigree.size *= scale
             pedigree.border *= scale
             pedigree.x *= scale
             pedigree.y *= scale

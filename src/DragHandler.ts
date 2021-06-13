@@ -11,6 +11,8 @@ export class MouseEventsHandler {
     pedigrees: Array<PedigreeDragShape> = []
     mouseOffsetX = 0
     mouseOffsetY = 0
+    lastCursorXPosition = 0
+    lastCursorYPosition = 0
 
     constructor(diagram) {
         this.pedigreeDiagram = diagram
@@ -37,12 +39,13 @@ export class MouseEventsHandler {
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
         this.pedigrees.forEach((pedigree)=>{
-            pedigree.pedigree.initShape()
+            pedigree.pedigree.draw()
             if(ctx.isPointInPath(mouseX, mouseY)) {
                 pedigree.dragEnabled = true
                 EventBus.emit(`click${pedigree.pedigree.id}`)
                 this.mouseOffsetX = mouseX - pedigree.pedigree.x
                 this.mouseOffsetY = mouseY - pedigree.pedigree.y
+                pedigree.pedigree.draw()
             }
         })
     }
@@ -52,9 +55,12 @@ export class MouseEventsHandler {
         const mouseY = e.clientY - rect.top;
         this.pedigrees.forEach((pedigree)=>{
             if(pedigree.dragEnabled) {
-                pedigree.pedigree.x = mouseX - this.mouseOffsetX
-                pedigree.pedigree.y = mouseY - this.mouseOffsetY
+                pedigree.pedigree.x = Math.round((mouseX - this.mouseOffsetX)/15)*15
+                pedigree.pedigree.y = Math.round((mouseY - this.mouseOffsetY)/15)*15
+                // pedigree.pedigree.x = mouseX - this.mouseOffsetX
+                // pedigree.pedigree.y = mouseY - this.mouseOffsetY
                 EventBus.emit('redraw')
+                pedigree.pedigree.draw()
             }
         })
     }
@@ -63,5 +69,14 @@ export class MouseEventsHandler {
             pedigree: pedigree,
             dragEnabled: false
         })
+    }
+    deletePedigree(id) {
+        for (let index = 0; index < this.pedigrees.length; index++) {
+            const element = this.pedigrees[index].pedigree;
+            if(id === element.id) {
+                this.pedigrees.splice(index, 1)
+            }
+            element.marriagePartner = null
+        }
     }
 }

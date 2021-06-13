@@ -52,7 +52,8 @@ export class SiblingLine {
         this.ctx.beginPath();
         this.ctx.moveTo(this.points.x1, this.points.y1);
         this.ctx.lineTo(this.points.x2, this.points.y2);
-        this.ctx.lineTo(this.points.x2, this.points.y3);
+        this.ctx.lineTo(this.points.x2, this.points.y3-80);
+        this.ctx.lineTo(this.points.x3, this.points.y3-80);
         this.ctx.lineTo(this.points.x3, this.points.y3);
         this.ctx.lineWidth = this.lineWidth
         this.ctx.stroke();

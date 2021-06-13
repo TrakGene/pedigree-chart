@@ -17,7 +17,7 @@ export default class ConnectionsManager {
     ctx: HTMLCanvasElement
     linesToRender: Array<Connection> = []
     renderedLines: Array<SiblingLine | MarriageLine> = []
-    lineWidth = 3
+    lineWidth = 2
 
     constructor(diagram) {
         this.pedigreeDiagram = diagram
@@ -32,6 +32,26 @@ export default class ConnectionsManager {
         })
     }
 
+    removeConnection(id) {
+        for (let index = 0; index < this.linesToRender.length; index++) {
+            const element = this.linesToRender[index];
+            if((id == element.pedigreeA.id) || (id == element.pedigreeB.id)) {
+                this.linesToRender.splice(index, 1)
+            }
+        }
+        for (let index = 0; index < this.linesToRender.length; index++) {
+            const element = this.linesToRender[index];
+            if((id == element.pedigreeA.id) || (id == element.pedigreeB.id)) {
+                this.linesToRender.splice(index, 1)
+            }
+        }
+    }
+
+    scaleConnections(scale) {
+        this.lineWidth = this.lineWidth * scale
+        this.drawConnections()
+    }
+
     drawConnections() {
         this.linesToRender.forEach(connection => {
             if (connection.type == "marriage") {
@@ -41,11 +61,6 @@ export default class ConnectionsManager {
                 this.drawSiblingLines(connection)
             }
         })
-    }
-    
-    scaleConnections(scale) {
-        this.lineWidth = this.lineWidth * scale
-        this.drawConnections()
     }
 
     drawMarriageLines(connection: Connection) {
@@ -71,7 +86,7 @@ export default class ConnectionsManager {
         let x2
         x2 = (nodeB.x + nodeB.size) + shift
         if(nodeA.marriagePartner) {
-            shift = (nodeA.marriagePartner.x - (nodeA.marriagePartner.x + nodeA.marriagePartner.size))/2
+            shift = (nodeA.x - (nodeA.marriagePartner.x + nodeA.marriagePartner.size))/2
             x2 =  (nodeA.marriagePartner.x + nodeA.marriagePartner.size) + shift
         } 
         if(nodeB.marriagePartner) {
