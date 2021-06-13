@@ -7,7 +7,6 @@ export default class RenderEngine {
     shapes = []
     diagram: HTMLCanvasElement
     diagramWrapper: HTMLElement
-    // dragHandler: MouseEventsHandler
     connectionManager: ConnectionManager
     pedigreeManager: PedigreeManager
 
@@ -23,7 +22,6 @@ export default class RenderEngine {
             this.resizeDiagram()
         })
         this.diagram = diagram
-        // this.dragHandler = new MouseEventsHandler(this.diagram)
         this.connectionManager = new ConnectionManager(this.diagram)
         this.pedigreeManager = new PedigreeManager(this.diagram)
         eventBus.on("redraw", () => this.draw())
@@ -47,9 +45,6 @@ export default class RenderEngine {
         setTimeout(()=>{
             this.draw()
         })
-    }
-    public woof() {
-        console.log("x")
     }
     public resizeDiagram() {
         this.diagram.width = window.innerWidth
