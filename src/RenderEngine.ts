@@ -58,8 +58,9 @@ export default class RenderEngine {
         )
     }
     public scale(scale) {
-        this.pedigreeManager.scalePedigrees(scale)
         this.connectionManager.scaleConnections(scale)
+        this.pedigreeManager.scalePedigrees(scale)
+        setTimeout(()=>this.draw())
     }
     public deletePedigree(id) {
         this.pedigreeManager.deletePedigree(id)
