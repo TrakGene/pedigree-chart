@@ -43,7 +43,6 @@ export default class ConnectionsManager {
 
     scaleConnections(scale) {
         this.lineWidth = this.lineWidth * scale
-        this.drawConnections()
     }
 
     drawConnections() {

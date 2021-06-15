@@ -47,7 +47,6 @@ export default class PedigreeManager {
             pedigree.border *= scale
             pedigree.x *= scale
             pedigree.y *= scale
-            pedigree.initShape()
         })
     }
 }
