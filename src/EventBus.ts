@@ -11,10 +11,10 @@ class EventBus {
             this.eventHandlers[eventName].push(eventHandler)
         }
     }
-    emit(eventName) {
+    emit(eventName, props = {}) {
         if(this.eventHandlers[eventName]) {
             this.eventHandlers[eventName].forEach(func => {
-                func()
+                func(props)
             });
         }
     }

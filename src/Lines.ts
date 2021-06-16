@@ -15,26 +15,39 @@ interface SiblingLinePoints {
 }
 
 export class MarriageLine {
-    static init(ctx: CanvasRenderingContext2D, points: MarriageLinePoints, lineWidth: number) {
+    static init(ctx: CanvasRenderingContext2D, points: MarriageLinePoints, lineWidth: number, scalingFactor: number) {
         ctx.beginPath();
+
+        ctx.save();
         ctx.moveTo(points.x1, points.y1);
         ctx.lineTo(points.x2, points.y2);
+        // ctx.translate(points.x1, points.y2)
+        ctx.scale(scalingFactor, scalingFactor)
+        // ctx.translate(-points.x1, -points.y2)
         ctx.lineWidth = lineWidth
         ctx.stroke();
+        ctx.restore()
+
         ctx.closePath();
     }
 }
 
 export class SiblingLine {
-    static init(ctx: CanvasRenderingContext2D, points: SiblingLinePoints, lineWidth: number) {
+    static init(ctx: CanvasRenderingContext2D, points: SiblingLinePoints, lineWidth: number, scalingFactor: number) {
         ctx.beginPath();
+        ctx.save()
         ctx.moveTo(points.x1, points.y1);
         ctx.lineTo(points.x2, points.y2);
-        ctx.lineTo(points.x2, points.y3-80);
-        ctx.lineTo(points.x3, points.y3-80);
+        ctx.lineTo(points.x2, points.y3);
         ctx.lineTo(points.x3, points.y3);
+        ctx.lineTo(points.x3, points.y3);
+        // ctx.translate(0.2, 0.2)
+        ctx.scale(scalingFactor, scalingFactor)
+        // ctx.translate(-0.2, -0.2)
         ctx.lineWidth = lineWidth
         ctx.stroke();
+        ctx.restore()
+
         ctx.closePath();
     }
 }
