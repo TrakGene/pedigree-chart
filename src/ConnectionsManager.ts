@@ -41,10 +41,6 @@ export default class ConnectionsManager {
         }
     }
 
-    scaleConnections(scale) {
-        this.lineWidth = this.lineWidth * scale
-    }
-
     drawConnections() {
         this.linesToRender.forEach(connection => {
             if (connection.type == "marriage") {
@@ -63,7 +59,7 @@ export default class ConnectionsManager {
             x2: connection.pedigreeB.calculateMiddle().x,
             y2: connection.pedigreeB.calculateMiddle().y,
         }
-        MarriageLine.init(this.ctx, points, this.lineWidth)
+        MarriageLine.init(this.ctx, points, this.lineWidth, this.scalingFactor)
     }
 
     drawSiblingLines(connection: Connection) {
@@ -98,6 +94,6 @@ export default class ConnectionsManager {
             x3: x3,
             y3: y3,
         }
-        SiblingLine.init(this.ctx, points, this.lineWidth)
+        SiblingLine.init(this.ctx, points, this.lineWidth, this.scalingFactor)
     }
 }

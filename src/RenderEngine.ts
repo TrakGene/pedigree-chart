@@ -1,6 +1,8 @@
+import { factory } from "typescript"
 import ConnectionManager from "./ConnectionsManager"
 import eventBus from './EventBus'
 import PedigreeManager from "./PedigreeManager"
+import EventBus from './EventBus'
 
 export default class RenderEngine {
     shapes = []
@@ -8,14 +10,17 @@ export default class RenderEngine {
     diagramWrapper: HTMLElement
     connectionManager: ConnectionManager
     pedigreeManager: PedigreeManager
+    scaleFactor = 1
 
     constructor(id) {
         this.diagramWrapper = document.getElementById(id) as HTMLElement;
         this.diagram = document.createElement('canvas')
+        // this.diagram.addEventListener('click', this.disableScroll)
         this.initDiagramEditor()
         this.initEvents()
         setTimeout(()=>this.draw())
     }
+
     private initDiagramEditor() {
         this.diagram.width = window.innerWidth
         this.diagram.height = window.innerHeight
@@ -30,6 +35,12 @@ export default class RenderEngine {
         window.addEventListener("resize", () => {
             this.resizeDiagramWidth()
         })
+        this.diagram.addEventListener("wheel", (event)=>{
+            this.scaleFactor += event.deltaY*0.001
+            EventBus.emit('scale', this.scaleFactor)
+            this.scale(event.deltaY*0.001)
+            event.preventDefault()
+        });
     }
     private resizeDiagramWidth() {
         this.diagram.width = window.innerWidth
@@ -58,8 +69,8 @@ export default class RenderEngine {
         )
     }
     public scale(scale) {
-        this.connectionManager.scaleConnections(scale)
-        this.pedigreeManager.scalePedigrees(scale)
+        const ctx = this.diagram.getContext("2d")
+        ctx.scale((scale+1), (scale+1))
         setTimeout(()=>this.draw())
     }
     public deletePedigree(id) {

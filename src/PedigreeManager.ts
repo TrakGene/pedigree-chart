@@ -6,6 +6,8 @@ export default class PedigreeManager {
     dragHandler: MouseEventsHandler
     ctx: HTMLCanvasElement
     pedigrees: Array<BasePedigree> = []
+    scalingFactor = 1
+    size = 60
 
     constructor(diagram) {
         this.pedigreeDiagram = diagram
@@ -39,14 +41,14 @@ export default class PedigreeManager {
             pedigree.initShape()
         })
     }
-    scalePedigrees(scale) {
-        const ctx = this.pedigreeDiagram.getContext('2d')
-        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
-        this.pedigrees.forEach(pedigree => {
-            pedigree.size *= scale
-            pedigree.border *= scale
-            pedigree.x *= scale
-            pedigree.y *= scale
-        })
-    }
+    // scalePedigrees(scale) {
+    //     const ctx = this.pedigreeDiagram.getContext('2d')
+    //     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+    //     // this.scalingFactor = scale
+    //     this.pedigrees.forEach(pedigree => {
+    //         // this.size = this.size + (this.size*scale)
+    //         // pedigree.size = this.size*scale
+    //         // pedigree.initShape()
+    //     })
+    // }
 }

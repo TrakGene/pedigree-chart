@@ -11,6 +11,9 @@ export abstract class BasePedigree {
     border = 3
     x = 0
     y = 0
+    x2 = 0
+    y2 = 0
+    scalingFactor = 1
     constructor(canvasDiagram) {
         this.canvasDiagram = canvasDiagram
     }
@@ -51,12 +54,14 @@ export class MalePedigree extends BasePedigree {
     initShape() {
         const ctx = this.canvasDiagram.getContext('2d')
         ctx.beginPath();
+        ctx.save()
         ctx.rect(this.x, this.y, this.size, this.size);
         ctx.lineWidth = this.border
         ctx.strokeStyle = "black";
         ctx.stroke();   
         ctx.fillStyle = "white";
         ctx.fill();
+        ctx.restore()
         ctx.closePath();
     }
 }
@@ -65,12 +70,15 @@ export class FemalePedigree extends BasePedigree {
     initShape() {
         const ctx = this.canvasDiagram.getContext('2d')
         ctx.beginPath();
+        ctx.save()
         ctx.arc(this.x + this.size/2, this.y+this.size/2, this.size/2, 0,2*Math.PI);
-        ctx.fillStyle = "white";
-        ctx.fill();
-        ctx.lineWidth = this.border-1
+        ctx.scale(this.scalingFactor, this.scalingFactor)
+        ctx.lineWidth = this.border
         ctx.strokeStyle = "black";
         ctx.stroke();   
+        ctx.fillStyle = "white";
+        ctx.fill();
+        ctx.restore()
         ctx.closePath();
     }
 }
