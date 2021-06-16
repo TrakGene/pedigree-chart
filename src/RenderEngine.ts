@@ -38,7 +38,7 @@ export default class RenderEngine {
         this.diagram.addEventListener("wheel", (event)=>{
             this.scaleFactor += event.deltaY*0.001
             EventBus.emit('scale', this.scaleFactor)
-            this.scale(event.deltaY*0.001)
+            this.scale(event.deltaY*0.001, event.clientX, event.clientY)
             event.preventDefault()
         });
     }
@@ -68,9 +68,11 @@ export default class RenderEngine {
             lineType
         )
     }
-    public scale(scale) {
+    public scale(scale, cursorX, cursorY) {
         const ctx = this.diagram.getContext("2d")
+        ctx.translate(cursorX, cursorY)
         ctx.scale((scale+1), (scale+1))
+        ctx.translate(-cursorX, -cursorY)
         setTimeout(()=>this.draw())
     }
     public deletePedigree(id) {
