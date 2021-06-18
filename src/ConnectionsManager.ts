@@ -12,6 +12,7 @@ export default class ConnectionsManager {
     ctx: CanvasRenderingContext2D
     linesToRender: Array<Connection> = []
     lineWidth = 2
+    scalingFactor = 1
 
     constructor(diagram) {
         this.pedigreeDiagram = diagram
