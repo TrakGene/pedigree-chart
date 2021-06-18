@@ -12,8 +12,8 @@ class BasePedigree {
         this.border = 3;
         this.x = 0;
         this.y = 0;
-        this.x2 = 0;
-        this.y2 = 0;
+        this.cameraOffsetX = 0;
+        this.cameraOffsetY = 0;
         this.scalingFactor = 1;
         this.canvasDiagram = canvasDiagram;
     }
@@ -52,7 +52,7 @@ class MalePedigree extends BasePedigree {
         const ctx = this.canvasDiagram.getContext('2d');
         ctx.beginPath();
         ctx.save();
-        ctx.rect(this.x, this.y, this.size, this.size);
+        ctx.rect(this.x + this.cameraOffsetX, this.y + this.cameraOffsetY, this.size, this.size);
         ctx.lineWidth = this.border;
         ctx.strokeStyle = "black";
         ctx.stroke();
