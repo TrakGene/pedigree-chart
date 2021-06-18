@@ -15,7 +15,6 @@ export default class RenderEngine {
     constructor(id) {
         this.diagramWrapper = document.getElementById(id) as HTMLElement;
         this.diagram = document.createElement('canvas')
-        // this.diagram.addEventListener('click', this.disableScroll)
         this.initDiagramEditor()
         this.initEvents()
         setTimeout(()=>this.draw())

@@ -8,8 +8,8 @@ export declare abstract class BasePedigree {
     border: number;
     x: number;
     y: number;
-    x2: number;
-    y2: number;
+    cameraOffsetX: number;
+    cameraOffsetY: number;
     scalingFactor: number;
     constructor(canvasDiagram: any);
     calculateMiddle(): {
