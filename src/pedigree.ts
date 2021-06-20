@@ -1,5 +1,6 @@
 import EventBus from './EventBus'
 import IdGenerator from './IdGenerator'
+import Camera from './Camera'
 
 export abstract class BasePedigree {
     canvasDiagram: HTMLCanvasElement
@@ -11,8 +12,6 @@ export abstract class BasePedigree {
     border = 3
     x = 0
     y = 0
-    cameraOffsetX = 0
-    cameraOffsetY = 0
     scalingFactor = 1
     constructor(canvasDiagram) {
         this.canvasDiagram = canvasDiagram
@@ -55,7 +54,7 @@ export class MalePedigree extends BasePedigree {
         const ctx = this.canvasDiagram.getContext('2d')
         ctx.beginPath();
         ctx.save()
-        ctx.rect(this.x + this.cameraOffsetX, this.y + this.cameraOffsetY, this.size, this.size);
+        ctx.rect(this.x + Camera.OffsetX, this.y + Camera.OffsetY, this.size, this.size);
         ctx.lineWidth = this.border
         ctx.strokeStyle = "black";
         ctx.stroke();   

@@ -1,5 +1,6 @@
 import { BasePedigree } from "./Pedigree"
 import { SiblingLine, MarriageLine } from "./Lines"
+import Camera from './Camera'
 
 interface Connection {
     pedigreeA: BasePedigree
@@ -12,6 +13,7 @@ export default class ConnectionsManager {
     ctx: CanvasRenderingContext2D
     linesToRender: Array<Connection> = []
     lineWidth = 2
+    scalingFactor = 1
 
     constructor(diagram) {
         this.pedigreeDiagram = diagram
@@ -54,10 +56,10 @@ export default class ConnectionsManager {
 
     drawMarriageLines(connection: Connection) {
         const points = {
-            x1: connection.pedigreeA.calculateMiddle().x,
-            y1: connection.pedigreeA.calculateMiddle().y,
-            x2: connection.pedigreeB.calculateMiddle().x,
-            y2: connection.pedigreeB.calculateMiddle().y,
+            x1: connection.pedigreeA.calculateMiddle().x+Camera.OffsetX,
+            y1: connection.pedigreeA.calculateMiddle().y+Camera.OffsetY,
+            x2: connection.pedigreeB.calculateMiddle().x+Camera.OffsetX,
+            y2: connection.pedigreeB.calculateMiddle().y+Camera.OffsetY,
         }
         MarriageLine.init(this.ctx, points, this.lineWidth, this.scalingFactor)
     }

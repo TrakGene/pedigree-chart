@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FemalePedigree = exports.MalePedigree = exports.UnknownPedigree = exports.BasePedigree = void 0;
 const EventBus_1 = require("./EventBus");
 const IdGenerator_1 = require("./IdGenerator");
+const Camera_1 = require("./Camera");
 class BasePedigree {
     constructor(canvasDiagram) {
         this.isMarried = false;
@@ -12,8 +13,6 @@ class BasePedigree {
         this.border = 3;
         this.x = 0;
         this.y = 0;
-        this.cameraOffsetX = 0;
-        this.cameraOffsetY = 0;
         this.scalingFactor = 1;
         this.canvasDiagram = canvasDiagram;
     }
@@ -52,7 +51,7 @@ class MalePedigree extends BasePedigree {
         const ctx = this.canvasDiagram.getContext('2d');
         ctx.beginPath();
         ctx.save();
-        ctx.rect(this.x + this.cameraOffsetX, this.y + this.cameraOffsetY, this.size, this.size);
+        ctx.rect(this.x + Camera_1.default.OffsetX, this.y + Camera_1.default.OffsetY, this.size, this.size);
         ctx.lineWidth = this.border;
         ctx.strokeStyle = "black";
         ctx.stroke();
