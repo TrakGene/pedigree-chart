@@ -1,6 +1,6 @@
 class Camera {
-    public cameraOffsetX = 0
-    public cameraOffsetY = 0
+    public OffsetX = 0
+    public OffsetY = 0
 }
 
 const camera = new Camera()
