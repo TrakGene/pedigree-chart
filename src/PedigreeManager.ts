@@ -1,54 +1,42 @@
-import { BasePedigree, MalePedigree, FemalePedigree } from "./Pedigree"
-import { MouseEventsHandler } from "./DragHandler"
+import { MalePedigree, FemalePedigree, BasePedigree } from "./Pedigree"
+import RenderEngine from "./RenderEngine"
 
 export default class PedigreeManager {
-    pedigreeDiagram: HTMLCanvasElement
-    dragHandler: MouseEventsHandler
-    ctx: HTMLCanvasElement
-    pedigrees: Array<BasePedigree> = []
-    scalingFactor = 1
-    size = 60
+    private diagram: HTMLCanvasElement
+    private renderEngine: RenderEngine
 
-    constructor(diagram) {
-        this.pedigreeDiagram = diagram
-        this.dragHandler = new MouseEventsHandler(this.pedigreeDiagram)
-        this.ctx = diagram.getContext("2d");
+    constructor(diagram: HTMLCanvasElement, renderEngine: RenderEngine) {
+        this.renderEngine = renderEngine
+        this.diagram = diagram
     }
 
-    createPedigree(sex, type, x, y) {
+    createPedigree(sex: string, type: string, x: number, y: number): BasePedigree {
         let pedigree;
         switch (sex) {
-            case "male": pedigree = new MalePedigree(this.pedigreeDiagram); break;
-            case "female": pedigree = new FemalePedigree(this.pedigreeDiagram); break;
+            case "male": 
+                pedigree = new MalePedigree(this.diagram, x, y); 
+                break;
+            case "female": 
+                pedigree = new FemalePedigree(this.diagram, x, y); 
+                break;
         }
-        pedigree.x = x
-        pedigree.y = y
-        this.pedigrees.push(pedigree)
-        this.dragHandler.appendPedigrees(pedigree)
+        this.renderEngine.pedigrees.push(pedigree)
         return pedigree
     }
-    deletePedigree(id) {
-        for (let index = 0; index < this.pedigrees.length; index++) {
-            const element = this.pedigrees[index];
+
+    deletePedigree(id: string): void {
+        const len = this.renderEngine.pedigrees.length
+        for (let i = 0; i < len; i++) {
+            const element = this.renderEngine.pedigrees[i];
             if(id === element.id) {
-                this.pedigrees.splice(index, 1)
+                this.renderEngine.pedigrees.splice(i, 1)
             }
         }
-        this.dragHandler.deletePedigree(id)
     }
-    drawPedigrees() {
-        this.pedigrees.forEach(pedigree => {
+    
+    initPedigreeShapes(): void {
+        this.renderEngine.pedigrees.forEach(pedigree => {
             pedigree.initShape()
         })
     }
-    // scalePedigrees(scale) {
-    //     const ctx = this.pedigreeDiagram.getContext('2d')
-    //     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
-    //     // this.scalingFactor = scale
-    //     this.pedigrees.forEach(pedigree => {
-    //         // this.size = this.size + (this.size*scale)
-    //         // pedigree.size = this.size*scale
-    //         // pedigree.initShape()
-    //     })
-    // }
 }

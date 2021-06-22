@@ -89,12 +89,12 @@ export default class ConnectionsManager {
         const x3 = nodeB.x + nodeB.size / 2
 
         const points = {
-            x1: x1,
-            y1: y1,
-            x2: x2,
-            y2: y2,
-            x3: x3,
-            y3: y3,
+            x1: x1+Camera.OffsetX,
+            y1: y1+Camera.OffsetY,
+            x2: x2+Camera.OffsetX,
+            y2: y2+Camera.OffsetY,
+            x3: x3+Camera.OffsetX,
+            y3: y3+Camera.OffsetY
         }
         SiblingLine.init(this.ctx, points, this.lineWidth, this.scalingFactor)
     }

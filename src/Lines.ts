@@ -21,9 +21,7 @@ export class MarriageLine {
         ctx.save();
         ctx.moveTo(points.x1, points.y1);
         ctx.lineTo(points.x2, points.y2);
-        // ctx.translate(points.x1, points.y2)
         ctx.scale(scalingFactor, scalingFactor)
-        // ctx.translate(-points.x1, -points.y2)
         ctx.lineWidth = lineWidth
         ctx.stroke();
         ctx.restore()
@@ -41,9 +39,7 @@ export class SiblingLine {
         ctx.lineTo(points.x2, points.y3);
         ctx.lineTo(points.x3, points.y3);
         ctx.lineTo(points.x3, points.y3);
-        // ctx.translate(0.2, 0.2)
         ctx.scale(scalingFactor, scalingFactor)
-        // ctx.translate(-0.2, -0.2)
         ctx.lineWidth = lineWidth
         ctx.stroke();
         ctx.restore()

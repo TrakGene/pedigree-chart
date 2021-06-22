@@ -13,8 +13,11 @@ export abstract class BasePedigree {
     x = 0
     y = 0
     scalingFactor = 1
-    constructor(canvasDiagram) {
+    dragEnabled = false
+    constructor(canvasDiagram, x, y) {
         this.canvasDiagram = canvasDiagram
+        this.x = x
+        this.y = y
     }
     calculateMiddle() {
         return { 
