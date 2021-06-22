@@ -1,15 +1,19 @@
-import { factory } from "typescript"
 import ConnectionManager from "./ConnectionsManager"
-import eventBus from './EventBus'
 import PedigreeManager from "./PedigreeManager"
 import EventBus from './EventBus'
+import DragHandler from "./DragHandler"
+import { BasePedigree } from "./Pedigree"
 
 export default class RenderEngine {
     shapes = []
     diagram: HTMLCanvasElement
     diagramWrapper: HTMLElement
+    pedigrees: Array<BasePedigree> = []
+
     connectionManager: ConnectionManager
     pedigreeManager: PedigreeManager
+    dragHandler: DragHandler
+
     scaleFactor = 1
 
     constructor(id) {
@@ -27,10 +31,11 @@ export default class RenderEngine {
         this.diagramWrapper.style.overflow = "hidden"
         this.diagramWrapper.appendChild(this.diagram)
         this.connectionManager = new ConnectionManager(this.diagram)
-        this.pedigreeManager = new PedigreeManager(this.diagram)
+        this.pedigreeManager = new PedigreeManager(this.diagram, this)
+        this.dragHandler = new DragHandler(this.diagram, this)
     }
     private initEvents() {
-        eventBus.on("redraw", () => this.draw())
+        EventBus.on("redraw", () => this.draw())
         window.addEventListener("resize", () => {
             this.resizeDiagramWidth()
         })
@@ -48,9 +53,9 @@ export default class RenderEngine {
     }
     private draw() {
         const ctx = this.diagram.getContext("2d")
-        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+        ctx.clearRect(-220, -220, window.innerWidth*100, window.innerHeight*100)
         this.connectionManager.drawConnections()
-        this.pedigreeManager.drawPedigrees()
+        this.pedigreeManager.initPedigreeShapes()
     }
     public create(sex, type, x = 0, y = 0) {
         const pedigree = this.pedigreeManager.createPedigree(sex, type, x, y)
@@ -69,10 +74,13 @@ export default class RenderEngine {
     }
     public scale(scale, cursorX, cursorY) {
         const ctx = this.diagram.getContext("2d")
-        ctx.translate(cursorX, cursorY)
-        ctx.scale((scale+1), (scale+1))
-        ctx.translate(-cursorX, -cursorY)
-        setTimeout(()=>this.draw())
+        this.scaleFactor = this.scaleFactor * (scale+1)
+        // if((this.scaleFactor > 0.15) && (this.scaleFactor < 2.5)) {
+            ctx.translate(cursorX, cursorY)
+            ctx.scale((scale+1), (scale+1))
+            ctx.translate(-cursorX, -cursorY)
+            setTimeout(()=>this.draw())
+        // }
     }
     public deletePedigree(id) {
         this.pedigreeManager.deletePedigree(id)

@@ -1,115 +1,108 @@
-import { BasePedigree } from './Pedigree'
 import EventBus from './EventBus'
 import Camera from './Camera'
+import RenderEngine from './RenderEngine'
 
-interface PedigreeDragShape {
-    pedigree: BasePedigree
-    dragEnabled: Boolean
-}
+export default class DragHandler {
+    diagram: HTMLCanvasElement
+    ctx: CanvasRenderingContext2D
 
-export class MouseEventsHandler {
-    pedigreeDiagram: HTMLCanvasElement
-    pedigrees: Array<PedigreeDragShape> = []
     mouseOffsetX = 0
     mouseOffsetY = 0
-    scalingFactor = 1
 
-    startPan = false
     firstCursorX = 0
     firstCursorY = 0
+    deltaX = 0
+    deltaY = 0
+    initialCameraOffsetX = 0
+    initialCameraOffsetY = 0
 
-    offsetX = 0
-    totalOffsetX = 0
-    offsetY = 0
-    totalOffsetY = 0
+    panDiagram = false
+    renderEngine: RenderEngine
 
-    constructor(diagram) {
-        this.pedigreeDiagram = diagram
-        this.initClickHandler()
-        EventBus.on('scale', (scale)=>{
-            this.scalingFactor = scale
-        })
+    constructor(diagram, renderEngine) {
+        this.diagram = diagram
+        this.ctx = diagram.getContext('2d')
+        this.renderEngine = renderEngine
+        this.initEvents()
     }
 
-    initClickHandler() {
-        this.pedigreeDiagram.onmousedown = (e) => {
-            this.handleMouseDown(e)
-            this.startPan = true
-            this.firstCursorX = e.clientX
-            this.firstCursorY = e.clientY      
+    private initEvents(): void {
+        this.diagram.onmousedown = (e) => {
+            this.setUserIntention(e)    
         }
-        this.pedigreeDiagram.onmousemove = (e) => {
-            this.dragHandler(e)
+        this.diagram.onmousemove = (e) => {
+            this.drag(e)
         }
-        this.pedigreeDiagram.onmouseup = (e) => {
-            this.startPan = false
-            this.totalOffsetX += this.offsetX
-            this.totalOffsetY += this.offsetY
-            this.pedigrees.forEach((pedigree)=>{
-                pedigree.dragEnabled = false
-            })
+        this.diagram.onmouseup = (e) => {
+            this.stopDrag()
         }
     }
 
-    handleMouseDown(e) {
-        const ctx = this.pedigreeDiagram.getContext('2d')
-        const rect = this.pedigreeDiagram.getBoundingClientRect();
+    private setUserIntention(e: MouseEvent): void {
+        const rect = this.diagram.getBoundingClientRect();
+        const scale = this.ctx.getTransform().a
         const mouseX = e.clientX - rect.left
         const mouseY = e.clientY - rect.top;
-        this.pedigrees.forEach((pedigree)=>{
-            pedigree.pedigree.initShape()
-            if(ctx.isPointInPath(mouseX, mouseY)) {
+        this.panDiagram = true
+        this.renderEngine.pedigrees.forEach((pedigree)=>{
+            pedigree.initShape()
+            if(this.ctx.isPointInPath(mouseX, mouseY)) {
                 pedigree.dragEnabled = true
-                this.mouseOffsetX = (mouseX/ctx.getTransform().a) - pedigree.pedigree.x
-                this.mouseOffsetY = (mouseY/ctx.getTransform().a) - pedigree.pedigree.y
-                EventBus.emit('redraw')
-                EventBus.emit(`click${pedigree.pedigree.id}`)
+                this.mouseOffsetX = (mouseX/scale) - pedigree.x
+                this.mouseOffsetY = (mouseY/scale) - pedigree.y
+                this.panDiagram = false
             }
         })
+
+        if(this.panDiagram) {
+            this.firstCursorX = e.clientX
+            this.firstCursorY = e.clientY  
+        }
     }
 
-    dragDiagram(e) {
-        const offsetX = e.clientX - this.firstCursorX
-        const offsetY = e.clientY - this.firstCursorY
-        this.offsetX = offsetX
-        this.offsetY = offsetY
-        Camera.OffsetX = this.totalOffsetX + offsetX
-        Camera.OffsetY = this.totalOffsetY + offsetY
+    private drag(e: MouseEvent): void {
+        if(this.panDiagram) {
+            this.dragDiagram(e)
+        } else {
+            this.dragPedigree(e)
+        }
+    }
+
+    private dragDiagram(e: MouseEvent): void {
+        const scale = this.ctx.getTransform().a
+        this.deltaX = (e.clientX - this.firstCursorX) / scale
+        this.deltaY = (e.clientY - this.firstCursorY)  / scale
+        Camera.OffsetX = this.initialCameraOffsetX + this.deltaX
+        Camera.OffsetY = this.initialCameraOffsetY + this.deltaY
         EventBus.emit('redraw')
     }
-    dragHandler(e) {
-        const rect = this.pedigreeDiagram.getBoundingClientRect();
-        const ctx = this.pedigreeDiagram.getContext('2d')
+
+    private dragPedigree(e: MouseEvent): void {
+        const rect = this.diagram.getBoundingClientRect();
+        const scale = this.ctx.getTransform().a
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
-        let isNotPanTriggered = false
-        this.pedigrees.forEach((pedigree)=>{
+        for (let i = 0; i < this.renderEngine.pedigrees.length; i++) {
+            const pedigree = this.renderEngine.pedigrees[i];
             if(pedigree.dragEnabled) {
-                isNotPanTriggered = true
-                this.startPan = false
                 // pedigree.pedigree.x = Math.round((mouseX - this.mouseOffsetX)/15)*15
                 // pedigree.pedigree.y = Math.round((mouseY - this.mouseOffsetY)/15)*15
-                pedigree.pedigree.x = (mouseX/ctx.getTransform().a) - this.mouseOffsetX
-                pedigree.pedigree.y = (mouseY/ctx.getTransform().a) - this.mouseOffsetY
-                EventBus.emit('redraw')
-            }
-        })
-        if(!isNotPanTriggered && this.startPan) {
-            this.dragDiagram(e)
-        }
-    }
-    appendPedigrees(pedigree) {
-        this.pedigrees.push({
-            pedigree: pedigree,
-            dragEnabled: false
-        })
-    }
-    deletePedigree(id) {
-        for (let index = 0; index < this.pedigrees.length; index++) {
-            const element = this.pedigrees[index].pedigree;
-            if(id === element.id) {
-                this.pedigrees.splice(index, 1)
+                pedigree.x = (mouseX/scale) - this.mouseOffsetX
+                pedigree.y = (mouseY/scale) - this.mouseOffsetY
+                break;
             }
         }
+        EventBus.emit('redraw')
+    }
+
+    private stopDrag(): void {
+        if(this.panDiagram) {
+            this.initialCameraOffsetX = Camera.OffsetX
+            this.initialCameraOffsetY = Camera.OffsetY
+            this.panDiagram = false
+        }
+        this.renderEngine.pedigrees.forEach((pedigree)=>{
+            pedigree.dragEnabled = false
+        })
     }
 }

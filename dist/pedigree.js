@@ -5,7 +5,7 @@ const EventBus_1 = require("./EventBus");
 const IdGenerator_1 = require("./IdGenerator");
 const Camera_1 = require("./Camera");
 class BasePedigree {
-    constructor(canvasDiagram) {
+    constructor(canvasDiagram, x, y) {
         this.isMarried = false;
         this.marriagePartner = null;
         this.id = IdGenerator_1.default.randomId();
@@ -14,7 +14,10 @@ class BasePedigree {
         this.x = 0;
         this.y = 0;
         this.scalingFactor = 1;
+        this.dragEnabled = false;
         this.canvasDiagram = canvasDiagram;
+        this.x = x;
+        this.y = y;
     }
     calculateMiddle() {
         return {

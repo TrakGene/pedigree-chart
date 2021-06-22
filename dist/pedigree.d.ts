@@ -9,7 +9,8 @@ export declare abstract class BasePedigree {
     x: number;
     y: number;
     scalingFactor: number;
-    constructor(canvasDiagram: any);
+    dragEnabled: boolean;
+    constructor(canvasDiagram: any, x: any, y: any);
     calculateMiddle(): {
         x: number;
         y: number;
