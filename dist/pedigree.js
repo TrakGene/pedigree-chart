@@ -70,7 +70,7 @@ class FemalePedigree extends BasePedigree {
         const ctx = this.canvasDiagram.getContext('2d');
         ctx.beginPath();
         ctx.save();
-        ctx.arc(this.x + this.size / 2, this.y + this.size / 2, this.size / 2, 0, 2 * Math.PI);
+        ctx.arc((this.x + this.size / 2) + Camera_1.default.OffsetX, (this.y + this.size / 2) + Camera_1.default.OffsetY, this.size / 2, 0, 2 * Math.PI);
         ctx.scale(this.scalingFactor, this.scalingFactor);
         ctx.lineWidth = this.border;
         ctx.strokeStyle = "black";

@@ -9,6 +9,7 @@ export default class RenderEngine {
     diagram: HTMLCanvasElement
     diagramWrapper: HTMLElement
     pedigrees: Array<BasePedigree> = []
+    twinPedigrees: Array<any> = []
 
     connectionManager: ConnectionManager
     pedigreeManager: PedigreeManager
@@ -70,6 +71,15 @@ export default class RenderEngine {
             pedigreeA,
             pedigreeB,
             lineType
+        )
+    }
+    public connectTwins(parentA: BasePedigree, parentB: BasePedigree, twinA: BasePedigree, twinB: BasePedigree, type) {
+        this.connectionManager.createTwinsConnection(
+            parentA,
+            parentB,
+            twinA,
+            twinB,
+            type
         )
     }
     public scale(scale, cursorX, cursorY) {
