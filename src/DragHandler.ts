@@ -85,10 +85,10 @@ export default class DragHandler {
         for (let i = 0; i < this.renderEngine.pedigrees.length; i++) {
             const pedigree = this.renderEngine.pedigrees[i];
             if(pedigree.dragEnabled) {
-                pedigree.x = Math.round((mouseX - this.mouseOffsetX)/15)*15
-                pedigree.y = Math.round((mouseY - this.mouseOffsetY)/15)*15
-                // pedigree.x = (mouseX/scale) - this.mouseOffsetX
-                // pedigree.y = (mouseY/scale) - this.mouseOffsetY
+                // pedigree.x = Math.round((mouseX - this.mouseOffsetX)/15)*15
+                // pedigree.y = Math.round((mouseY - this.mouseOffsetY)/15)*15
+                pedigree.x = (mouseX/scale) - this.mouseOffsetX
+                pedigree.y = (mouseY/scale) - this.mouseOffsetY
                 break;
             }
         }

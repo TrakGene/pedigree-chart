@@ -9,8 +9,7 @@ interface Connection {
 }
 
 interface TwinConnection {
-    parentA: BasePedigree
-    parentB: BasePedigree
+    parent: BasePedigree
     twinA: BasePedigree
     twinB: BasePedigree
     type: string
@@ -37,10 +36,9 @@ export default class ConnectionsManager {
         })
     }
 
-    createTwinsConnection(parentA, parentB, twinA, twinB, type) {
+    createTwinsConnection(parent, twinA, twinB, type) {
         this.twinLinesToRender.push({
-            parentA: parentA,
-            parentB: parentB,
+            parent: parent,
             twinA: twinA,
             twinB: twinB,
             type: type
@@ -76,8 +74,7 @@ export default class ConnectionsManager {
         })
         this.twinLinesToRender.forEach(connection => {
             this.drawTwinsLines(
-                connection.parentA,
-                connection.parentB,
+                connection.parent,
                 connection.twinA,
                 connection.twinB
             )
@@ -129,10 +126,7 @@ export default class ConnectionsManager {
             shift = (nodeA.x - (nodeA.marriagePartner.x + nodeA.marriagePartner.size))/2
             x2 =  (nodeA.marriagePartner.x + nodeA.marriagePartner.size) + shift
         } 
-        // if(nodeB.marriagePartner) {
-        //     shift = (nodeB.x - (nodeB.marriagePartner.x + nodeB.marriagePartner.size))/2
-        //     x2 = (nodeB.marriagePartner.x + nodeB.marriagePartner.size) + shift
-        // } 
+
         const y2 = nodeA.y + nodeA.size / 2
 
         const y3 = nodeB.y + nodeB.size / 2
