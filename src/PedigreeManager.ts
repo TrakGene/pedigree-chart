@@ -1,4 +1,4 @@
-import { MalePedigree, FemalePedigree, BasePedigree } from "./Pedigree"
+import { MalePedigree, FemalePedigree, UnknownPedigree ,BasePedigree } from "./Pedigree"
 import RenderEngine from "./RenderEngine"
 
 export default class PedigreeManager {
@@ -18,6 +18,9 @@ export default class PedigreeManager {
                 break;
             case "female": 
                 pedigree = new FemalePedigree(this.diagram, x, y); 
+                break;
+            case "unknown": 
+                pedigree = new UnknownPedigree(this.diagram, x, y); 
                 break;
         }
         this.renderEngine.pedigrees.push(pedigree)

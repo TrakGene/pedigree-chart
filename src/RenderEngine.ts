@@ -9,6 +9,7 @@ export default class RenderEngine {
     diagram: HTMLCanvasElement
     diagramWrapper: HTMLElement
     pedigrees: Array<BasePedigree> = []
+    twinPedigrees: Array<any> = []
 
     connectionManager: ConnectionManager
     pedigreeManager: PedigreeManager
@@ -53,7 +54,7 @@ export default class RenderEngine {
     }
     private draw() {
         const ctx = this.diagram.getContext("2d")
-        ctx.clearRect(-220, -220, window.innerWidth*100, window.innerHeight*100)
+        ctx.clearRect(-10000, -10000, window.innerWidth*1000, window.innerHeight*1000)
         this.connectionManager.drawConnections()
         this.pedigreeManager.initPedigreeShapes()
     }
@@ -62,7 +63,7 @@ export default class RenderEngine {
         return pedigree
     }
     public connect(pedigreeA, pedigreeB, lineType) {
-        if (lineType === "marriage") {
+        if (lineType === "marriage" || lineType === "separation") {
             pedigreeA.marriagePartner = pedigreeB
             pedigreeB.marriagePartner = pedigreeA
         }
@@ -72,14 +73,23 @@ export default class RenderEngine {
             lineType
         )
     }
+    public connectTwins(parentA: BasePedigree, parentB: BasePedigree, twinA: BasePedigree, twinB: BasePedigree, type) {
+        this.connectionManager.createTwinsConnection(
+            parentA,
+            parentB,
+            twinA,
+            twinB,
+            type
+        )
+    }
     public scale(scale, cursorX, cursorY) {
         const ctx = this.diagram.getContext("2d")
         this.scaleFactor = this.scaleFactor * (scale+1)
         // if((this.scaleFactor > 0.15) && (this.scaleFactor < 2.5)) {
-            ctx.translate(cursorX, cursorY)
-            ctx.scale((scale+1), (scale+1))
-            ctx.translate(-cursorX, -cursorY)
-            setTimeout(()=>this.draw())
+        ctx.translate(cursorX, cursorY)
+        ctx.scale((scale+1), (scale+1))
+        ctx.translate(-cursorX, -cursorY)
+        setTimeout(()=>this.draw())
         // }
     }
     public deletePedigree(id) {
