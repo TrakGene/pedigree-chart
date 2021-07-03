@@ -156,6 +156,8 @@ export default class ConnectionsManager {
     }
 
     drawTwinsLines(parent, twinA, twinB) {
+        twinA.twin = twinB
+        twinB.twin = twinA
         const x1 = ((twinA.x + twinA.size / 2) + (twinB.x + twinA.size / 2))/2
 
         const x21 = (twinA.x + twinA.size / 2)
@@ -234,6 +236,8 @@ export default class ConnectionsManager {
     }
 
     drawIdenticalTwinsLines(parent, twinA, twinB) {
+        twinA.twin = twinB
+        twinB.twin = twinA
         const x1 = ((twinA.x + twinA.size / 2) + (twinB.x + twinA.size / 2))/2
 
         const x21 = (twinA.x + twinA.size / 2)

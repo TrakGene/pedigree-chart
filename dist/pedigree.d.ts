@@ -2,6 +2,7 @@ export declare abstract class BasePedigree {
     canvasDiagram: HTMLCanvasElement;
     isMarried: boolean;
     marriagePartner: any;
+    twin: any;
     storage: any;
     id: string;
     size: number;

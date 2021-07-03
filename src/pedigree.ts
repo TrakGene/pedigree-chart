@@ -6,6 +6,7 @@ export abstract class BasePedigree {
     canvasDiagram: HTMLCanvasElement
     isMarried = false
     marriagePartner = null;
+    twin = null;
     storage: any
     id = IdGenerator.randomId()
     size = 60
