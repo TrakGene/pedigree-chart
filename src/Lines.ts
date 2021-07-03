@@ -82,10 +82,40 @@ export class SiblingLine {
 export class TwinsLine {
     static init(ctx: CanvasRenderingContext2D, points, lineWidth: number, scalingFactor: number) {
         ctx.beginPath();
+        // line to connect twins
         ctx.moveTo(points.x1, points.y1);
         ctx.lineTo(points.x21, points.y21);
         ctx.moveTo(points.x1, points.y1);
         ctx.lineTo(points.x22, points.y22);
+
+        // line connecting to diagram
+        ctx.moveTo(points.x1, points.y1);
+        ctx.lineTo(points.x3, points.y3);
+        ctx.lineTo(points.x4, points.y4);
+        ctx.lineTo(points.x5, points.y5);
+        ctx.scale(scalingFactor, scalingFactor)
+        ctx.lineWidth = lineWidth
+        ctx.stroke();
+        ctx.closePath();
+    }
+}
+export class IdenticalTwinsLine {
+    static init(ctx: CanvasRenderingContext2D, points, lineWidth: number, scalingFactor: number) {
+        ctx.beginPath();
+        // line to connect twins
+        ctx.moveTo(points.x1, points.y1);
+        ctx.lineTo(points.x21, points.y21);
+        ctx.moveTo(points.x1, points.y1);
+        ctx.lineTo(points.x22, points.y22);
+
+        ctx.moveTo(points.x1, points.y1+50);
+        // ctx.moveTo(points.x21, points.y1+30);
+        const middleX1 = (points.x21 - points.x1)/2
+        ctx.lineTo( points.x1+middleX1, points.y1+50);
+        const middleX2 = (points.x22 - points.x1)/2
+        ctx.lineTo( points.x1+middleX2, points.y1+50);
+
+        // line connecting to diagram
         ctx.moveTo(points.x1, points.y1);
         ctx.lineTo(points.x3, points.y3);
         ctx.lineTo(points.x4, points.y4);
