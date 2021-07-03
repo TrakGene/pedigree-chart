@@ -68,6 +68,9 @@ export default class ConnectionsManager {
             if (connection.type == "sibling") {
                 this.drawSiblingLines(connection)
             }
+            if (connection.type == "separation") {
+                this.drawSeparationLines(connection)
+            }
             if (connection.type == "consanguineous") {
                 this.drawConsanguineousLines(connection)
             }

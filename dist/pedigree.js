@@ -37,11 +37,11 @@ class UnknownPedigree extends BasePedigree {
         ctx.lineWidth = this.border;
         ctx.strokeStyle = "black";
         const size2 = this.size / 2;
-        ctx.moveTo(this.x, this.y + size2);
-        ctx.lineTo(this.x + size2, this.y);
-        ctx.lineTo(this.x + this.size, this.y + size2);
-        ctx.lineTo(this.x + size2, this.y + this.size);
-        ctx.lineTo(this.x, this.y + size2);
+        ctx.moveTo(this.x + Camera_1.default.OffsetX, this.y + size2 + Camera_1.default.OffsetY);
+        ctx.lineTo(this.x + size2 + Camera_1.default.OffsetX, this.y + Camera_1.default.OffsetY);
+        ctx.lineTo(this.x + this.size + Camera_1.default.OffsetX, this.y + size2 + Camera_1.default.OffsetY);
+        ctx.lineTo(this.x + size2 + Camera_1.default.OffsetX, this.y + this.size + Camera_1.default.OffsetY);
+        ctx.lineTo(this.x + Camera_1.default.OffsetX, this.y + size2 + Camera_1.default.OffsetY);
         ctx.stroke();
         ctx.fillStyle = "white";
         ctx.fill();
@@ -53,14 +53,12 @@ class MalePedigree extends BasePedigree {
     initShape() {
         const ctx = this.canvasDiagram.getContext('2d');
         ctx.beginPath();
-        ctx.save();
         ctx.rect(this.x + Camera_1.default.OffsetX, this.y + Camera_1.default.OffsetY, this.size, this.size);
         ctx.lineWidth = this.border;
         ctx.strokeStyle = "black";
         ctx.stroke();
         ctx.fillStyle = "white";
         ctx.fill();
-        ctx.restore();
         ctx.closePath();
     }
 }
@@ -69,7 +67,6 @@ class FemalePedigree extends BasePedigree {
     initShape() {
         const ctx = this.canvasDiagram.getContext('2d');
         ctx.beginPath();
-        ctx.save();
         ctx.arc((this.x + this.size / 2) + Camera_1.default.OffsetX, (this.y + this.size / 2) + Camera_1.default.OffsetY, this.size / 2, 0, 2 * Math.PI);
         ctx.scale(this.scalingFactor, this.scalingFactor);
         ctx.lineWidth = this.border;
@@ -77,7 +74,6 @@ class FemalePedigree extends BasePedigree {
         ctx.stroke();
         ctx.fillStyle = "white";
         ctx.fill();
-        ctx.restore();
         ctx.closePath();
     }
 }
