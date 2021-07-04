@@ -87,8 +87,9 @@ export default class DragHandler {
             if(pedigree.dragEnabled) {
                 pedigree.x = Math.round(((mouseX/scale) - this.mouseOffsetX)/15)*15
                 pedigree.y = Math.round(((mouseY/scale)- this.mouseOffsetY)/15)*15
-                // pedigree.x = (mouseX/scale) - this.mouseOffsetX
-                // pedigree.y = (mouseY/scale) - this.mouseOffsetY
+                if(pedigree.twin) {
+                    pedigree.twin.y = Math.round(((mouseY/scale)- this.mouseOffsetY)/15)*15
+                }
                 break;
             }
         }

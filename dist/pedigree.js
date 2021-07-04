@@ -8,6 +8,7 @@ class BasePedigree {
     constructor(canvasDiagram, x, y) {
         this.isMarried = false;
         this.marriagePartner = null;
+        this.twin = null;
         this.id = IdGenerator_1.default.randomId();
         this.size = 60;
         this.border = 3;
