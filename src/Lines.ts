@@ -17,13 +17,11 @@ interface SiblingLinePoints {
 export class MarriageLine {
     static init(ctx: CanvasRenderingContext2D, points: MarriageLinePoints, lineWidth: number, scalingFactor: number) {
         ctx.beginPath();
-        ctx.save();
         ctx.moveTo(points.x1, points.y1);
         ctx.lineTo(points.x2, points.y2);
         ctx.scale(scalingFactor, scalingFactor)
         ctx.lineWidth = lineWidth
         ctx.stroke();
-        ctx.restore()
         ctx.closePath();
     }
 }
@@ -32,14 +30,12 @@ export class ConsanguineousLine {
     static init(ctx: CanvasRenderingContext2D, points: MarriageLinePoints, lineWidth: number, scalingFactor: number) {
         const offset = 4
         ctx.beginPath();
-        ctx.save();
         ctx.moveTo(points.x1, points.y1-offset);
         ctx.lineTo(points.x2, points.y2-offset);
         ctx.moveTo(points.x1, points.y1+offset);
         ctx.lineTo(points.x2, points.y2+offset);
         ctx.lineWidth = lineWidth
         ctx.stroke();
-        ctx.restore()
         ctx.closePath();
     }
 }
@@ -47,7 +43,6 @@ export class ConsanguineousLine {
 export class SeparationLine {
     static init(ctx: CanvasRenderingContext2D, points: MarriageLinePoints, lineWidth: number, scalingFactor: number) {
         ctx.beginPath();
-        ctx.save();
         ctx.moveTo(points.x1, points.y1);
         ctx.lineTo(points.x2, points.y2);
         ctx.moveTo(((points.x1+48+points.x2)/2)-5, ((points.y1+points.y2)/2)-24);
@@ -57,7 +52,6 @@ export class SeparationLine {
         ctx.scale(scalingFactor, scalingFactor)
         ctx.lineWidth = lineWidth
         ctx.stroke();
-        ctx.restore()
         ctx.closePath();
     }
 }
@@ -65,7 +59,6 @@ export class SeparationLine {
 export class SiblingLine {
     static init(ctx: CanvasRenderingContext2D, points: SiblingLinePoints, lineWidth: number, scalingFactor: number) {
         ctx.beginPath();
-        ctx.save()
         ctx.moveTo(points.x1, points.y1);
         ctx.lineTo(points.x2, points.y2);
         ctx.lineTo(points.x2, points.y3-100);
@@ -74,7 +67,6 @@ export class SiblingLine {
         ctx.scale(scalingFactor, scalingFactor)
         ctx.lineWidth = lineWidth
         ctx.stroke();
-        ctx.restore()
         ctx.closePath();
     }
 }
