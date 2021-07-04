@@ -1,8 +1,8 @@
-import ConnectionManager from "./ConnectionsManager"
-import PedigreeManager from "./PedigreeManager"
-import EventBus from './EventBus'
-import DragHandler from "./DragHandler"
-import { BasePedigree } from "./Pedigree"
+import ConnectionManager from "./ConnectionsManager";
+import PedigreeManager from "./PedigreeManager";
+import EventBus from "./EventBus";
+import DragHandler from "./DragHandler";
+import { BasePedigree } from "./Pedigree";
 
 export default class RenderEngine {
     shapes = []
@@ -11,11 +11,11 @@ export default class RenderEngine {
     diagramWrapper: HTMLElement
     pedigrees: Array<BasePedigree> = []
 
-    connectionManager: ConnectionManager
-    pedigreeManager: PedigreeManager
-    dragHandler: DragHandler
+  connectionManager: ConnectionManager;
+  pedigreeManager: PedigreeManager;
+  dragHandler: DragHandler;
 
-    scaleFactor = 1
+  scaleFactor = 1;
 
     constructor(id) {
         this.diagramWrapper = document.getElementById(id) as HTMLElement;
@@ -43,7 +43,6 @@ export default class RenderEngine {
         })
         this.diagram.addEventListener("wheel", (event)=>{
             this.scaleFactor += event.deltaY*0.001
-            EventBus.emit('scale', this.scaleFactor)
             this.scale(event.deltaY*0.001, event.clientX, event.clientY)
             event.preventDefault()
         });
@@ -54,8 +53,7 @@ export default class RenderEngine {
         this.draw()
     }
     private draw() {
-        const ctx = this.diagram.getContext("2d")
-        ctx.clearRect(-10000, -10000, window.innerWidth*1000, window.innerHeight*1000)
+        this.ctx.clearRect(-10000, -10000, window.innerWidth*1000, window.innerHeight*1000)
         this.connectionManager.drawConnections()
         this.pedigreeManager.initPedigreeShapes()
     }
@@ -84,11 +82,10 @@ export default class RenderEngine {
         )
     }
     public scale(scale, cursorX, cursorY) {
-        const ctx = this.diagram.getContext("2d")
         this.scaleFactor = this.scaleFactor * (scale+1)
-        ctx.translate(cursorX, cursorY)
-        ctx.scale((scale+1), (scale+1))
-        ctx.translate(-cursorX, -cursorY)
+        this.ctx.translate(cursorX, cursorY)
+        this.ctx.scale((scale+1), (scale+1))
+        this.ctx.translate(-cursorX, -cursorY)
         setTimeout(()=>this.draw())
     }
     public deletePedigree(id) {

@@ -6,6 +6,7 @@ const IdGenerator_1 = require("./IdGenerator");
 const Camera_1 = require("./Camera");
 class BasePedigree {
     constructor(canvasDiagram, ctx, x, y) {
+        this.twin = null;
         this.isMarried = false;
         this.marriagePartner = null;
         this.id = IdGenerator_1.default.randomId();

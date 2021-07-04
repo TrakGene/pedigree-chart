@@ -5,6 +5,7 @@ import Camera from "./Camera";
 export abstract class BasePedigree {
   canvasDiagram: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
+  twin = null;
   isMarried = false;
   marriagePartner = null;
   storage: any;
