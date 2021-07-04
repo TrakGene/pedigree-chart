@@ -5,18 +5,16 @@ const EventBus_1 = require("./EventBus");
 const IdGenerator_1 = require("./IdGenerator");
 const Camera_1 = require("./Camera");
 class BasePedigree {
-    constructor(canvasDiagram, ctx, x, y) {
-        this.twin = null;
-        this.isMarried = false;
-        this.marriagePartner = null;
+    constructor(ctx, x, y) {
         this.id = IdGenerator_1.default.randomId();
+        this.isMarried = false;
+        this.dragEnabled = false;
+        this.twin = null;
+        this.marriagePartner = null;
         this.size = 60;
         this.border = 3;
         this.x = 0;
         this.y = 0;
-        this.scalingFactor = 1;
-        this.dragEnabled = false;
-        this.canvasDiagram = canvasDiagram;
         this.ctx = ctx;
         this.x = x;
         this.y = y;
@@ -28,7 +26,7 @@ class BasePedigree {
         };
     }
     on(eventName, eventHandler) {
-        EventBus_1.default.on(`${eventName}${this.id}`, () => eventHandler(this.id));
+        EventBus_1.default.on(`${eventName}${this.id}`, () => eventHandler(this));
     }
 }
 exports.BasePedigree = BasePedigree;
@@ -48,6 +46,8 @@ class UnknownPedigree extends BasePedigree {
         this.ctx.fill();
         this.ctx.closePath();
     }
+    updateConfig() {
+    }
 }
 exports.UnknownPedigree = UnknownPedigree;
 class MalePedigree extends BasePedigree {
@@ -61,19 +61,22 @@ class MalePedigree extends BasePedigree {
         this.ctx.fill();
         this.ctx.closePath();
     }
+    updateConfig() {
+    }
 }
 exports.MalePedigree = MalePedigree;
 class FemalePedigree extends BasePedigree {
     initShape() {
         this.ctx.beginPath();
         this.ctx.arc(this.x + this.size / 2 + Camera_1.default.OffsetX, this.y + this.size / 2 + Camera_1.default.OffsetY, this.size / 2, 0, 2 * Math.PI);
-        this.ctx.scale(this.scalingFactor, this.scalingFactor);
         this.ctx.lineWidth = this.border;
         this.ctx.strokeStyle = "black";
         this.ctx.stroke();
         this.ctx.fillStyle = "white";
         this.ctx.fill();
         this.ctx.closePath();
+    }
+    updateConfig() {
     }
 }
 exports.FemalePedigree = FemalePedigree;

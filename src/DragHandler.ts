@@ -51,6 +51,7 @@ export default class DragHandler {
                 this.mouseOffsetX = (mouseX/scale) - pedigree.x
                 this.mouseOffsetY = (mouseY/scale) - pedigree.y
                 this.panDiagram = false
+                EventBus.emit(`pedigree-click`, pedigree)
             }
         })
 

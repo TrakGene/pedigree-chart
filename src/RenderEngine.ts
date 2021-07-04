@@ -96,6 +96,9 @@ export default class RenderEngine {
             this.draw()
         })
     }
+    public on(eventName: "pedigree-click", eventHandler) {
+        EventBus.on(eventName, eventHandler)
+    }
     public updatePedigree(id) {
         
     }

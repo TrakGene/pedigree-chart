@@ -16,13 +16,13 @@ export default class PedigreeManager {
         let pedigree;
         switch (sex) {
             case "male": 
-                pedigree = new MalePedigree(this.diagram, this.ctx, x, y); 
+                pedigree = new MalePedigree(this.ctx, x, y); 
                 break;
             case "female": 
-                pedigree = new FemalePedigree(this.diagram, this.ctx,x, y); 
+                pedigree = new FemalePedigree(this.ctx,x, y); 
                 break;
             case "unknown": 
-                pedigree = new UnknownPedigree(this.diagram, this.ctx,x, y); 
+                pedigree = new UnknownPedigree(this.ctx,x, y); 
                 break;
         }
         this.renderEngine.pedigrees.push(pedigree)
