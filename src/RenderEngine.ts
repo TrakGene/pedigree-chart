@@ -72,10 +72,11 @@ export default class RenderEngine {
             lineType
         )
     }
-    public connectTwins(parentA: BasePedigree, parentB: BasePedigree, twinA: BasePedigree, twinB: BasePedigree, type) {
+    public connectTwins(parent: BasePedigree, twinA: BasePedigree, twinB: BasePedigree, type) {
+        twinA.twin = twinB;
+        twinB.twin = twinA;
         this.connectionManager.createTwinsConnection(
-            parentA,
-            parentB,
+            parent,
             twinA,
             twinB,
             type

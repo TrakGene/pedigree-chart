@@ -83,64 +83,58 @@ export default class ConnectionsManager {
     });
     this.twinLinesToRender.forEach((connection) => {
       if (connection.type == "non-identical") {
-        this.drawTwinsLines(
-          connection.parent,
-          connection.twinA,
-          connection.twinB
-        );
+        this.drawTwinsLines(connection);
       }
       if (connection.type == "identical") {
-        this.drawIdenticalTwinsLines(
-          connection.parent,
-          connection.twinA,
-          connection.twinB
-        );
+        this.drawIdenticalTwinsLines(connection);
       }
     });
   }
 
   drawMarriageLines(connection: Connection) {
-    const points = {
-      x1: connection.pedigreeA.calculateMiddle().x + Camera.OffsetX,
-      y1: connection.pedigreeA.calculateMiddle().y + Camera.OffsetY,
-      x2: connection.pedigreeB.calculateMiddle().x + Camera.OffsetX,
-      y2: connection.pedigreeB.calculateMiddle().y + Camera.OffsetY,
+    const nodeA: BasePedigree = connection.pedigreeA;
+    const nodeB: BasePedigree = connection.pedigreeB;
+    const pointsToRender = {
+      x1: nodeA.calculateMiddle().x + Camera.OffsetX,
+      y1: nodeA.calculateMiddle().y + Camera.OffsetY,
+      x2: nodeB.calculateMiddle().x + Camera.OffsetX,
+      y2: nodeB.calculateMiddle().y + Camera.OffsetY,
     };
-    MarriageLine.init(this.ctx, points, this.lineWidth);
+    MarriageLine.init(this.ctx, pointsToRender, this.lineWidth);
   }
 
   drawConsanguineousLines(connection: Connection) {
-    const points = {
-      x1: connection.pedigreeA.calculateMiddle().x + Camera.OffsetX,
-      y1: connection.pedigreeA.calculateMiddle().y + Camera.OffsetY,
-      x2: connection.pedigreeB.calculateMiddle().x + Camera.OffsetX,
-      y2: connection.pedigreeB.calculateMiddle().y + Camera.OffsetY,
+    const nodeA: BasePedigree = connection.pedigreeA;
+    const nodeB: BasePedigree = connection.pedigreeB;
+    const pointsToRender = {
+      x1: nodeA.calculateMiddle().x + Camera.OffsetX,
+      y1: nodeA.calculateMiddle().y + Camera.OffsetY,
+      x2: nodeB.calculateMiddle().x + Camera.OffsetX,
+      y2: nodeB.calculateMiddle().y + Camera.OffsetY,
     };
-    ConsanguineousLine.init(
-      this.ctx,
-      points,
-      this.lineWidth
-    );
+    ConsanguineousLine.init(this.ctx, pointsToRender, this.lineWidth);
   }
 
   drawSeparationLines(connection: Connection) {
-    const points = {
-      x1: connection.pedigreeA.calculateMiddle().x + Camera.OffsetX,
-      y1: connection.pedigreeA.calculateMiddle().y + Camera.OffsetY,
-      x2: connection.pedigreeB.calculateMiddle().x + Camera.OffsetX,
-      y2: connection.pedigreeB.calculateMiddle().y + Camera.OffsetY,
+    const nodeA: BasePedigree = connection.pedigreeA;
+    const nodeB: BasePedigree = connection.pedigreeB;
+    const pointsToRender = {
+      x1: nodeA.calculateMiddle().x + Camera.OffsetX,
+      y1: nodeA.calculateMiddle().y + Camera.OffsetY,
+      x2: nodeB.calculateMiddle().x + Camera.OffsetX,
+      y2: nodeB.calculateMiddle().y + Camera.OffsetY,
     };
-    SeparationLine.init(this.ctx, points, this.lineWidth);
+    SeparationLine.init(this.ctx, pointsToRender, this.lineWidth);
   }
 
   drawSiblingLines(connection: Connection) {
-    const nodeA = connection.pedigreeA;
-    const nodeB = connection.pedigreeB;
+    const nodeA: BasePedigree = connection.pedigreeA;
+    const nodeB: BasePedigree = connection.pedigreeB;
 
-    const x1 = nodeA.x + nodeA.size / 2;
-    const y1 = nodeA.y + nodeA.size / 2;
+    const x1 = nodeA.calculateMiddle().x;
+    const y1 = nodeA.calculateMiddle().y;
 
-    // Distance beetwen pedigreeA and B
+    // Distance beetwen pedigreeA and pedigreeB
     let shift = (nodeA.x - (nodeB.x + nodeB.size)) / 2;
     let x2;
     x2 = nodeB.x + nodeB.size + shift;
@@ -150,12 +144,12 @@ export default class ConnectionsManager {
       x2 = nodeA.marriagePartner.x + nodeA.marriagePartner.size + shift;
     }
 
-    const y2 = nodeA.y + nodeA.size / 2;
+    const y2 = y1
 
-    const y3 = nodeB.y + nodeB.size / 2;
-    const x3 = nodeB.x + nodeB.size / 2;
+    const y3 = nodeB.calculateMiddle().y;
+    const x3 = nodeB.calculateMiddle().x;
 
-    const points = {
+    const pointsToRender = {
       x1: x1 + Camera.OffsetX,
       y1: y1 + Camera.OffsetY,
       x2: x2 + Camera.OffsetX,
@@ -163,30 +157,110 @@ export default class ConnectionsManager {
       x3: x3 + Camera.OffsetX,
       y3: y3 + Camera.OffsetY,
     };
-    SiblingLine.init(this.ctx, points, this.lineWidth);
+    SiblingLine.init(this.ctx, pointsToRender, this.lineWidth);
   }
 
-  drawTwinsLines(parent, twinA, twinB) {
-    twinA.twin = twinB;
-    twinB.twin = twinA;
-    const x1 = (twinA.x + twinA.size / 2 + (twinB.x + twinA.size / 2)) / 2;
+  drawTwinsLines(connection: TwinConnection) {
+    const twinA: BasePedigree = connection.twinA
+    const twinB: BasePedigree = connection.twinB
+    const parent: BasePedigree = connection.parent
 
-    const x21 = twinA.x + twinA.size / 2;
-    const y21 = twinA.y + twinA.size / 2;
+    // Point where twins are connected
+    const x1 = (twinA.calculateMiddle().x + twinB.calculateMiddle().x) / 2;
 
-    const x22 = twinB.x + twinB.size / 2;
-    const y22 = twinB.y + twinB.size / 2;
+    // Middle of twin A
+    const x21 = twinA.calculateMiddle().x
+    const y21 = twinA.calculateMiddle().y
 
-    let y1 = 0;
-    if (y22 > y21) {
-      y1 = y21 - 100;
+    // Middle of twin B
+    const x22 = twinB.calculateMiddle().x
+    const y22 = twinB.calculateMiddle().y
+
+    // Calculate twin connection length
+    const y1 = y21 - 100 | y22 - 100
+
+    // Connection to the parent
+    if (!parent.marriagePartner) {
+      const x3 = x1;
+      const y3 = (y1 + (parent.y + parent.size / 2)) / 2;
+      const x4 = parent.x + parent.size / 2;
+      const y4 = y3;
+      const x5 = x4;
+      const y5 = parent.y + parent.size / 2;
+      const pointsToRender = {
+        x1: x1 + Camera.OffsetX,
+        y1: y1 + Camera.OffsetY,
+        x21: x21 + Camera.OffsetX,
+        y21: y21 + Camera.OffsetY,
+        x22: x22 + Camera.OffsetX,
+        y22: y22 + Camera.OffsetY,
+        x3: x3 + Camera.OffsetX,
+        y3: y3 + Camera.OffsetY,
+        x4: x4 + Camera.OffsetX,
+        y4: y4 + Camera.OffsetY,
+        x5: x5 + Camera.OffsetX,
+        y5: y5 + Camera.OffsetY,
+      };
+
+      TwinsLine.init(this.ctx, pointsToRender, this.lineWidth);
     } else {
-      y1 = y22 - 100;
+      const nodeA = parent;
+      const nodeB = parent.marriagePartner;
+
+      let shift = (nodeA.x - (nodeB.x + nodeB.size)) / 2;
+      let x3;
+      x3 = nodeB.x + nodeB.size + shift;
+      if (nodeA.marriagePartner) {
+        shift =
+          (nodeA.x - (nodeA.marriagePartner.x + nodeA.marriagePartner.size)) /
+          2;
+        x3 = nodeA.marriagePartner.x + nodeA.marriagePartner.size + shift;
+      }
+      const y3 = y1;
+
+      const x4 = x3;
+      const y4 = parent.y + parent.size / 2;
+
+      const x5 = parent.x + parent.size / 2;
+      const y5 = y4;
+      const pointsToRender = {
+        x1: x1 + Camera.OffsetX,
+        y1: y1 + Camera.OffsetY,
+        x21: x21 + Camera.OffsetX,
+        y21: y21 + Camera.OffsetY,
+        x22: x22 + Camera.OffsetX,
+        y22: y22 + Camera.OffsetY,
+        x3: x3 + Camera.OffsetX,
+        y3: y3 + Camera.OffsetY,
+        x4: x4 + Camera.OffsetX,
+        y4: y4 + Camera.OffsetY,
+        x5: x5 + Camera.OffsetX,
+        y5: y5 + Camera.OffsetY,
+      };
+      TwinsLine.init(this.ctx, pointsToRender, this.lineWidth);
     }
+  }
 
-    // y1 and x1 is point where twins are connected
+  drawIdenticalTwinsLines(connection: TwinConnection) {
+    const twinA: BasePedigree = connection.twinA
+    const twinB: BasePedigree = connection.twinB
+    const parent: BasePedigree = connection.parent
 
-    // const nodeA = parent
+    // Point where twins are connected
+    const x1 = (twinA.calculateMiddle().x + twinB.calculateMiddle().x) / 2;
+
+    // Middle of twin A
+    const x21 = twinA.calculateMiddle().x
+    const y21 = twinA.calculateMiddle().y
+
+    // Middle of twin B
+    const x22 = twinB.calculateMiddle().x
+    const y22 = twinB.calculateMiddle().y
+
+    // Calculate twin connection length
+    const y1 = y21 - 100 | y22 - 100
+
+    // Connection to the parent
     if (!parent.marriagePartner) {
       const x3 = x1;
       const y3 = (y1 + (parent.y + parent.size / 2)) / 2;
@@ -209,7 +283,7 @@ export default class ConnectionsManager {
         y5: y5 + Camera.OffsetY,
       };
 
-      TwinsLine.init(this.ctx, points, this.lineWidth);
+      IdenticalTwinsLine.init(this.ctx, points, this.lineWidth);
     } else {
       const nodeA = parent;
       const nodeB = parent.marriagePartner;
@@ -244,97 +318,7 @@ export default class ConnectionsManager {
         x5: x5 + Camera.OffsetX,
         y5: y5 + Camera.OffsetY,
       };
-      TwinsLine.init(this.ctx, points, this.lineWidth);
-    }
-  }
-
-  drawIdenticalTwinsLines(parent, twinA, twinB) {
-    twinA.twin = twinB;
-    twinB.twin = twinA;
-    const x1 = (twinA.x + twinA.size / 2 + (twinB.x + twinA.size / 2)) / 2;
-
-    const x21 = twinA.x + twinA.size / 2;
-    const y21 = twinA.y + twinA.size / 2;
-
-    const x22 = twinB.x + twinB.size / 2;
-    const y22 = twinB.y + twinB.size / 2;
-
-    let y1 = 0;
-    if (y22 > y21) {
-      y1 = y21 - 100;
-    } else {
-      y1 = y22 - 100;
-    }
-
-    // y1 and x1 is point where twins are connected
-
-    // const nodeA = parent
-    if (!parent.marriagePartner) {
-      const x3 = x1;
-      const y3 = (y1 + (parent.y + parent.size / 2)) / 2;
-      const x4 = parent.x + parent.size / 2;
-      const y4 = y3;
-      const x5 = x4;
-      const y5 = parent.y + parent.size / 2;
-      const points = {
-        x1: x1 + Camera.OffsetX,
-        y1: y1 + Camera.OffsetY,
-        x21: x21 + Camera.OffsetX,
-        y21: y21 + Camera.OffsetY,
-        x22: x22 + Camera.OffsetX,
-        y22: y22 + Camera.OffsetY,
-        x3: x3 + Camera.OffsetX,
-        y3: y3 + Camera.OffsetY,
-        x4: x4 + Camera.OffsetX,
-        y4: y4 + Camera.OffsetY,
-        x5: x5 + Camera.OffsetX,
-        y5: y5 + Camera.OffsetY,
-      };
-
-      IdenticalTwinsLine.init(
-        this.ctx,
-        points,
-        this.lineWidth
-      );
-    } else {
-      const nodeA = parent;
-      const nodeB = parent.marriagePartner;
-
-      let shift = (nodeA.x - (nodeB.x + nodeB.size)) / 2;
-      let x3;
-      x3 = nodeB.x + nodeB.size + shift;
-      if (nodeA.marriagePartner) {
-        shift =
-          (nodeA.x - (nodeA.marriagePartner.x + nodeA.marriagePartner.size)) /
-          2;
-        x3 = nodeA.marriagePartner.x + nodeA.marriagePartner.size + shift;
-      }
-      const y3 = y1;
-
-      const x4 = x3;
-      const y4 = parent.y + parent.size / 2;
-
-      const x5 = parent.x + parent.size / 2;
-      const y5 = y4;
-      const points = {
-        x1: x1 + Camera.OffsetX,
-        y1: y1 + Camera.OffsetY,
-        x21: x21 + Camera.OffsetX,
-        y21: y21 + Camera.OffsetY,
-        x22: x22 + Camera.OffsetX,
-        y22: y22 + Camera.OffsetY,
-        x3: x3 + Camera.OffsetX,
-        y3: y3 + Camera.OffsetY,
-        x4: x4 + Camera.OffsetX,
-        y4: y4 + Camera.OffsetY,
-        x5: x5 + Camera.OffsetX,
-        y5: y5 + Camera.OffsetY,
-      };
-      IdenticalTwinsLine.init(
-        this.ctx,
-        points,
-        this.lineWidth
-      );
+      IdenticalTwinsLine.init(this.ctx, points, this.lineWidth);
     }
   }
 }
