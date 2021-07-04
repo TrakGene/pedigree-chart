@@ -3,24 +3,26 @@ import RenderEngine from "./RenderEngine"
 
 export default class PedigreeManager {
     private diagram: HTMLCanvasElement
+    private ctx: CanvasRenderingContext2D
     private renderEngine: RenderEngine
 
     constructor(diagram: HTMLCanvasElement, renderEngine: RenderEngine) {
         this.renderEngine = renderEngine
         this.diagram = diagram
+        this.ctx = diagram.getContext("2d")
     }
 
     createPedigree(sex: string, type: string, x: number, y: number): BasePedigree {
         let pedigree;
         switch (sex) {
             case "male": 
-                pedigree = new MalePedigree(this.diagram, x, y); 
+                pedigree = new MalePedigree(this.diagram, this.ctx, x, y); 
                 break;
             case "female": 
-                pedigree = new FemalePedigree(this.diagram, x, y); 
+                pedigree = new FemalePedigree(this.diagram, this.ctx,x, y); 
                 break;
             case "unknown": 
-                pedigree = new UnknownPedigree(this.diagram, x, y); 
+                pedigree = new UnknownPedigree(this.diagram, this.ctx,x, y); 
                 break;
         }
         this.renderEngine.pedigrees.push(pedigree)

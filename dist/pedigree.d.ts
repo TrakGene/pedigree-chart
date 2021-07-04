@@ -1,5 +1,6 @@
 export declare abstract class BasePedigree {
     canvasDiagram: HTMLCanvasElement;
+    ctx: CanvasRenderingContext2D;
     isMarried: boolean;
     marriagePartner: any;
     storage: any;
@@ -10,7 +11,7 @@ export declare abstract class BasePedigree {
     y: number;
     scalingFactor: number;
     dragEnabled: boolean;
-    constructor(canvasDiagram: any, x: any, y: any);
+    constructor(canvasDiagram: HTMLCanvasElement, ctx: CanvasRenderingContext2D, x: number, y: number);
     calculateMiddle(): {
         x: number;
         y: number;

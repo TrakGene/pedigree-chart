@@ -7,9 +7,9 @@ import { BasePedigree } from "./Pedigree"
 export default class RenderEngine {
     shapes = []
     diagram: HTMLCanvasElement
+    ctx: CanvasRenderingContext2D
     diagramWrapper: HTMLElement
     pedigrees: Array<BasePedigree> = []
-    twinPedigrees: Array<any> = []
 
     connectionManager: ConnectionManager
     pedigreeManager: PedigreeManager
@@ -20,6 +20,7 @@ export default class RenderEngine {
     constructor(id) {
         this.diagramWrapper = document.getElementById(id) as HTMLElement;
         this.diagram = document.createElement('canvas')
+        this.ctx = this.diagram.getContext("2d")
         this.initDiagramEditor()
         this.initEvents()
         setTimeout(()=>this.draw())
@@ -85,12 +86,10 @@ export default class RenderEngine {
     public scale(scale, cursorX, cursorY) {
         const ctx = this.diagram.getContext("2d")
         this.scaleFactor = this.scaleFactor * (scale+1)
-        // if((this.scaleFactor > 0.15) && (this.scaleFactor < 2.5)) {
         ctx.translate(cursorX, cursorY)
         ctx.scale((scale+1), (scale+1))
         ctx.translate(-cursorX, -cursorY)
         setTimeout(()=>this.draw())
-        // }
     }
     public deletePedigree(id) {
         this.pedigreeManager.deletePedigree(id)
@@ -98,5 +97,8 @@ export default class RenderEngine {
         setTimeout(() => {
             this.draw()
         })
+    }
+    public updatePedigree(id) {
+        
     }
 }
