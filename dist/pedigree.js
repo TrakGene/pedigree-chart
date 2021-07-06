@@ -4,6 +4,7 @@ exports.FemalePedigree = exports.MalePedigree = exports.UnknownPedigree = export
 const EventBus_1 = require("./EventBus");
 const IdGenerator_1 = require("./IdGenerator");
 const Camera_1 = require("./Camera");
+const Label_1 = require("./Label");
 class BasePedigree {
     constructor(ctx, x, y) {
         this.id = IdGenerator_1.default.randomId();
@@ -18,6 +19,7 @@ class BasePedigree {
         this.ctx = ctx;
         this.x = x;
         this.y = y;
+        this.label = new Label_1.Label(ctx, this);
     }
     calculateMiddle() {
         return {
@@ -45,8 +47,12 @@ class UnknownPedigree extends BasePedigree {
         this.ctx.fillStyle = "white";
         this.ctx.fill();
         this.ctx.closePath();
+        this.label.drawLabel();
     }
     updateConfig() {
+    }
+    setLabel(obj) {
+        this.label.setLabel(obj);
     }
 }
 exports.UnknownPedigree = UnknownPedigree;
@@ -60,8 +66,12 @@ class MalePedigree extends BasePedigree {
         this.ctx.fillStyle = "white";
         this.ctx.fill();
         this.ctx.closePath();
+        this.label.drawLabel();
     }
     updateConfig() {
+    }
+    setLabel(obj) {
+        this.label.setLabel(obj);
     }
 }
 exports.MalePedigree = MalePedigree;
@@ -75,8 +85,12 @@ class FemalePedigree extends BasePedigree {
         this.ctx.fillStyle = "white";
         this.ctx.fill();
         this.ctx.closePath();
+        this.label.drawLabel();
     }
     updateConfig() {
+    }
+    setLabel(obj) {
+        this.label.setLabel(obj);
     }
 }
 exports.FemalePedigree = FemalePedigree;

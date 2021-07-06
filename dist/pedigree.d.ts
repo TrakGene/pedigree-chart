@@ -1,4 +1,6 @@
+import { Label } from "./Label";
 export declare abstract class BasePedigree {
+    protected label: Label;
     protected ctx: CanvasRenderingContext2D;
     readonly id: string;
     protected isMarried: boolean;
@@ -22,12 +24,15 @@ export declare abstract class BasePedigree {
 export declare class UnknownPedigree extends BasePedigree {
     initShape(): void;
     updateConfig(): void;
+    setLabel(obj: any): void;
 }
 export declare class MalePedigree extends BasePedigree {
     initShape(): void;
     updateConfig(): void;
+    setLabel(obj: any): void;
 }
 export declare class FemalePedigree extends BasePedigree {
     initShape(): void;
     updateConfig(): void;
+    setLabel(obj: any): void;
 }

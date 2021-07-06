@@ -31,6 +31,7 @@ export default class RenderEngine {
         this.diagram.height = window.innerHeight
         this.diagramWrapper.style.border = "3px solid black"
         this.diagramWrapper.style.overflow = "hidden"
+        this.ctx.font = "16px Arial";
         this.diagramWrapper.appendChild(this.diagram)
         this.connectionManager = new ConnectionManager(this.diagram)
         this.pedigreeManager = new PedigreeManager(this.diagram, this)

@@ -1,8 +1,10 @@
 import EventBus from "./EventBus";
 import IdGenerator from "./IdGenerator";
 import Camera from "./Camera";
+import { Label } from "./Label";
 
 export abstract class BasePedigree {
+  protected label: Label
   protected ctx: CanvasRenderingContext2D;
   readonly id = IdGenerator.randomId();
   protected isMarried = false;
@@ -23,6 +25,7 @@ export abstract class BasePedigree {
     this.ctx = ctx;
     this.x = x;
     this.y = y;
+    this.label = new Label(ctx, this)
   }
   calculateMiddle() {
     return {
@@ -57,9 +60,13 @@ export class UnknownPedigree extends BasePedigree {
     this.ctx.fillStyle = "white";
     this.ctx.fill();
     this.ctx.closePath();
+    this.label.drawLabel()
   }
   updateConfig() {
 
+  }
+  setLabel(obj) {
+    this.label.setLabel(obj)
   }
 }
 
@@ -78,9 +85,13 @@ export class MalePedigree extends BasePedigree {
     this.ctx.fillStyle = "white";
     this.ctx.fill();
     this.ctx.closePath();
+    this.label.drawLabel()
   }
   updateConfig() {
 
+  }
+  setLabel(obj) {
+    this.label.setLabel(obj)
   }
 }
 
@@ -100,9 +111,11 @@ export class FemalePedigree extends BasePedigree {
     this.ctx.fillStyle = "white";
     this.ctx.fill();
     this.ctx.closePath();
+    this.label.drawLabel()
   }
   updateConfig() {
-
-
+  }
+  setLabel(obj) {
+    this.label.setLabel(obj)
   }
 }
