@@ -37,6 +37,7 @@ export abstract class BasePedigree {
     EventBus.on(`${eventName}${this.id}`, () => eventHandler(this));
   }
   abstract initShape();
+  abstract drawPedigree();
   abstract updateConfig(configObj);
 }
 export class UnknownPedigree extends BasePedigree {
@@ -60,6 +61,9 @@ export class UnknownPedigree extends BasePedigree {
     this.ctx.fillStyle = "white";
     this.ctx.fill();
     this.ctx.closePath();
+  }
+  drawPedigree() {
+    this.initShape()
     this.label.drawLabel()
   }
   updateConfig() {
@@ -85,6 +89,9 @@ export class MalePedigree extends BasePedigree {
     this.ctx.fillStyle = "white";
     this.ctx.fill();
     this.ctx.closePath();
+  }
+  drawPedigree() {
+    this.initShape()
     this.label.drawLabel()
   }
   updateConfig() {
@@ -111,6 +118,9 @@ export class FemalePedigree extends BasePedigree {
     this.ctx.fillStyle = "white";
     this.ctx.fill();
     this.ctx.closePath();
+  }
+  drawPedigree() {
+    this.initShape()
     this.label.drawLabel()
   }
   updateConfig() {

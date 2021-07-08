@@ -12,7 +12,7 @@ export class Label {
   private ctx: CanvasRenderingContext2D;
   private pedigree: BasePedigree;
   private labelData: LabelData;
-  private lineHeight = 20;
+  private lineHeight = 0;
   constructor(ctx: CanvasRenderingContext2D, pedigree: BasePedigree) {
     this.ctx = ctx;
     this.pedigree = pedigree;
@@ -24,6 +24,17 @@ export class Label {
     };
   }
   drawLabel() {
+    this.ctx.beginPath();
+    this.ctx.rect(
+      this.pedigree.x + camera.OffsetX,
+      this.pedigree.y + camera.OffsetY + 80,
+      this.ctx.measureText(this.labelData.name + " " + this.labelData.surname).width,
+      this.pedigree.size
+    );
+    this.ctx.fillStyle = "white";
+    this.ctx.fill();
+    this.ctx.closePath();
+    
     const pedSize = this.pedigree.size;
     this.ctx.fillStyle = "black";
     const idCenter =
@@ -35,21 +46,31 @@ export class Label {
       pedSize / 2;
     const ageCenter =
       this.ctx.measureText(this.labelData.age).width / 2 - pedSize / 2;
-    this.ctx.fillText(
-      `${this.labelData.id}`,
-      this.pedigree.x + camera.OffsetX - idCenter,
-      this.pedigree.y + camera.OffsetY + 80
-    );
-    this.ctx.fillText(
-      `${this.labelData.name + " " + this.labelData.surname}`,
-      this.pedigree.x + camera.OffsetX - nameCenter,
-      this.pedigree.y + camera.OffsetY + 80 + this.lineHeight
-    );
-    this.ctx.fillText(
-      `${this.labelData.age}`,
-      this.pedigree.x + camera.OffsetX - ageCenter,
-      this.pedigree.y + camera.OffsetY + 80 + this.lineHeight * 2
-    );
+    if(this.labelData.id !== "") {
+      this.ctx.fillText(
+        `${this.labelData.id}`,
+        this.pedigree.x + camera.OffsetX - idCenter,
+        this.pedigree.y + camera.OffsetY + 80 + this.lineHeight
+      );
+      this.lineHeight += 20
+    }
+    if((this.labelData.name !== "") || (this.labelData.surname !== "")) {
+      this.ctx.fillText(
+        `${this.labelData.name + " " + this.labelData.surname}`,
+        this.pedigree.x + camera.OffsetX - nameCenter,
+        this.pedigree.y + camera.OffsetY + 80 + this.lineHeight
+      );
+      this.lineHeight += 20
+    }
+    if(this.labelData.age !== "") {
+      this.ctx.fillText(
+        `${this.labelData.age}`,
+        this.pedigree.x + camera.OffsetX - ageCenter,
+        this.pedigree.y + camera.OffsetY + 80 + this.lineHeight
+      );
+      this.lineHeight += 20
+    }
+    this.lineHeight = 0
   }
   setLabel(newState) {
     Object.keys(newState).forEach((prop) => {

@@ -47,6 +47,9 @@ class UnknownPedigree extends BasePedigree {
         this.ctx.fillStyle = "white";
         this.ctx.fill();
         this.ctx.closePath();
+    }
+    drawPedigree() {
+        this.initShape();
         this.label.drawLabel();
     }
     updateConfig() {
@@ -66,6 +69,9 @@ class MalePedigree extends BasePedigree {
         this.ctx.fillStyle = "white";
         this.ctx.fill();
         this.ctx.closePath();
+    }
+    drawPedigree() {
+        this.initShape();
         this.label.drawLabel();
     }
     updateConfig() {
@@ -85,6 +91,9 @@ class FemalePedigree extends BasePedigree {
         this.ctx.fillStyle = "white";
         this.ctx.fill();
         this.ctx.closePath();
+    }
+    drawPedigree() {
+        this.initShape();
         this.label.drawLabel();
     }
     updateConfig() {

@@ -56,7 +56,7 @@ export default class RenderEngine {
     private draw() {
         this.ctx.clearRect(-10000, -10000, window.innerWidth*1000, window.innerHeight*1000)
         this.connectionManager.drawConnections()
-        this.pedigreeManager.initPedigreeShapes()
+        this.pedigreeManager.drawPedigrees()
     }
     public create(sex, type, x = 0, y = 0) {
         const pedigree = this.pedigreeManager.createPedigree(sex, type, x, y)

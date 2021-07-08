@@ -19,20 +19,24 @@ export declare abstract class BasePedigree {
     };
     on(eventName: any, eventHandler: any): void;
     abstract initShape(): any;
+    abstract drawPedigree(): any;
     abstract updateConfig(configObj: any): any;
 }
 export declare class UnknownPedigree extends BasePedigree {
     initShape(): void;
+    drawPedigree(): void;
     updateConfig(): void;
     setLabel(obj: any): void;
 }
 export declare class MalePedigree extends BasePedigree {
     initShape(): void;
+    drawPedigree(): void;
     updateConfig(): void;
     setLabel(obj: any): void;
 }
 export declare class FemalePedigree extends BasePedigree {
     initShape(): void;
+    drawPedigree(): void;
     updateConfig(): void;
     setLabel(obj: any): void;
 }
