@@ -12,6 +12,7 @@ export class Label {
   private pedigree: BasePedigree;
   private labelData: LabelData;
   private lineHeight = 0;
+  private offsetFromPedigree = 75
   constructor(ctx: CanvasRenderingContext2D, pedigree: BasePedigree) {
     this.ctx = ctx;
     this.pedigree = pedigree;
@@ -21,7 +22,32 @@ export class Label {
       age: "",
     };
   }
+
+  longestString() {
+    let maxWidth = 0;
+    Object.keys(this.labelData).forEach((key) => {
+      if (this.ctx.measureText(this.labelData[key]).width > maxWidth) {
+        maxWidth = this.ctx.measureText(this.labelData[key]).width;
+      }
+    });
+    return maxWidth;
+  }
+
+  longestStringCenter() {
+    return this.longestString() / 2 - this.pedigree.size / 2;
+  }
+
   drawLabel() {
+    this.ctx.beginPath();
+    this.ctx.rect(
+      this.pedigree.x + camera.OffsetX - this.longestStringCenter(),
+      this.pedigree.y + camera.OffsetY + this.offsetFromPedigree,
+      this.longestString(),
+      this.calculateBackgroundHeight()
+    );
+    this.ctx.fillStyle = "white";
+    this.ctx.fill();
+    this.ctx.closePath();
     this.ctx.fillStyle = "black";
 
     Object.keys(this.labelData).forEach((key) => {
@@ -32,20 +58,28 @@ export class Label {
         this.ctx.fillText(
           `${this.labelData[key]}`,
           this.pedigree.x + camera.OffsetX - center,
-          this.pedigree.y + camera.OffsetY + 80 + this.lineHeight
+          this.pedigree.y + camera.OffsetY + this.offsetFromPedigree+16 + this.lineHeight
         );
         this.lineHeight += 20;
       }
     });
     this.lineHeight = 0;
   }
+  
   setLabel(newState) {
     Object.keys(newState).forEach((prop) => {
       this.labelData[prop] = newState[prop];
     });
     eventBus.emit("redraw");
   }
+
   calculateBackgroundHeight() {
-    Object.keys(this.labelData);
+    let height = 0;
+    Object.keys(this.labelData).forEach((key) => {
+      if (this.labelData[key] !== "") {
+        height += 20;
+      }
+    });
+    return height;
   }
 }
