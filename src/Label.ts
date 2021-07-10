@@ -5,7 +5,6 @@ import { BasePedigree } from "./Pedigree";
 interface LabelData {
   id: string;
   name: string;
-  surname: string;
   age: string;
 }
 export class Label {
@@ -19,31 +18,32 @@ export class Label {
     this.labelData = {
       id: "",
       name: "",
-      surname: "",
       age: "",
     };
   }
   drawLabel() {
+    const pedSize = this.pedigree.size;
+    const nameCenter =
+    this.ctx.measureText(this.labelData.name)
+      .width /
+      2 -
+    pedSize / 2;
+
     this.ctx.beginPath();
     this.ctx.rect(
-      this.pedigree.x + camera.OffsetX,
+      this.pedigree.x + camera.OffsetX - nameCenter,
       this.pedigree.y + camera.OffsetY + 80,
-      this.ctx.measureText(this.labelData.name + " " + this.labelData.surname).width,
+      this.ctx.measureText(this.labelData.name).width,
       this.pedigree.size
     );
     this.ctx.fillStyle = "white";
     this.ctx.fill();
     this.ctx.closePath();
-    
-    const pedSize = this.pedigree.size;
+
     this.ctx.fillStyle = "black";
     const idCenter =
       this.ctx.measureText(this.labelData.id).width / 2 - pedSize / 2;
-    const nameCenter =
-      this.ctx.measureText(this.labelData.name + " " + this.labelData.surname)
-        .width /
-        2 -
-      pedSize / 2;
+
     const ageCenter =
       this.ctx.measureText(this.labelData.age).width / 2 - pedSize / 2;
     if(this.labelData.id !== "") {
@@ -54,9 +54,9 @@ export class Label {
       );
       this.lineHeight += 20
     }
-    if((this.labelData.name !== "") || (this.labelData.surname !== "")) {
+    if(this.labelData.name !== "") {
       this.ctx.fillText(
-        `${this.labelData.name + " " + this.labelData.surname}`,
+        `${this.labelData.name}`,
         this.pedigree.x + camera.OffsetX - nameCenter,
         this.pedigree.y + camera.OffsetY + 80 + this.lineHeight
       );
@@ -77,5 +77,8 @@ export class Label {
       this.labelData[prop] = newState[prop];
     });
     eventBus.emit("redraw");
+  }
+  calculateBackgroundHeight() {
+    Object.keys(this.labelData)
   }
 }
