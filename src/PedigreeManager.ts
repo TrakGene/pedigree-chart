@@ -1,10 +1,8 @@
-import {
-  MalePedigree,
-  FemalePedigree,
-  UnknownPedigree,
-  BasePedigree,
-} from "./pedigrees/Pedigree";
 import RenderEngine from "./RenderEngine";
+import MalePedigree from "./pedigrees/MalePedigree";
+import FemalePedigree from "./pedigrees/FemalePedigree";
+import UnknownPedigree from "./pedigrees/UnknownPedigree";
+import BasePedigree from "./pedigrees/BasePedigree";
 
 export default class PedigreeManager {
   private ctx: CanvasRenderingContext2D;
@@ -17,7 +15,6 @@ export default class PedigreeManager {
 
   createPedigree(
     sex: string,
-    type: string,
     x: number,
     y: number
   ): BasePedigree {

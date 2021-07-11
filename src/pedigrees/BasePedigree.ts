@@ -3,7 +3,7 @@ import IdGenerator from "../IdGenerator";
 import { Label } from "../Label";
 import { Shape } from "../Shapes";
 
-export abstract class BasePedigree {
+export default abstract class BasePedigree {
     protected label: Label;
     protected shape: Shape;
     protected ctx: CanvasRenderingContext2D;
