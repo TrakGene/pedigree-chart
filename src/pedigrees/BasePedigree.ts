@@ -1,7 +1,7 @@
 import EventBus from "../EventBus";
 import IdGenerator from "../IdGenerator";
-import { Label } from "../Label";
-import { Shape } from "../Shapes";
+import Label from "./Label";
+import Shape from "../diseaseShapes/Shape";
 
 export default abstract class BasePedigree {
   protected label: Label;

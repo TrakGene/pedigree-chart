@@ -1,6 +1,6 @@
 import BasePedigree from "./BasePedigree";
 import Camera from "../Camera";
-import { UnknownShape } from "../Shapes";
+import UnknownShape from "../diseaseShapes/UnknownShapes";
 
 export default class UnknownPedigree extends BasePedigree {
   initShape() {

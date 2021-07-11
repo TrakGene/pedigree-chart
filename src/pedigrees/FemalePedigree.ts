@@ -1,6 +1,6 @@
 import BasePedigree from "./BasePedigree";
 import Camera from "../Camera";
-import { FemaleShape } from "../Shapes";
+import FemaleShape from "../diseaseShapes/FemaleShapes";
 
 export default class FemalePedigree extends BasePedigree {
   initShape() {

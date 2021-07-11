@@ -1,13 +1,14 @@
-import camera from "./Camera";
-import eventBus from "./EventBus";
-import { BasePedigree } from "./pedigrees/Pedigree";
+import camera from "../Camera";
+import eventBus from "../EventBus";
+import BasePedigree from "./BasePedigree"
 
 interface LabelData {
   id: string;
   name: string;
   age: string;
 }
-export class Label {
+
+export default class Label {
   private ctx: CanvasRenderingContext2D;
   private pedigree: BasePedigree;
   private labelData: LabelData;
@@ -23,7 +24,7 @@ export class Label {
     };
   }
 
-  longestString() {
+  private longestString() {
     let maxWidth = 0;
     Object.keys(this.labelData).forEach((key) => {
       if (this.ctx.measureText(this.labelData[key]).width > maxWidth) {
@@ -33,8 +34,18 @@ export class Label {
     return maxWidth;
   }
 
-  longestStringCenter() {
+  private longestStringCenter() {
     return this.longestString() / 2 - this.pedigree.size / 2;
+  }
+
+  private calculateBackgroundHeight() {
+    let height = 0;
+    Object.keys(this.labelData).forEach((key) => {
+      if (this.labelData[key] !== "") {
+        height += 20;
+      }
+    });
+    return height;
   }
 
   drawLabel() {
@@ -71,15 +82,5 @@ export class Label {
       this.labelData[prop] = newState[prop];
     });
     eventBus.emit("redraw");
-  }
-
-  calculateBackgroundHeight() {
-    let height = 0;
-    Object.keys(this.labelData).forEach((key) => {
-      if (this.labelData[key] !== "") {
-        height += 20;
-      }
-    });
-    return height;
   }
 }
