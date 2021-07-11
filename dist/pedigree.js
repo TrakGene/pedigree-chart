@@ -5,10 +5,13 @@ const EventBus_1 = require("./EventBus");
 const IdGenerator_1 = require("./IdGenerator");
 const Camera_1 = require("./Camera");
 const Label_1 = require("./Label");
+const Shapes_1 = require("./Shapes");
 class BasePedigree {
     constructor(ctx, x, y) {
         this.id = IdGenerator_1.default.randomId();
         this.isMarried = false;
+        this.diseaseShape = "";
+        this.diseaseColor = "";
         this.dragEnabled = false;
         this.twin = null;
         this.marriagePartner = null;
@@ -47,14 +50,27 @@ class UnknownPedigree extends BasePedigree {
         this.ctx.fillStyle = "white";
         this.ctx.fill();
         this.ctx.closePath();
-        // Add shape
     }
     drawPedigree() {
         this.initShape();
         this.label.drawLabel();
+        this.drawDiseaseShape();
     }
-    updateConfig() {
+    setDiseaseShape(shape, color) {
+        this.diseaseShape = shape;
+        this.diseaseColor = color;
+        this.shape = new Shapes_1.UnknownShape(this.ctx, this);
+        this.drawDiseaseShape();
     }
+    drawDiseaseShape() {
+        if (this.shape) {
+            switch (this.diseaseShape) {
+                case "dot":
+                    this.shape.drawDot(this.diseaseColor);
+            }
+        }
+    }
+    updateConfig() { }
     setLabel(obj) {
         this.label.setLabel(obj);
     }
@@ -73,10 +89,24 @@ class MalePedigree extends BasePedigree {
     }
     drawPedigree() {
         this.initShape();
+        this.drawDiseaseShape();
         this.label.drawLabel();
     }
-    updateConfig() {
+    setDiseaseShape(shape, color) {
+        this.diseaseShape = shape;
+        this.diseaseColor = color;
+        this.shape = new Shapes_1.MaleShape(this.ctx, this);
+        this.drawDiseaseShape();
     }
+    drawDiseaseShape() {
+        if (this.shape) {
+            switch (this.diseaseShape) {
+                case "dot":
+                    this.shape.drawDot(this.diseaseColor);
+            }
+        }
+    }
+    updateConfig() { }
     setLabel(obj) {
         this.label.setLabel(obj);
     }
@@ -95,10 +125,24 @@ class FemalePedigree extends BasePedigree {
     }
     drawPedigree() {
         this.initShape();
+        this.drawDiseaseShape();
         this.label.drawLabel();
     }
-    updateConfig() {
+    setDiseaseShape(shape, color) {
+        this.diseaseShape = shape;
+        this.diseaseColor = color;
+        this.shape = new Shapes_1.FemaleShape(this.ctx, this);
+        this.drawDiseaseShape();
     }
+    drawDiseaseShape() {
+        if (this.shape) {
+            switch (this.diseaseShape) {
+                case "dot":
+                    this.shape.drawDot(this.diseaseColor);
+            }
+        }
+    }
+    updateConfig() { }
     setLabel(obj) {
         this.label.setLabel(obj);
     }
