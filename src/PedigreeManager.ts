@@ -3,7 +3,7 @@ import {
   FemalePedigree,
   UnknownPedigree,
   BasePedigree,
-} from "./Pedigree";
+} from "./pedigrees/Pedigree";
 import RenderEngine from "./RenderEngine";
 
 export default class PedigreeManager {

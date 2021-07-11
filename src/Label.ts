@@ -1,6 +1,6 @@
 import camera from "./Camera";
 import eventBus from "./EventBus";
-import { BasePedigree } from "./Pedigree";
+import { BasePedigree } from "./pedigrees/Pedigree";
 
 interface LabelData {
   id: string;

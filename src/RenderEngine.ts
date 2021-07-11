@@ -2,7 +2,7 @@ import ConnectionManager from "./ConnectionsManager";
 import PedigreeManager from "./PedigreeManager";
 import EventBus from "./EventBus";
 import DragHandler from "./DragHandler";
-import { BasePedigree } from "./Pedigree";
+import { BasePedigree } from "./pedigrees/Pedigree";
 
 export default class RenderEngine {
     shapes = []

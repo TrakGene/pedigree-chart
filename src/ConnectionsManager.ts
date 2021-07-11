@@ -1,4 +1,4 @@
-import { BasePedigree } from "./Pedigree";
+import { BasePedigree } from "./pedigrees/Pedigree";
 import {
   SiblingLine,
   MarriageLine,

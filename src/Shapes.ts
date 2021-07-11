@@ -1,4 +1,4 @@
-import { BasePedigree } from "./Pedigree";
+import { BasePedigree } from "./pedigrees/Pedigree";
 import Camera from "./Camera";
 
 export abstract class Shape {
