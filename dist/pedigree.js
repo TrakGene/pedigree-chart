@@ -47,6 +47,7 @@ class UnknownPedigree extends BasePedigree {
         this.ctx.fillStyle = "white";
         this.ctx.fill();
         this.ctx.closePath();
+        // Add shape
     }
     drawPedigree() {
         this.initShape();
