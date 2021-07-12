@@ -16,5 +16,7 @@ export default class UnknownShape extends Shape {
     this.ctx.fill();
     this.ctx.closePath();
   }
-  fillColor() {}
+  fillColor(color: string) {
+    this.pedigree.fillColor = color
+  }
 }

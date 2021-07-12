@@ -14,7 +14,7 @@ export default class MalePedigree extends BasePedigree {
     this.ctx.lineWidth = this.border;
     this.ctx.strokeStyle = "black";
     this.ctx.stroke();
-    this.ctx.fillStyle = "white";
+    this.ctx.fillStyle = this.fillColor;
     this.ctx.fill();
     this.ctx.closePath();
   }
@@ -34,6 +34,10 @@ export default class MalePedigree extends BasePedigree {
       switch (this.diseaseShape) {
         case "dot":
           this.shape.drawDot(this.diseaseColor);
+          break;
+        case "fill":
+          this.shape.fillColor(this.diseaseColor);
+          break;
       }
     }
   }

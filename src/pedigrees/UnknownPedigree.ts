@@ -20,7 +20,7 @@ export default class UnknownPedigree extends BasePedigree {
     );
     this.ctx.lineTo(this.x + Camera.OffsetX, this.y + size2 + Camera.OffsetY);
     this.ctx.stroke();
-    this.ctx.fillStyle = "white";
+    this.ctx.fillStyle = this.fillColor;
     this.ctx.fill();
     this.ctx.closePath();
   }
@@ -40,6 +40,10 @@ export default class UnknownPedigree extends BasePedigree {
       switch (this.diseaseShape) {
         case "dot":
           this.shape.drawDot(this.diseaseColor);
+          break
+        case "fill":
+          this.shape.fillColor(this.diseaseColor);
+          break;
       }
     }
   }

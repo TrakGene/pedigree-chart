@@ -9,5 +9,5 @@ export default abstract class Shape {
     this.pedigree = pedigree;
   }
   abstract drawDot(color: string);
-  abstract fillColor();
+  abstract fillColor(color: string);
 }

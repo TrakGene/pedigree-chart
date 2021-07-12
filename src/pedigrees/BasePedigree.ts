@@ -11,6 +11,7 @@ export default abstract class BasePedigree {
   protected isMarried = false;
   protected diseaseShape = "";
   protected diseaseColor = "";
+  fillColor = "white"
   dragEnabled = false;
   twin = null;
   marriagePartner = null;
