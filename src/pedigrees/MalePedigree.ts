@@ -38,6 +38,18 @@ export default class MalePedigree extends BasePedigree {
         case "fill":
           this.shape.fillColor(this.diseaseColor);
           break;
+        case "q1":
+          this.shape.fillFirstQuaterColor(this.diseaseColor);
+          break;
+        case "q2":
+          this.shape.fillSecondQuaterColor(this.diseaseColor);
+          break;
+        case "q3":
+          this.shape.fillThirdQuaterColor(this.diseaseColor);
+          break;
+        case "q4":
+          this.shape.fillFourthQuaterColor(this.diseaseColor);
+          break;
       }
     }
   }

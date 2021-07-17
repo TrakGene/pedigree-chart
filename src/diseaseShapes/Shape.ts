@@ -1,5 +1,4 @@
 import BasePedigree from "../pedigrees/BasePedigree";
-import Camera from "../Camera";
 
 export default abstract class Shape {
   protected ctx: CanvasRenderingContext2D;

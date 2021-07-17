@@ -2,7 +2,7 @@ import ConnectionManager from "./ConnectionsManager";
 import PedigreeManager from "./PedigreeManager";
 import EventBus from "./EventBus";
 import DragHandler from "./DragHandler";
-import { BasePedigree } from "./pedigrees/Pedigree";
+import BasePedigree from "./pedigrees/BasePedigree";
 
 export default class RenderEngine {
     shapes = []
@@ -17,7 +17,7 @@ export default class RenderEngine {
 
   scaleFactor = 1;
 
-    constructor(id) {
+    constructor(id: string) {
         this.diagramWrapper = document.getElementById(id) as HTMLElement;
         this.diagram = document.createElement('canvas')
         this.ctx = this.diagram.getContext("2d")
@@ -58,8 +58,8 @@ export default class RenderEngine {
         this.connectionManager.drawConnections()
         this.pedigreeManager.drawPedigrees()
     }
-    public create(sex, type, x = 0, y = 0) {
-        const pedigree = this.pedigreeManager.createPedigree(sex, type, x, y)
+    public create(sex, x = 0, y = 0) {
+        const pedigree = this.pedigreeManager.createPedigree(sex, x, y)
         return pedigree
     }
     public connect(pedigreeA, pedigreeB, lineType) {
