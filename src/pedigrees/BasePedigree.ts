@@ -36,8 +36,38 @@ export default abstract class BasePedigree {
   on(eventName, eventHandler) {
     EventBus.on(`${eventName}${this.id}`, () => eventHandler(this));
   }
+  drawDiseaseShape() {
+    if (this.shape) {
+      switch (this.diseaseShape) {
+        case "dot":
+          this.shape.drawDot(this.diseaseColor);
+          break;
+        case "fill":
+          this.shape.fillColor(this.diseaseColor);
+          break;
+        case "q1":
+          this.shape.fillFirstQuarterColor(this.diseaseColor);
+          break;
+        case "q2":
+          this.shape.fillSecondQuarterColor(this.diseaseColor);
+          break;
+        case "q3":
+          this.shape.fillThirdQuarterColor(this.diseaseColor);
+          break;
+        case "q4":
+          this.shape.fillFourthQuarterColor(this.diseaseColor);
+          break;
+      }
+    }
+  }
+  setLabel(obj) {
+    this.label.setLabel(obj);
+  }
+  drawPedigree() {
+    this.initShape();
+    this.drawDiseaseShape();
+    this.label.drawLabel();
+  }
   abstract initShape();
-  abstract drawPedigree();
   abstract setDiseaseShape(shape, color);
-  abstract drawDiseaseShape();
 }
