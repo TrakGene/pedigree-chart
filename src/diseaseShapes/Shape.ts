@@ -9,4 +9,8 @@ export default abstract class Shape {
   }
   abstract drawDot(color: string);
   abstract fillColor(color: string);
+  abstract fillFirstQuarterColor(color: string);
+  abstract fillSecondQuarterColor(color: string);
+  abstract fillThirdQuarterColor(color: string);
+  abstract fillFourthQuarterColor(color: string);
 }

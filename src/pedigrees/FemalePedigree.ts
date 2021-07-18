@@ -39,6 +39,18 @@ export default class FemalePedigree extends BasePedigree {
         case "fill":
           this.shape.fillColor(this.diseaseColor);
           break;
+        case "q1":
+          this.shape.fillFirstQuarterColor(this.diseaseColor);
+          break;
+        case "q2":
+          this.shape.fillSecondQuarterColor(this.diseaseColor);
+          break;
+        case "q3":
+          this.shape.fillThirdQuarterColor(this.diseaseColor);
+          break;
+        case "q4":
+          this.shape.fillFourthQuarterColor(this.diseaseColor);
+          break;
       }
     }
   }

@@ -19,28 +19,28 @@ export default class MaleShape extends Shape {
   fillColor(color: string) {
     this.pedigree.fillColor = color
   }
-  fillFirstQuaterColor(color: string) {
+  fillFirstQuarterColor(color: string) {
     this.ctx.beginPath();
     this.ctx.rect(this.pedigree.x, this.pedigree.y, this.pedigree.size/2, this.pedigree.size/2)
     this.ctx.fillStyle = color
     this.ctx.fill();
     this.ctx.closePath();
   }
-  fillSecondQuaterColor(color: string) {
+  fillSecondQuarterColor(color: string) {
     this.ctx.beginPath();
     this.ctx.rect(this.pedigree.x+this.pedigree.size/2, this.pedigree.y, this.pedigree.size/2, this.pedigree.size/2)
     this.ctx.fillStyle = color
     this.ctx.fill();
     this.ctx.closePath();
   }
-  fillThirdQuaterColor(color: string) {
+  fillThirdQuarterColor(color: string) {
     this.ctx.beginPath();
     this.ctx.rect(this.pedigree.x, this.pedigree.y+this.pedigree.size/2, this.pedigree.size/2, this.pedigree.size/2)
     this.ctx.fillStyle = color
     this.ctx.fill();
     this.ctx.closePath();
   }
-  fillFourthQuaterColor(color: string) {
+  fillFourthQuarterColor(color: string) {
     this.ctx.beginPath();
     this.ctx.rect(this.pedigree.x+this.pedigree.size/2, this.pedigree.y+this.pedigree.size/2, this.pedigree.size/2, this.pedigree.size/2)
     this.ctx.fillStyle = color
