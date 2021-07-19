@@ -1,5 +1,4 @@
 import EventBus from "../EventBus";
-import IdGenerator from "../IdGenerator";
 import Label from "./Label";
 import Shape from "../diseaseShapes/Shape";
 
@@ -7,7 +6,6 @@ export default abstract class BasePedigree {
   protected label: Label;
   protected shape: Shape;
   protected ctx: CanvasRenderingContext2D;
-  readonly id = IdGenerator.randomId();
   protected isMarried = false;
   protected diseaseShape = "";
   protected diseaseColor = "";
