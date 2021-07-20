@@ -24,10 +24,13 @@ export default class UnknownPedigree extends BasePedigree {
     this.ctx.fill();
     this.ctx.closePath();
   }
-  setDiseaseShape(shape, color) {
-    this.diseaseShape = shape;
-    this.diseaseColor = color;
-    this.shape = new UnknownShape(this.ctx, this);
+  addDiseaseShape(diseaseShape, color) {
+    let shape = {
+      diseaseShape: diseaseShape,
+      diseaseColor: color,
+      shapeInstance: new UnknownShape(this.ctx, this)
+    }
+    this.shapes.push(shape)
     this.drawDiseaseShape();
   }
 }

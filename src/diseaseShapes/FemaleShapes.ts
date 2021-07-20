@@ -6,7 +6,7 @@ export default class FemaleShape extends Shape {
     const cx=this.pedigree.x+this.pedigree.size/2;
     const cy=this.pedigree.y+this.pedigree.size/2;
     const radius=this.pedigree.size/2;
-    const colors=['white', 'white', color, 'white'];
+    const colors=['transparent', 'transparent', color, 'transparent'];
 
     for(let i=0;i<4;i++){
         let startAngle=i*Math.PI/2;
@@ -23,7 +23,8 @@ export default class FemaleShape extends Shape {
     const cx=this.pedigree.x+this.pedigree.size/2;
     const cy=this.pedigree.y+this.pedigree.size/2;
     const radius=this.pedigree.size/2;
-    const colors=['white', 'white', color, 'white'];
+    const colors=['transparent', 'transparent', 'transparent', color];
+
 
     for(let i=0;i<4;i++){
         let startAngle=i*Math.PI/2;
@@ -40,7 +41,7 @@ export default class FemaleShape extends Shape {
     const cx=this.pedigree.x+this.pedigree.size/2;
     const cy=this.pedigree.y+this.pedigree.size/2;
     const radius=this.pedigree.size/2;
-    const colors=['white', 'white', color, 'white'];
+    const colors=[color, 'transparent', 'transparent', 'transparent'];
 
     for(let i=0;i<4;i++){
         let startAngle=i*Math.PI/2;
@@ -57,7 +58,7 @@ export default class FemaleShape extends Shape {
     const cx=this.pedigree.x+this.pedigree.size/2;
     const cy=this.pedigree.y+this.pedigree.size/2;
     const radius=this.pedigree.size/2;
-    const colors=['white', 'white', color, 'white'];
+    const colors=['transparent', color, 'transparent', 'transparent'];
 
     for(let i=0;i<4;i++){
         let startAngle=i*Math.PI/2;

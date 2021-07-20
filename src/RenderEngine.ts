@@ -5,7 +5,6 @@ import DragHandler from "./DragHandler";
 import BasePedigree from "./pedigrees/BasePedigree";
 
 export default class RenderEngine {
-  shapes = [];
   diagram: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
   diagramWrapper: HTMLElement;

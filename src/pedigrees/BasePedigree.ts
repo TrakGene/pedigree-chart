@@ -2,13 +2,17 @@ import EventBus from "../EventBus";
 import Label from "./Label";
 import Shape from "../diseaseShapes/Shape";
 
+interface ShapeProps {
+  shapeInstance: Shape;
+  diseaseShape: string;
+  diseaseColor: string;
+}
+
 export default abstract class BasePedigree {
   protected label: Label;
-  protected shape: Shape;
+  protected shapes: ShapeProps[] = [];
   protected ctx: CanvasRenderingContext2D;
   protected isMarried = false;
-  protected diseaseShape = "";
-  protected diseaseColor = "";
   fillColor = "white"
   dragEnabled = false;
   twin = null;
@@ -32,30 +36,32 @@ export default abstract class BasePedigree {
     };
   }
   on(eventName, eventHandler) {
-    EventBus.on(`${eventName}${this.id}`, () => eventHandler(this));
+    EventBus.on(`${eventName}${this}`, () => eventHandler(this));
   }
   drawDiseaseShape() {
-    if (this.shape) {
-      switch (this.diseaseShape) {
-        case "dot":
-          this.shape.drawDot(this.diseaseColor);
-          break;
-        case "fill":
-          this.shape.fillColor(this.diseaseColor);
-          break;
-        case "q1":
-          this.shape.fillFirstQuarterColor(this.diseaseColor);
-          break;
-        case "q2":
-          this.shape.fillSecondQuarterColor(this.diseaseColor);
-          break;
-        case "q3":
-          this.shape.fillThirdQuarterColor(this.diseaseColor);
-          break;
-        case "q4":
-          this.shape.fillFourthQuarterColor(this.diseaseColor);
-          break;
-      }
+    if (this.shapes.length > 0) {
+      this.shapes.forEach((shape: ShapeProps)=>{
+        switch (shape.diseaseShape) {
+          case "dot":
+            shape.shapeInstance.drawDot(shape.diseaseColor);
+            break;
+          case "fill":
+            shape.shapeInstance.fillColor(shape.diseaseColor);
+            break;
+          case "q1":
+            shape.shapeInstance.fillFirstQuarterColor(shape.diseaseColor);
+            break;
+          case "q2":
+            shape.shapeInstance.fillSecondQuarterColor(shape.diseaseColor);
+            break;
+          case "q3":
+            shape.shapeInstance.fillThirdQuarterColor(shape.diseaseColor);
+            break;
+          case "q4":
+            shape.shapeInstance.fillFourthQuarterColor(shape.diseaseColor);
+            break;
+        }
+      })
     }
   }
   setLabel(obj) {
@@ -67,5 +73,5 @@ export default abstract class BasePedigree {
     this.label.drawLabel();
   }
   abstract initShape();
-  abstract setDiseaseShape(shape, color);
+  abstract addDiseaseShape(shape, color);
 }
