@@ -15,6 +15,7 @@ export default abstract class BasePedigree {
   protected isMarried = false;
   fillColor = "white"
   dragEnabled = false;
+  isInLegend = false;
   twin = null;
   marriagePartner = null;
   storage: any;

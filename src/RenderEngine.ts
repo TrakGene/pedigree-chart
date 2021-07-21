@@ -3,6 +3,7 @@ import PedigreeManager from "./PedigreeManager";
 import EventBus from "./EventBus";
 import DragHandler from "./DragHandler";
 import BasePedigree from "./pedigrees/BasePedigree";
+import LegendTable from "./Legend";
 
 export default class RenderEngine {
   diagram: HTMLCanvasElement;
@@ -96,6 +97,9 @@ export default class RenderEngine {
     setTimeout(() => {
       this.draw();
     });
+  }
+  public createLegend(x, y) {
+    return new LegendTable(this.ctx, x, y, this)
   }
   public on(eventName: "pedigree-click", eventHandler) {
     EventBus.on(eventName, eventHandler);
