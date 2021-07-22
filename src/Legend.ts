@@ -15,9 +15,11 @@ export default class LegendTable {
   private y: number;
   private ctx: CanvasRenderingContext2D;
   private items: item[] = [];
-  private itemsPerRow: number;
+  private itemsPerRow = 2;
   private renderEngine: RenderEngine;
-  private longestStringLength: number;
+  private longestStringLength = 0;
+  private pedOffsetX = 0;
+  private pedOffsetY = 0;
 
   constructor(
     ctx: CanvasRenderingContext2D,
@@ -29,7 +31,20 @@ export default class LegendTable {
     this.renderEngine = renderEngine;
     this.x = x;
     this.y = y;
+    this.pedOffsetX = x;
+    this.pedOffsetY = y;
     ctx.rect(x, y, 0, 0);
+  }
+  private calculatePedigreePoisiton() {
+    const length = this.items.length
+    if(length === 0) return;
+    if(length % this.itemsPerRow === 0) {
+      this.pedOffsetX = this.x
+      this.pedOffsetY += 100
+    } else {
+      this.pedOffsetX += 140+this.longestStringLength
+    }
+
   }
   setItemsPerRow(num: number) {
     this.itemsPerRow = num;
@@ -46,10 +61,12 @@ export default class LegendTable {
       Object.create(Object.getPrototypeOf(pedigree)),
       pedigree
     );
+    this.calculatePedigreePoisiton()
 
     this.renderEngine.pedigrees.push(legendPedigree);
-    legendPedigree.x = 600;
-    legendPedigree.y = 40;
+    console.log(this.pedOffsetX)
+    legendPedigree.x = this.pedOffsetX
+    legendPedigree.y = this.pedOffsetY
     legendPedigree.isInLegend = true;
     legendPedigree.shapes.forEach((shape) => {
       legendPedigree.addDiseaseShape(shape.diseaseShape, shape.diseaseColor);
