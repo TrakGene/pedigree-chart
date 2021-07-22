@@ -1,5 +1,12 @@
+import camera from "./Camera";
+import eventBus from "./EventBus";
 import BasePedigree from "./pedigrees/BasePedigree";
 import RenderEngine from "./RenderEngine";
+
+interface item {
+  pedigree: BasePedigree;
+  diseaseLabel: string;
+}
 
 export default class LegendTable {
   private size: number;
@@ -7,9 +14,10 @@ export default class LegendTable {
   private x: number;
   private y: number;
   private ctx: CanvasRenderingContext2D;
-  private items: BasePedigree[] = [];
+  private items: item[] = [];
   private itemsPerRow: number;
   private renderEngine: RenderEngine;
+  private longestStringLength: number;
 
   constructor(
     ctx: CanvasRenderingContext2D,
@@ -29,7 +37,11 @@ export default class LegendTable {
   setBackgroundColor(color: string) {
     this.backgroundColor = color;
   }
-  addPedigree(pedigree, disease) {
+  addItem(pedigree, disease) {
+    const stringLen = this.ctx.measureText(disease).width
+    if(stringLen > this.longestStringLength) {
+      this.longestStringLength = stringLen
+    }
     const legendPedigree = Object.assign(
       Object.create(Object.getPrototypeOf(pedigree)),
       pedigree
@@ -39,11 +51,19 @@ export default class LegendTable {
     legendPedigree.x = 600;
     legendPedigree.y = 40;
     legendPedigree.isInLegend = true;
-    legendPedigree.shapes.forEach((shape)=>{
-        legendPedigree.addDiseaseShape(shape.diseaseShape, shape.diseaseColor)
-    })
-    this.items.push(legendPedigree);
-    console.log(this.items);
-    console.log(pedigree);
+    legendPedigree.shapes.forEach((shape) => {
+      legendPedigree.addDiseaseShape(shape.diseaseShape, shape.diseaseColor);
+    });
+    eventBus.on("redraw", () => {
+      this.ctx.fillText(
+        disease,
+        legendPedigree.x + 90 + camera.OffsetX,
+        legendPedigree.calculateMiddle().y + camera.OffsetY
+      );
+    });
+    this.items.push({
+      pedigree: legendPedigree,
+      diseaseLabel: disease,
+    });
   }
 }
