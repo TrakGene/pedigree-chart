@@ -4,6 +4,7 @@ import EventBus from "./EventBus";
 import DragHandler from "./DragHandler";
 import BasePedigree from "./pedigrees/BasePedigree";
 import LegendTable from "./Legend";
+import eventBus from "./EventBus";
 
 export default class RenderEngine {
   diagram: HTMLCanvasElement;
@@ -89,7 +90,7 @@ export default class RenderEngine {
     this.ctx.translate(cursorX, cursorY);
     this.ctx.scale(scale + 1, scale + 1);
     this.ctx.translate(-cursorX, -cursorY);
-    setTimeout(() => this.draw());
+    setTimeout(() => eventBus.emit('redraw'));
   }
   public deletePedigree(id) {
     this.pedigreeManager.deletePedigree(id);
@@ -99,7 +100,7 @@ export default class RenderEngine {
     });
   }
   public createLegend(x, y) {
-    return new LegendTable(this.ctx, x, y, this)
+    return new LegendTable(this.ctx, x, y)
   }
   public on(eventName: "pedigree-click", eventHandler) {
     EventBus.on(eventName, eventHandler);
