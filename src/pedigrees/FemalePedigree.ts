@@ -19,10 +19,13 @@ export default class FemalePedigree extends BasePedigree {
     this.ctx.fill();
     this.ctx.closePath();
   }
-  setDiseaseShape(shape, color) {
-    this.diseaseShape = shape;
-    this.diseaseColor = color;
-    this.shape = new FemaleShape(this.ctx, this);
+  addDiseaseShape(diseaseShape, color) {
+    let shape = {
+      diseaseShape: diseaseShape,
+      diseaseColor: color,
+      shapeInstance: new FemaleShape(this.ctx, this)
+    }
+    this.shapes.push(shape)
     this.drawDiseaseShape();
   }
 }

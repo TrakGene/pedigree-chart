@@ -1,7 +1,7 @@
 class Camera {
-    public OffsetX = 0
-    public OffsetY = 0
+  public OffsetX = 0;
+  public OffsetY = 0;
 }
 
-const camera = new Camera()
-export default camera
+const camera = new Camera();
+export default camera;
