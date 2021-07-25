@@ -1,3 +1,3 @@
 import PedigreeChart from "./RenderEngine"
 
-export { PedigreeChart }
+export default PedigreeChart
