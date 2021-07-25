@@ -1,7 +1,7 @@
 {
-  "name": "pedigree-chart-library",
+  "name": "pedigree-chart",
   "version": "1.0.0",
-  "description": "React Pedigree Chart Library",
+  "description": "Pedigree chart library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
