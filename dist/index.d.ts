@@ -1,2 +1,2 @@
-import Engine from "./RenderEngine";
-export { Engine };
+import PedigreeChart from "./RenderEngine";
+export { PedigreeChart };

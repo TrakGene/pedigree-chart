@@ -18,16 +18,18 @@ export default class RenderEngine {
 
   scaleFactor = 1;
 
-  constructor(id: string) {
-    this.diagramWrapper = document.getElementById(id) as HTMLElement;
+  // constructor(id: string) {
+  //   // this.diagramWrapper = document.getElementById(id) as HTMLElement;
+  //   // this.diagram = document.createElement("canvas");
+  //   // this.ctx = this.diagram.getContext("2d");
+  //   // this.initEvents();
+  //   // setTimeout(() => this.draw());
+  // }
+
+  public setDiagram(diagramId: string) {
+    this.diagramWrapper = document.getElementById(diagramId) as HTMLElement;
     this.diagram = document.createElement("canvas");
     this.ctx = this.diagram.getContext("2d");
-    this.initDiagramEditor();
-    this.initEvents();
-    setTimeout(() => this.draw());
-  }
-
-  private initDiagramEditor() {
     this.diagram.width = window.innerWidth;
     this.diagram.height = window.innerHeight;
     this.diagramWrapper.style.border = "3px solid black";
@@ -37,6 +39,8 @@ export default class RenderEngine {
     this.connectionManager = new ConnectionManager(this.diagram);
     this.pedigreeManager = new PedigreeManager(this.diagram, this);
     this.dragHandler = new DragHandler(this.diagram, this);
+    this.initEvents();
+    setTimeout(() => this.draw());
   }
   private initEvents() {
     EventBus.on("redraw", () => this.draw());
