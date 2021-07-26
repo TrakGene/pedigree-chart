@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const EventBus_1 = require("../EventBus");
 const Label_1 = require("./Label");
+const Camera_1 = require("../Camera");
 class BasePedigree {
     constructor(ctx, x, y) {
         this.shapes = [];
@@ -19,6 +20,18 @@ class BasePedigree {
         this.x = x;
         this.y = y;
         this.label = new Label_1.default(ctx, this);
+    }
+    getMidX() {
+        return this.calculateMiddle().x + Camera_1.default.OffsetX;
+    }
+    getMidY() {
+        return this.calculateMiddle().y + Camera_1.default.OffsetY;
+    }
+    getX() {
+        return this.x + Camera_1.default.OffsetX;
+    }
+    getY() {
+        return this.y + Camera_1.default.OffsetY;
     }
     calculateMiddle() {
         return {

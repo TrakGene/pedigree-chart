@@ -21,6 +21,10 @@ export default abstract class BasePedigree {
     x: number;
     y: number;
     constructor(ctx: CanvasRenderingContext2D, x: number, y: number);
+    getMidX(): number;
+    getMidY(): number;
+    getX(): number;
+    getY(): number;
     calculateMiddle(): {
         x: number;
         y: number;

@@ -1,6 +1,7 @@
 import EventBus from "../EventBus";
 import Label from "./Label";
 import Shape from "../diseaseShapes/Shape";
+import camera from "../Camera";
 
 interface ShapeProps {
   shapeInstance: Shape;
@@ -29,6 +30,18 @@ export default abstract class BasePedigree {
     this.x = x;
     this.y = y;
     this.label = new Label(ctx, this);
+  }
+  getMidX() {
+    return this.calculateMiddle().x + camera.OffsetX
+  }
+  getMidY() {
+    return this.calculateMiddle().y + camera.OffsetY
+  }
+  getX() {
+    return this.x + camera.OffsetX
+  }
+  getY() {
+    return this.y + camera.OffsetY
   }
   calculateMiddle() {
     return {

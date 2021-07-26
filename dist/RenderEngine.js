@@ -11,13 +11,6 @@ class RenderEngine {
         this.pedigrees = [];
         this.scaleFactor = 1;
     }
-    // constructor(id: string) {
-    //   // this.diagramWrapper = document.getElementById(id) as HTMLElement;
-    //   // this.diagram = document.createElement("canvas");
-    //   // this.ctx = this.diagram.getContext("2d");
-    //   // this.initEvents();
-    //   // setTimeout(() => this.draw());
-    // }
     setDiagram(diagramId) {
         this.diagramWrapper = document.getElementById(diagramId);
         this.diagram = document.createElement("canvas");

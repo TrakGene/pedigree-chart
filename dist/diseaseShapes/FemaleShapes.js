@@ -1,12 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Shape_1 = require("./Shape");
-const Camera_1 = require("../Camera");
 class FemaleShape extends Shape_1.default {
     constructor() {
         super(...arguments);
-        this.x = this.pedigree.x + this.pedigree.size / 2;
-        this.y = this.pedigree.y + this.pedigree.size / 2;
         this.radius = this.pedigree.size / 2;
     }
     drawQuarterShape(colors) {
@@ -14,8 +11,8 @@ class FemaleShape extends Shape_1.default {
             let startAngle = (i * Math.PI) / 2;
             let endAngle = startAngle + Math.PI / 2;
             this.ctx.beginPath();
-            this.ctx.moveTo(this.x + Camera_1.default.OffsetX, this.y + Camera_1.default.OffsetY);
-            this.ctx.arc(this.x + Camera_1.default.OffsetX, this.y + Camera_1.default.OffsetY, this.radius, startAngle, endAngle);
+            this.ctx.moveTo(this.pedigree.getMidX(), this.pedigree.getMidY());
+            this.ctx.arc(this.pedigree.getMidX(), this.pedigree.getMidY(), this.radius, startAngle, endAngle);
             this.ctx.closePath();
             this.ctx.fillStyle = colors[i];
             this.ctx.fill();

@@ -1,7 +1,5 @@
 import Shape from "./Shape";
 export default class FemaleShape extends Shape {
-    private x;
-    private y;
     private radius;
     private drawQuarterShape;
     fillFirstQuarterColor(color: string): void;

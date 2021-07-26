@@ -18,14 +18,6 @@ export default class RenderEngine {
 
   scaleFactor = 1;
 
-  // constructor(id: string) {
-  //   // this.diagramWrapper = document.getElementById(id) as HTMLElement;
-  //   // this.diagram = document.createElement("canvas");
-  //   // this.ctx = this.diagram.getContext("2d");
-  //   // this.initEvents();
-  //   // setTimeout(() => this.draw());
-  // }
-
   public setDiagram(diagramId: string) {
     this.diagramWrapper = document.getElementById(diagramId) as HTMLElement;
     this.diagram = document.createElement("canvas");
