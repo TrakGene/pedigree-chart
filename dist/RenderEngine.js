@@ -13,7 +13,7 @@ class RenderEngine {
             width: 1200,
             height: 600,
             dragEnabled: false,
-            panEnabled: true,
+            panEnabled: false,
             font: "16px Arial"
         };
         this.scaleFactor = 1;
@@ -29,11 +29,6 @@ class RenderEngine {
         this.ctx.font = this.config.font;
         this.connectionManager = new ConnectionsManager_1.default(this.diagram);
         this.pedigreeManager = new PedigreeManager_1.default(this.diagram, this);
-        if (this.config.dragEnabled || this.config.panEnabled) {
-            this.dragHandler = new DragHandler_1.default(this.diagram, this);
-            this.config.dragEnabled ? this.dragHandler.dragEnabled = true : null;
-            this.config.panEnabled ? this.dragHandler.panEnabled = true : null;
-        }
         this.initEvents();
         setTimeout(() => this.draw());
     }
@@ -47,6 +42,18 @@ class RenderEngine {
             this.scale(event.deltaY * 0.001, event.clientX, event.clientY);
             event.preventDefault();
         });
+    }
+    recreateDiagram() {
+        this.diagram.width = this.config.width;
+        this.diagram.height = this.config.height;
+        this.ctx.font = this.config.font;
+        if (this.config.dragEnabled || this.config.panEnabled) {
+            this.dragHandler = new DragHandler_1.default(this.diagram, this);
+            this.config.dragEnabled ? this.dragHandler.dragEnabled = true : null;
+            this.config.panEnabled ? this.dragHandler.panEnabled = true : null;
+        }
+        this.draw();
+        this.resizeDiagramWidth();
     }
     resizeDiagramWidth() {
         this.diagram.width = window.innerWidth;
@@ -62,7 +69,7 @@ class RenderEngine {
         Object.keys(configObject).forEach(key => {
             this.config[key] = configObject[key];
         });
-        this.setDiagram(this.diagramId);
+        this.recreateDiagram();
     }
     create(sex, x = 0, y = 0) {
         const pedigree = this.pedigreeManager.createPedigree(sex, x, y);

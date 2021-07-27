@@ -16,7 +16,7 @@ export default class RenderEngine {
     width: 1200,
     height: 600,
     dragEnabled: false,
-    panEnabled: true,
+    panEnabled: false,
     font: "16px Arial"
   }
   connectionManager: ConnectionManager;
@@ -33,15 +33,10 @@ export default class RenderEngine {
     this.diagram.style.border = "4px solid black";
     this.diagram.style.overflow = "hidden";
     this.ctx = this.diagram.getContext("2d");
-    this.ctx.font = this.config.font;
+    this.ctx.font = this.config.font
 
     this.connectionManager = new ConnectionManager(this.diagram);
     this.pedigreeManager = new PedigreeManager(this.diagram, this);
-    if(this.config.dragEnabled || this.config.panEnabled) {
-      this.dragHandler = new DragHandler(this.diagram, this);
-      this.config.dragEnabled ? this.dragHandler.dragEnabled = true : null
-      this.config.panEnabled ? this.dragHandler.panEnabled = true : null
-    }
     this.initEvents();
     setTimeout(() => this.draw());
   }
@@ -55,6 +50,18 @@ export default class RenderEngine {
       this.scale(event.deltaY * 0.001, event.clientX, event.clientY);
       event.preventDefault();
     });
+  }
+  private recreateDiagram() {
+    this.diagram.width = this.config.width
+    this.diagram.height = this.config.height
+    this.ctx.font = this.config.font
+    if(this.config.dragEnabled || this.config.panEnabled) {
+      this.dragHandler = new DragHandler(this.diagram, this);
+      this.config.dragEnabled ? this.dragHandler.dragEnabled = true : null
+      this.config.panEnabled ? this.dragHandler.panEnabled = true : null
+    }
+    this.draw()
+    this.resizeDiagramWidth();
   }
   private resizeDiagramWidth() {
     this.diagram.width = window.innerWidth;
@@ -75,7 +82,7 @@ export default class RenderEngine {
     Object.keys(configObject).forEach(key=>{
       this.config[key] = configObject[key]
     })
-    this.setDiagram(this.diagramId)
+    this.recreateDiagram()
   }
   public create(sex, x = 0, y = 0) {
     const pedigree = this.pedigreeManager.createPedigree(sex, x, y);

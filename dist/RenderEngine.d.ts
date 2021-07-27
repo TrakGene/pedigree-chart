@@ -22,6 +22,7 @@ export default class RenderEngine {
     scaleFactor: number;
     setDiagram(diagramId: string): void;
     private initEvents;
+    private recreateDiagram;
     private resizeDiagramWidth;
     private draw;
     setConfig(configObject: any): void;
