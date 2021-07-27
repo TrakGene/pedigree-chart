@@ -8,10 +8,17 @@ import eventBus from "./EventBus";
 
 export default class RenderEngine {
   diagram: HTMLCanvasElement;
+  diagramId: string;
   ctx: CanvasRenderingContext2D;
   diagramWrapper: HTMLElement;
   pedigrees: Array<BasePedigree> = [];
-
+  config = {
+    width: 1200,
+    height: 600,
+    dragEnabled: false,
+    panEnabled: true,
+    font: "16px Arial"
+  }
   connectionManager: ConnectionManager;
   pedigreeManager: PedigreeManager;
   dragHandler: DragHandler;
@@ -19,18 +26,22 @@ export default class RenderEngine {
   scaleFactor = 1;
 
   public setDiagram(diagramId: string) {
-    this.diagramWrapper = document.getElementById(diagramId) as HTMLElement;
-    this.diagram = document.createElement("canvas");
+    this.diagramId = diagramId
+    this.diagram = document.getElementById(diagramId) as HTMLCanvasElement;
+    this.diagram.width = this.config.width
+    this.diagram.height = this.config.height
+    this.diagram.style.border = "4px solid black";
+    this.diagram.style.overflow = "hidden";
     this.ctx = this.diagram.getContext("2d");
-    this.diagram.width = window.innerWidth;
-    this.diagram.height = window.innerHeight;
-    this.diagramWrapper.style.border = "3px solid black";
-    this.diagramWrapper.style.overflow = "hidden";
-    this.ctx.font = "16px Arial";
-    this.diagramWrapper.appendChild(this.diagram);
+    this.ctx.font = this.config.font;
+
     this.connectionManager = new ConnectionManager(this.diagram);
     this.pedigreeManager = new PedigreeManager(this.diagram, this);
-    this.dragHandler = new DragHandler(this.diagram, this);
+    if(this.config.dragEnabled || this.config.panEnabled) {
+      this.dragHandler = new DragHandler(this.diagram, this);
+      this.config.dragEnabled ? this.dragHandler.dragEnabled = true : null
+      this.config.panEnabled ? this.dragHandler.panEnabled = true : null
+    }
     this.initEvents();
     setTimeout(() => this.draw());
   }
@@ -59,6 +70,12 @@ export default class RenderEngine {
     );
     this.connectionManager.drawConnections();
     this.pedigreeManager.drawPedigrees();
+  }
+  public setConfig(configObject: any) {
+    Object.keys(configObject).forEach(key=>{
+      this.config[key] = configObject[key]
+    })
+    this.setDiagram(this.diagramId)
   }
   public create(sex, x = 0, y = 0) {
     const pedigree = this.pedigreeManager.createPedigree(sex, x, y);

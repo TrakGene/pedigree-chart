@@ -12,6 +12,8 @@ export default class DragHandler {
     initialCameraOffsetY: number;
     panDiagram: boolean;
     renderEngine: RenderEngine;
+    dragEnabled: boolean;
+    panEnabled: boolean;
     constructor(diagram: any, renderEngine: any);
     private initEvents;
     private setUserIntention;

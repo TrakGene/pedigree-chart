@@ -5,9 +5,17 @@ import BasePedigree from "./pedigrees/BasePedigree";
 import LegendTable from "./Legend";
 export default class RenderEngine {
     diagram: HTMLCanvasElement;
+    diagramId: string;
     ctx: CanvasRenderingContext2D;
     diagramWrapper: HTMLElement;
     pedigrees: Array<BasePedigree>;
+    config: {
+        width: number;
+        height: number;
+        dragEnabled: boolean;
+        panEnabled: boolean;
+        font: string;
+    };
     connectionManager: ConnectionManager;
     pedigreeManager: PedigreeManager;
     dragHandler: DragHandler;
@@ -16,6 +24,7 @@ export default class RenderEngine {
     private initEvents;
     private resizeDiagramWidth;
     private draw;
+    setConfig(configObject: any): void;
     create(sex: any, x?: number, y?: number): BasePedigree;
     connect(pedigreeA: any, pedigreeB: any, lineType: any): void;
     connectTwins(parent: BasePedigree, twinA: BasePedigree, twinB: BasePedigree, type: any): void;

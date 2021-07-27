@@ -13,6 +13,8 @@ class DragHandler {
         this.initialCameraOffsetX = 0;
         this.initialCameraOffsetY = 0;
         this.panDiagram = false;
+        this.dragEnabled = false;
+        this.panEnabled = false;
         this.diagram = diagram;
         this.ctx = diagram.getContext("2d");
         this.renderEngine = renderEngine;
@@ -59,6 +61,8 @@ class DragHandler {
         }
     }
     dragDiagram(e) {
+        if (!this.panEnabled)
+            return;
         const scale = this.ctx.getTransform().a;
         this.deltaX = (e.clientX - this.firstCursorX) / scale;
         this.deltaY = (e.clientY - this.firstCursorY) / scale;
@@ -67,6 +71,8 @@ class DragHandler {
         EventBus_1.default.emit("redraw");
     }
     dragPedigree(e) {
+        if (!this.dragEnabled)
+            return;
         const rect = this.diagram.getBoundingClientRect();
         const scale = this.ctx.getTransform().a;
         const mouseX = e.clientX - rect.left;
