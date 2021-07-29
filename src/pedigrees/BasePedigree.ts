@@ -52,7 +52,7 @@ export default abstract class BasePedigree {
   on(eventName, eventHandler) {
     EventBus.on(`${eventName}${this}`, () => eventHandler(this));
   }
-  drawDiseaseShape() {
+  protected drawDiseaseShape() {
     if (this.shapes.length > 0) {
       this.shapes.forEach((shape: ShapeProps)=>{
         switch (shape.diseaseShape) {
@@ -78,10 +78,10 @@ export default abstract class BasePedigree {
       })
     }
   }
-  setLabel(obj) {
+  public setLabel(obj) {
     this.label.setLabel(obj);
   }
-  drawPedigree() {
+  public drawPedigree() {
     this.initShape();
     this.drawDiseaseShape();
     this.label.drawLabel();

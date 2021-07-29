@@ -17,6 +17,9 @@ export default class RenderEngine {
     height: 600,
     dragEnabled: false,
     panEnabled: false,
+    scaleType: "none",
+    minScale: 0.5,
+    maxScale: 2,
     font: "16px Arial"
   }
   connectionManager: ConnectionManager;
@@ -34,22 +37,10 @@ export default class RenderEngine {
     this.diagram.style.overflow = "hidden";
     this.ctx = this.diagram.getContext("2d");
     this.ctx.font = this.config.font
-
     this.connectionManager = new ConnectionManager(this.diagram);
     this.pedigreeManager = new PedigreeManager(this.diagram, this);
-    this.initEvents();
-    setTimeout(() => this.draw());
-  }
-  private initEvents() {
     EventBus.on("redraw", () => this.draw());
-    window.addEventListener("resize", () => {
-      this.resizeDiagramWidth();
-    });
-    this.diagram.addEventListener("wheel", (event) => {
-      this.scaleFactor += event.deltaY * 0.001;
-      this.scale(event.deltaY * 0.001, event.clientX, event.clientY);
-      event.preventDefault();
-    });
+    EventBus.emit("redraw")
   }
   private recreateDiagram() {
     this.diagram.width = this.config.width
@@ -60,20 +51,52 @@ export default class RenderEngine {
       this.config.dragEnabled ? this.dragHandler.dragEnabled = true : null
       this.config.panEnabled ? this.dragHandler.panEnabled = true : null
     }
+    if(this.config.scaleType === "none") return;
+    if(this.config.scaleType === "pointer") this.scaleWithPointer();
+    if(this.config.scaleType === "scroll") this.scaleWithScroll();
     this.draw()
-    this.resizeDiagramWidth();
   }
-  private resizeDiagramWidth() {
-    this.diagram.width = window.innerWidth;
-    this.diagram.height = window.innerHeight;
-    this.draw();
+  private scaleWithScroll() {
+    this.diagram.addEventListener("wheel", (event) => {
+      if((this.scaleFactor > this.config.maxScale)) {
+        if(event.deltaY > 0) return;
+        if(event.deltaY < 0) this.scaleFactor += event.deltaY * 0.001;
+      }
+      if((this.scaleFactor < this.config.minScale)) {
+        if(event.deltaY < 0) return;
+        if(event.deltaY > 0) this.scaleFactor += event.deltaY * 0.001;
+      }
+      this.scale(event.deltaY * 0.001, 0, 0);
+      event.preventDefault();
+    });
+  }
+  private scaleWithPointer() {
+    this.diagram.addEventListener("wheel", (event) => {
+      if((this.scaleFactor > this.config.maxScale)) {
+        if(event.deltaY > 0) return;
+        if(event.deltaY < 0) this.scaleFactor += event.deltaY * 0.001;
+      }
+      if((this.scaleFactor < this.config.minScale)) {
+        if(event.deltaY < 0) return;
+        if(event.deltaY > 0) this.scaleFactor += event.deltaY * 0.001;
+      }
+      this.scale(event.deltaY * 0.001, event.clientX, event.clientY);
+      event.preventDefault();
+    });
+  }
+  private scale(scale, cursorX, cursorY) {
+    this.scaleFactor = this.scaleFactor * (scale + 1);
+    this.ctx.translate(cursorX, cursorY);
+    this.ctx.scale(scale + 1, scale + 1);
+    this.ctx.translate(-cursorX, -cursorY);
+    setTimeout(() => eventBus.emit('redraw'));
   }
   private draw() {
     this.ctx.clearRect(
-      -10000,
-      -10000,
-      window.innerWidth * 1000,
-      window.innerHeight * 1000
+      0,
+      0,
+      this.config.width*this.config.maxScale,
+      this.config.height*this.config.maxScale
     );
     this.connectionManager.drawConnections();
     this.pedigreeManager.drawPedigrees();
@@ -104,13 +127,6 @@ export default class RenderEngine {
     twinA.twin = twinB;
     twinB.twin = twinA;
     this.connectionManager.createTwinsConnection(parent, twinA, twinB, type);
-  }
-  public scale(scale, cursorX, cursorY) {
-    this.scaleFactor = this.scaleFactor * (scale + 1);
-    this.ctx.translate(cursorX, cursorY);
-    this.ctx.scale(scale + 1, scale + 1);
-    this.ctx.translate(-cursorX, -cursorY);
-    setTimeout(() => eventBus.emit('redraw'));
   }
   public deletePedigree(id) {
     this.pedigreeManager.deletePedigree(id);

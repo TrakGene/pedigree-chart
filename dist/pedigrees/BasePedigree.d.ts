@@ -30,7 +30,7 @@ export default abstract class BasePedigree {
         y: number;
     };
     on(eventName: any, eventHandler: any): void;
-    drawDiseaseShape(): void;
+    protected drawDiseaseShape(): void;
     setLabel(obj: any): void;
     drawPedigree(): void;
     abstract initShape(): any;

@@ -14,6 +14,9 @@ export default class RenderEngine {
         height: number;
         dragEnabled: boolean;
         panEnabled: boolean;
+        scaleType: string;
+        minScale: number;
+        maxScale: number;
         font: string;
     };
     connectionManager: ConnectionManager;
@@ -21,15 +24,15 @@ export default class RenderEngine {
     dragHandler: DragHandler;
     scaleFactor: number;
     setDiagram(diagramId: string): void;
-    private initEvents;
     private recreateDiagram;
-    private resizeDiagramWidth;
+    private scaleWithScroll;
+    private scaleWithPointer;
+    private scale;
     private draw;
     setConfig(configObject: any): void;
     create(sex: any, x?: number, y?: number): BasePedigree;
     connect(pedigreeA: any, pedigreeB: any, lineType: any): void;
     connectTwins(parent: BasePedigree, twinA: BasePedigree, twinB: BasePedigree, type: any): void;
-    scale(scale: any, cursorX: any, cursorY: any): void;
     deletePedigree(id: any): void;
     createLegend(x: any, y: any): LegendTable;
     on(eventName: "pedigree-click", eventHandler: any): void;
