@@ -23,12 +23,12 @@ export default class RenderEngine {
     pedigreeManager: PedigreeManager;
     dragHandler: DragHandler;
     scaleFactor: number;
-    setDiagram(diagramId: string): void;
     private recreateDiagram;
     private scaleWithScroll;
     private scaleWithPointer;
     private scale;
     private draw;
+    setDiagram(diagramId: string): void;
     setConfig(configObject: any): void;
     create(sex: any, x?: number, y?: number): BasePedigree;
     connect(pedigreeA: any, pedigreeB: any, lineType: any): void;

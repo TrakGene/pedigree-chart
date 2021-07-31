@@ -14,12 +14,12 @@ export default abstract class BasePedigree {
   protected shapes: ShapeProps[] = [];
   protected ctx: CanvasRenderingContext2D;
   protected isMarried = false;
+  private storage: any;
   fillColor = "white"
   dragEnabled = false;
   isInLegend = false;
   twin = null;
   marriagePartner = null;
-  storage: any;
   size = 60;
   border = 3;
   x = 0;
@@ -30,27 +30,6 @@ export default abstract class BasePedigree {
     this.x = x;
     this.y = y;
     this.label = new Label(ctx, this);
-  }
-  getMidX() {
-    return this.calculateMiddle().x + camera.OffsetX
-  }
-  getMidY() {
-    return this.calculateMiddle().y + camera.OffsetY
-  }
-  getX() {
-    return this.x + camera.OffsetX
-  }
-  getY() {
-    return this.y + camera.OffsetY
-  }
-  calculateMiddle() {
-    return {
-      x: this.x + this.size / 2,
-      y: this.y + this.size / 2,
-    };
-  }
-  on(eventName, eventHandler) {
-    EventBus.on(`${eventName}${this}`, () => eventHandler(this));
   }
   protected drawDiseaseShape() {
     if (this.shapes.length > 0) {
@@ -78,13 +57,40 @@ export default abstract class BasePedigree {
       })
     }
   }
-  public setLabel(obj) {
+  public setLabel(obj: any) {
     this.label.setLabel(obj);
   }
-  public drawPedigree() {
+  public setStorage(obj: any) {
+    this.storage = obj
+  }
+  public getStorage() {
+    return this.storage
+  } 
+  public draw() {
     this.initShape();
     this.drawDiseaseShape();
     this.label.drawLabel();
+  }
+  public getMidX() {
+    return this.calculateMiddle().x + camera.OffsetX
+  }
+  public getMidY() {
+    return this.calculateMiddle().y + camera.OffsetY
+  }
+  public getX() {
+    return this.x + camera.OffsetX
+  }
+  public getY() {
+    return this.y + camera.OffsetY
+  }
+  public calculateMiddle() {
+    return {
+      x: this.x + this.size / 2,
+      y: this.y + this.size / 2,
+    };
+  }
+  public on(eventName, eventHandler) {
+    EventBus.on(`${eventName}${this}`, () => eventHandler(this));
   }
   abstract initShape();
   abstract addDiseaseShape(shape, color);

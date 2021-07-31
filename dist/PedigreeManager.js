@@ -35,7 +35,7 @@ class PedigreeManager {
     }
     drawPedigrees() {
         this.renderEngine.pedigrees.forEach((pedigree) => {
-            pedigree.drawPedigree();
+            pedigree.draw();
         });
     }
 }

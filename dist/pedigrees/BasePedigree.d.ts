@@ -10,17 +10,22 @@ export default abstract class BasePedigree {
     protected shapes: ShapeProps[];
     protected ctx: CanvasRenderingContext2D;
     protected isMarried: boolean;
+    private storage;
     fillColor: string;
     dragEnabled: boolean;
     isInLegend: boolean;
     twin: any;
     marriagePartner: any;
-    storage: any;
     size: number;
     border: number;
     x: number;
     y: number;
     constructor(ctx: CanvasRenderingContext2D, x: number, y: number);
+    protected drawDiseaseShape(): void;
+    setLabel(obj: any): void;
+    setStorage(obj: any): void;
+    getStorage(): any;
+    draw(): void;
     getMidX(): number;
     getMidY(): number;
     getX(): number;
@@ -30,9 +35,6 @@ export default abstract class BasePedigree {
         y: number;
     };
     on(eventName: any, eventHandler: any): void;
-    protected drawDiseaseShape(): void;
-    setLabel(obj: any): void;
-    drawPedigree(): void;
     abstract initShape(): any;
     abstract addDiseaseShape(shape: any, color: any): any;
 }

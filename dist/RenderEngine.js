@@ -21,20 +21,6 @@ class RenderEngine {
         };
         this.scaleFactor = 1;
     }
-    setDiagram(diagramId) {
-        this.diagramId = diagramId;
-        this.diagram = document.getElementById(diagramId);
-        this.diagram.width = this.config.width;
-        this.diagram.height = this.config.height;
-        this.diagram.style.border = "4px solid black";
-        this.diagram.style.overflow = "hidden";
-        this.ctx = this.diagram.getContext("2d");
-        this.ctx.font = this.config.font;
-        this.connectionManager = new ConnectionsManager_1.default(this.diagram);
-        this.pedigreeManager = new PedigreeManager_1.default(this.diagram, this);
-        EventBus_1.default.on("redraw", () => this.draw());
-        EventBus_1.default.emit("redraw");
-    }
     recreateDiagram() {
         this.diagram.width = this.config.width;
         this.diagram.height = this.config.height;
@@ -100,6 +86,20 @@ class RenderEngine {
         this.connectionManager.drawConnections();
         this.pedigreeManager.drawPedigrees();
     }
+    setDiagram(diagramId) {
+        this.diagramId = diagramId;
+        this.diagram = document.getElementById(diagramId);
+        this.diagram.width = this.config.width;
+        this.diagram.height = this.config.height;
+        this.diagram.style.border = "4px solid black";
+        this.diagram.style.overflow = "hidden";
+        this.ctx = this.diagram.getContext("2d");
+        this.ctx.font = this.config.font;
+        this.connectionManager = new ConnectionsManager_1.default(this.diagram);
+        this.pedigreeManager = new PedigreeManager_1.default(this.diagram, this);
+        EventBus_1.default.on("redraw", () => this.draw());
+        EventBus_1.default.emit("redraw");
+    }
     setConfig(configObject) {
         Object.keys(configObject).forEach(key => {
             this.config[key] = configObject[key];
@@ -111,7 +111,7 @@ class RenderEngine {
         return pedigree;
     }
     connect(pedigreeA, pedigreeB, lineType) {
-        if (lineType === "marriage" || lineType === "separation") {
+        if (lineType === "partnership" || lineType === "separation") {
             pedigreeA.marriagePartner = pedigreeB;
             pedigreeB.marriagePartner = pedigreeA;
         }

@@ -58,7 +58,7 @@ export default class LegendTable {
       this.calculatePedigreePoisiton(index)
       item.pedigree.x = this.pedOffsetX
       item.pedigree.y = this.pedOffsetY
-      item.pedigree.drawPedigree()
+      item.pedigree.draw()
     })
   }
   setItemsPerRow(num: number) {

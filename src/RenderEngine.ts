@@ -28,20 +28,6 @@ export default class RenderEngine {
 
   scaleFactor = 1;
 
-  public setDiagram(diagramId: string) {
-    this.diagramId = diagramId
-    this.diagram = document.getElementById(diagramId) as HTMLCanvasElement;
-    this.diagram.width = this.config.width
-    this.diagram.height = this.config.height
-    this.diagram.style.border = "4px solid black";
-    this.diagram.style.overflow = "hidden";
-    this.ctx = this.diagram.getContext("2d");
-    this.ctx.font = this.config.font
-    this.connectionManager = new ConnectionManager(this.diagram);
-    this.pedigreeManager = new PedigreeManager(this.diagram, this);
-    EventBus.on("redraw", () => this.draw());
-    EventBus.emit("redraw")
-  }
   private recreateDiagram() {
     this.diagram.width = this.config.width
     this.diagram.height = this.config.height
@@ -101,6 +87,20 @@ export default class RenderEngine {
     this.connectionManager.drawConnections();
     this.pedigreeManager.drawPedigrees();
   }
+  public setDiagram(diagramId: string) {
+    this.diagramId = diagramId
+    this.diagram = document.getElementById(diagramId) as HTMLCanvasElement;
+    this.diagram.width = this.config.width
+    this.diagram.height = this.config.height
+    this.diagram.style.border = "4px solid black";
+    this.diagram.style.overflow = "hidden";
+    this.ctx = this.diagram.getContext("2d");
+    this.ctx.font = this.config.font
+    this.connectionManager = new ConnectionManager(this.diagram);
+    this.pedigreeManager = new PedigreeManager(this.diagram, this);
+    EventBus.on("redraw", () => this.draw());
+    EventBus.emit("redraw")
+  }
   public setConfig(configObject: any) {
     Object.keys(configObject).forEach(key=>{
       this.config[key] = configObject[key]
@@ -112,7 +112,7 @@ export default class RenderEngine {
     return pedigree;
   }
   public connect(pedigreeA, pedigreeB, lineType) {
-    if (lineType === "marriage" || lineType === "separation") {
+    if (lineType === "partnership" || lineType === "separation") {
       pedigreeA.marriagePartner = pedigreeB;
       pedigreeB.marriagePartner = pedigreeA;
     }

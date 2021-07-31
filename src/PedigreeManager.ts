@@ -46,7 +46,7 @@ export default class PedigreeManager {
 
   drawPedigrees(): void {
     this.renderEngine.pedigrees.forEach((pedigree) => {
-      pedigree.drawPedigree();
+      pedigree.draw();
     });
   }
 }

@@ -21,27 +21,6 @@ class BasePedigree {
         this.y = y;
         this.label = new Label_1.default(ctx, this);
     }
-    getMidX() {
-        return this.calculateMiddle().x + Camera_1.default.OffsetX;
-    }
-    getMidY() {
-        return this.calculateMiddle().y + Camera_1.default.OffsetY;
-    }
-    getX() {
-        return this.x + Camera_1.default.OffsetX;
-    }
-    getY() {
-        return this.y + Camera_1.default.OffsetY;
-    }
-    calculateMiddle() {
-        return {
-            x: this.x + this.size / 2,
-            y: this.y + this.size / 2,
-        };
-    }
-    on(eventName, eventHandler) {
-        EventBus_1.default.on(`${eventName}${this}`, () => eventHandler(this));
-    }
     drawDiseaseShape() {
         if (this.shapes.length > 0) {
             this.shapes.forEach((shape) => {
@@ -71,10 +50,37 @@ class BasePedigree {
     setLabel(obj) {
         this.label.setLabel(obj);
     }
-    drawPedigree() {
+    setStorage(obj) {
+        this.storage = obj;
+    }
+    getStorage() {
+        return this.storage;
+    }
+    draw() {
         this.initShape();
         this.drawDiseaseShape();
         this.label.drawLabel();
+    }
+    getMidX() {
+        return this.calculateMiddle().x + Camera_1.default.OffsetX;
+    }
+    getMidY() {
+        return this.calculateMiddle().y + Camera_1.default.OffsetY;
+    }
+    getX() {
+        return this.x + Camera_1.default.OffsetX;
+    }
+    getY() {
+        return this.y + Camera_1.default.OffsetY;
+    }
+    calculateMiddle() {
+        return {
+            x: this.x + this.size / 2,
+            y: this.y + this.size / 2,
+        };
+    }
+    on(eventName, eventHandler) {
+        EventBus_1.default.on(`${eventName}${this}`, () => eventHandler(this));
     }
 }
 exports.default = BasePedigree;
