@@ -3,10 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const EventBus_1 = require("../EventBus");
 const Label_1 = require("./Label");
 const Camera_1 = require("../Camera");
+const IdGenerator_1 = require("../IdGenerator");
 class BasePedigree {
     constructor(ctx, x, y) {
         this.shapes = [];
         this.isMarried = false;
+        this.id = null;
         this.fillColor = "white";
         this.dragEnabled = false;
         this.isInLegend = false;
@@ -16,6 +18,7 @@ class BasePedigree {
         this.border = 3;
         this.x = 0;
         this.y = 0;
+        this.id = IdGenerator_1.default.getId();
         this.ctx = ctx;
         this.x = x;
         this.y = y;

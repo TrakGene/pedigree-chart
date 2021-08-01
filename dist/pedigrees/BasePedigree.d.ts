@@ -11,6 +11,7 @@ export default abstract class BasePedigree {
     protected ctx: CanvasRenderingContext2D;
     protected isMarried: boolean;
     private storage;
+    id: number;
     fillColor: string;
     dragEnabled: boolean;
     isInLegend: boolean;

@@ -34,7 +34,7 @@ export default class PedigreeManager {
     return pedigree;
   }
 
-  deletePedigree(id: string): void {
+  deletePedigree(id: number): void {
     const len = this.renderEngine.pedigrees.length;
     for (let i = 0; i < len; i++) {
       const element = this.renderEngine.pedigrees[i];

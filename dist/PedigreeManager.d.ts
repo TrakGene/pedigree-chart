@@ -5,6 +5,6 @@ export default class PedigreeManager {
     private renderEngine;
     constructor(diagram: HTMLCanvasElement, renderEngine: RenderEngine);
     createPedigree(sex: string, x: number, y: number): BasePedigree;
-    deletePedigree(id: string): void;
+    deletePedigree(id: number): void;
     drawPedigrees(): void;
 }

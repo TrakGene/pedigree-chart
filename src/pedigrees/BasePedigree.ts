@@ -2,6 +2,7 @@ import EventBus from "../EventBus";
 import Label from "./Label";
 import Shape from "../diseaseShapes/Shape";
 import camera from "../Camera";
+import IdGenerator from "../IdGenerator"
 
 interface ShapeProps {
   shapeInstance: Shape;
@@ -15,6 +16,7 @@ export default abstract class BasePedigree {
   protected ctx: CanvasRenderingContext2D;
   protected isMarried = false;
   private storage: any;
+  id: number = null;
   fillColor = "white"
   dragEnabled = false;
   isInLegend = false;
@@ -26,6 +28,7 @@ export default abstract class BasePedigree {
   y = 0;
 
   constructor(ctx: CanvasRenderingContext2D, x: number, y: number) {
+    this.id = IdGenerator.getId()
     this.ctx = ctx;
     this.x = x;
     this.y = y;
