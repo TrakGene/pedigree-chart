@@ -12,5 +12,5 @@ export default class LegendTable {
     private drawDiseaseLabels;
     private drawLegendPedigrees;
     setItemsPerRow(num: number): void;
-    addItem(pedigree: any, disease: any): void;
+    setPedigree(pedigree: any, disease: any): void;
 }

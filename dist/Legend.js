@@ -49,7 +49,7 @@ class LegendTable {
     setItemsPerRow(num) {
         this.itemsPerRow = num;
     }
-    addItem(pedigree, disease) {
+    setPedigree(pedigree, disease) {
         const stringLen = this.ctx.measureText(disease).width;
         if (stringLen > this.longestStringLength) {
             this.longestStringLength = stringLen;
@@ -65,8 +65,7 @@ class LegendTable {
             pedigree: legendPedigree,
             diseaseLabel: disease,
         });
-        this.drawLegendPedigrees();
-        this.drawDiseaseLabels();
+        setTimeout(() => { EventBus_1.default.emit("redraw"); }, 1);
     }
 }
 exports.default = LegendTable;
