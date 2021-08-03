@@ -7,7 +7,6 @@ export default class RenderEngine {
     diagram: HTMLCanvasElement;
     diagramId: string;
     ctx: CanvasRenderingContext2D;
-    diagramWrapper: HTMLElement;
     pedigrees: Array<BasePedigree>;
     config: {
         width: number;
@@ -33,7 +32,7 @@ export default class RenderEngine {
     create(sex: any, x?: number, y?: number): BasePedigree;
     connect(pedigreeA: any, pedigreeB: any, lineType: any): void;
     connectTwins(parent: BasePedigree, twinA: BasePedigree, twinB: BasePedigree, type: any): void;
-    deletePedigree(id: any): void;
+    delete(id: any): void;
     createLegend(x: any, y: any): LegendTable;
     on(eventName: "pedigree-click", eventHandler: any): void;
 }

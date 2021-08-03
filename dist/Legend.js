@@ -67,5 +67,8 @@ class LegendTable {
         });
         setTimeout(() => { EventBus_1.default.emit("redraw"); }, 1);
     }
+    removePedigree(id) {
+        this.items = this.items.filter(item => item.pedigree.id !== id);
+    }
 }
 exports.default = LegendTable;

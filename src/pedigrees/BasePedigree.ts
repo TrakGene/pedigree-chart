@@ -92,6 +92,10 @@ export default abstract class BasePedigree {
       y: this.y + this.size / 2,
     };
   }
+  public clearShapes() {
+    this.shapes = []
+    EventBus.emit("redraw")
+  }
   public on(eventName, eventHandler) {
     EventBus.on(`${eventName}${this}`, () => eventHandler(this));
   }

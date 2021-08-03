@@ -82,6 +82,10 @@ class BasePedigree {
             y: this.y + this.size / 2,
         };
     }
+    clearShapes() {
+        this.shapes = [];
+        EventBus_1.default.emit("redraw");
+    }
     on(eventName, eventHandler) {
         EventBus_1.default.on(`${eventName}${this}`, () => eventHandler(this));
     }

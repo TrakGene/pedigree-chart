@@ -10,7 +10,6 @@ export default class RenderEngine {
   diagram: HTMLCanvasElement;
   diagramId: string;
   ctx: CanvasRenderingContext2D;
-  diagramWrapper: HTMLElement;
   pedigrees: Array<BasePedigree> = [];
   config = {
     width: 1200,
@@ -128,12 +127,11 @@ export default class RenderEngine {
     twinB.twin = twinA;
     this.connectionManager.createTwinsConnection(parent, twinA, twinB, type);
   }
-  public deletePedigree(id) {
+  public delete(id) {
+    this.pedigrees = this.pedigrees.filter(pedigree => pedigree.id !== id)
     this.pedigreeManager.deletePedigree(id);
     this.connectionManager.removeConnection(id);
-    setTimeout(() => {
-      this.draw();
-    });
+    EventBus.emit("redraw")
   }
   public createLegend(x, y) {
     return new LegendTable(this.ctx, x, y)

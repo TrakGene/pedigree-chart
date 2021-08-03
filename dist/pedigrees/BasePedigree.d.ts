@@ -35,6 +35,7 @@ export default abstract class BasePedigree {
         x: number;
         y: number;
     };
+    clearShapes(): void;
     on(eventName: any, eventHandler: any): void;
     abstract initShape(): any;
     abstract addDiseaseShape(shape: any, color: any): any;

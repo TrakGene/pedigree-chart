@@ -122,12 +122,11 @@ class RenderEngine {
         twinB.twin = twinA;
         this.connectionManager.createTwinsConnection(parent, twinA, twinB, type);
     }
-    deletePedigree(id) {
+    delete(id) {
+        this.pedigrees = this.pedigrees.filter(pedigree => pedigree.id !== id);
         this.pedigreeManager.deletePedigree(id);
         this.connectionManager.removeConnection(id);
-        setTimeout(() => {
-            this.draw();
-        });
+        EventBus_1.default.emit("redraw");
     }
     createLegend(x, y) {
         return new Legend_1.default(this.ctx, x, y);
