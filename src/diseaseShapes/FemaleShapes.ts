@@ -1,9 +1,6 @@
 import Shape from "./Shape";
-import camera from "../Camera";
 
 export default class FemaleShape extends Shape {
-  private x = this.pedigree.x + this.pedigree.size / 2
-  private y = this.pedigree.y + this.pedigree.size / 2 
   private radius = this.pedigree.size / 2;
 
   private drawQuarterShape(colors) {
@@ -11,8 +8,8 @@ export default class FemaleShape extends Shape {
       let startAngle = (i * Math.PI) / 2;
       let endAngle = startAngle + Math.PI / 2;
       this.ctx.beginPath();
-      this.ctx.moveTo(this.x + camera.OffsetX, this.y + camera.OffsetY);
-      this.ctx.arc(this.x + camera.OffsetX, this.y + camera.OffsetY, this.radius, startAngle, endAngle);
+      this.ctx.moveTo(this.pedigree.getMidX(), this.pedigree.getMidY());
+      this.ctx.arc(this.pedigree.getMidX(), this.pedigree.getMidY(), this.radius, startAngle, endAngle);
       this.ctx.closePath();
       this.ctx.fillStyle = colors[i];
       this.ctx.fill();

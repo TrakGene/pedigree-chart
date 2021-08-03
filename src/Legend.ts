@@ -58,13 +58,13 @@ export default class LegendTable {
       this.calculatePedigreePoisiton(index)
       item.pedigree.x = this.pedOffsetX
       item.pedigree.y = this.pedOffsetY
-      item.pedigree.drawPedigree()
+      item.pedigree.draw()
     })
   }
-  setItemsPerRow(num: number) {
+  public setItemsPerRow(num: number) {
     this.itemsPerRow = num;
   }
-  addItem(pedigree, disease) {
+  public setPedigree(pedigree, disease) {
     const stringLen = this.ctx.measureText(disease).width
     if(stringLen > this.longestStringLength) {
       this.longestStringLength = stringLen
@@ -84,7 +84,9 @@ export default class LegendTable {
       pedigree: legendPedigree,
       diseaseLabel: disease,
     });
-    this.drawLegendPedigrees()
-    this.drawDiseaseLabels()
+    setTimeout(()=>{eventBus.emit("redraw")}, 1)
+  }
+  public removePedigree(id: number) {
+    this.items = this.items.filter(item=>item.pedigree.id !== id)
   }
 }

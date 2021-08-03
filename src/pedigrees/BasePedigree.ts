@@ -1,6 +1,8 @@
 import EventBus from "../EventBus";
 import Label from "./Label";
 import Shape from "../diseaseShapes/Shape";
+import camera from "../Camera";
+import IdGenerator from "../IdGenerator"
 
 interface ShapeProps {
   shapeInstance: Shape;
@@ -13,33 +15,26 @@ export default abstract class BasePedigree {
   protected shapes: ShapeProps[] = [];
   protected ctx: CanvasRenderingContext2D;
   protected isMarried = false;
+  private storage: any;
+  id: number = null;
   fillColor = "white"
   dragEnabled = false;
   isInLegend = false;
   twin = null;
   marriagePartner = null;
-  storage: any;
   size = 60;
   border = 3;
   x = 0;
   y = 0;
 
   constructor(ctx: CanvasRenderingContext2D, x: number, y: number) {
+    this.id = IdGenerator.getId()
     this.ctx = ctx;
     this.x = x;
     this.y = y;
     this.label = new Label(ctx, this);
   }
-  calculateMiddle() {
-    return {
-      x: this.x + this.size / 2,
-      y: this.y + this.size / 2,
-    };
-  }
-  on(eventName, eventHandler) {
-    EventBus.on(`${eventName}${this}`, () => eventHandler(this));
-  }
-  drawDiseaseShape() {
+  protected drawDiseaseShape() {
     if (this.shapes.length > 0) {
       this.shapes.forEach((shape: ShapeProps)=>{
         switch (shape.diseaseShape) {
@@ -65,13 +60,44 @@ export default abstract class BasePedigree {
       })
     }
   }
-  setLabel(obj) {
+  public setLabel(obj: any) {
     this.label.setLabel(obj);
   }
-  drawPedigree() {
+  public setStorage(obj: any) {
+    this.storage = obj
+  }
+  public getStorage() {
+    return this.storage
+  } 
+  public draw() {
     this.initShape();
     this.drawDiseaseShape();
     this.label.drawLabel();
+  }
+  public getMidX() {
+    return this.calculateMiddle().x + camera.OffsetX
+  }
+  public getMidY() {
+    return this.calculateMiddle().y + camera.OffsetY
+  }
+  public getX() {
+    return this.x + camera.OffsetX
+  }
+  public getY() {
+    return this.y + camera.OffsetY
+  }
+  public calculateMiddle() {
+    return {
+      x: this.x + this.size / 2,
+      y: this.y + this.size / 2,
+    };
+  }
+  public clearShapes() {
+    this.shapes = []
+    EventBus.emit("redraw")
+  }
+  public on(eventName, eventHandler) {
+    EventBus.on(`${eventName}${this}`, () => eventHandler(this));
   }
   abstract initShape();
   abstract addDiseaseShape(shape, color);

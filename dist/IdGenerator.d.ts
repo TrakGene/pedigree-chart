@@ -1,7 +1,6 @@
 declare class IdGenerator {
-    offset: number;
-    characters: string;
-    randomId(): string;
+    private availableId;
+    getId(): number;
 }
 declare const generator: IdGenerator;
 export default generator;

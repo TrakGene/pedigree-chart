@@ -19,6 +19,9 @@ export default class DragHandler {
   panDiagram = false;
   renderEngine: RenderEngine;
 
+  dragEnabled = false
+  panEnabled = false
+
   constructor(diagram, renderEngine) {
     this.diagram = diagram;
     this.ctx = diagram.getContext("2d");
@@ -70,6 +73,7 @@ export default class DragHandler {
   }
 
   private dragDiagram(e: MouseEvent): void {
+    if(!this.panEnabled) return;
     const scale = this.ctx.getTransform().a;
     this.deltaX = (e.clientX - this.firstCursorX) / scale;
     this.deltaY = (e.clientY - this.firstCursorY) / scale;
@@ -79,6 +83,7 @@ export default class DragHandler {
   }
 
   private dragPedigree(e: MouseEvent): void {
+    if(!this.dragEnabled) return;
     const rect = this.diagram.getBoundingClientRect();
     const scale = this.ctx.getTransform().a;
     const mouseX = e.clientX - rect.left;

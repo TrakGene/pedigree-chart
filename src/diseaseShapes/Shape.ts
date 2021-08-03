@@ -1,5 +1,4 @@
 import BasePedigree from "../pedigrees/BasePedigree";
-import Camera from "../Camera";
 
 export default abstract class Shape {
   protected ctx: CanvasRenderingContext2D;
@@ -12,8 +11,8 @@ export default abstract class Shape {
     const size = 16;
     this.ctx.beginPath();
     this.ctx.arc(
-      this.pedigree.x + this.pedigree.size / 2 + Camera.OffsetX,
-      this.pedigree.y + this.pedigree.size / 2 + Camera.OffsetY,
+      this.pedigree.getMidX(),
+      this.pedigree.getMidY(),
       size / 2,
       0,
       2 * Math.PI

@@ -4,23 +4,20 @@ import Camera from "../Camera";
 export default class UnknownShape extends Shape {
   fillFirstQuarterColor(color: string) {
     this.ctx.beginPath();
-    this.ctx.moveTo(this.pedigree.x + Camera.OffsetX, this.pedigree.y + this.pedigree.size / 2 + Camera.OffsetY);
-    this.ctx.lineTo(this.pedigree.x + this.pedigree.size / 2 + Camera.OffsetX, this.pedigree.y + Camera.OffsetY);
-    this.ctx.lineTo(
-      this.pedigree.x + this.pedigree.size / 2 + Camera.OffsetX,
-      this.pedigree.y + this.pedigree.size / 2 + Camera.OffsetY
-    );
+    this.ctx.moveTo(this.pedigree.getX(), this.pedigree.getMidY());
+    this.ctx.lineTo(this.pedigree.getMidX(), this.pedigree.getY());
+    this.ctx.lineTo(this.pedigree.getMidX(), this.pedigree.getMidY());
     this.ctx.fillStyle = color;
     this.ctx.fill();
     this.ctx.closePath();
   }
   fillSecondQuarterColor(color: string) {
     this.ctx.beginPath();
-    this.ctx.moveTo(this.pedigree.x + this.pedigree.size/2 + Camera.OffsetX, this.pedigree.y + this.pedigree.size / 2 + Camera.OffsetY);
-    this.ctx.lineTo(this.pedigree.x + this.pedigree.size/2 + Camera.OffsetX, this.pedigree.y + Camera.OffsetY);
+    this.ctx.moveTo(this.pedigree.getMidX(), this.pedigree.getMidY());
+    this.ctx.lineTo(this.pedigree.getMidX(), this.pedigree.getY());
     this.ctx.lineTo(
-      this.pedigree.x + this.pedigree.size + Camera.OffsetX,
-      this.pedigree.y + this.pedigree.size / 2 + Camera.OffsetY
+      this.pedigree.getX() + this.pedigree.size,
+      this.pedigree.getMidY()
     );
     this.ctx.fillStyle = color;
     this.ctx.fill();
@@ -28,11 +25,17 @@ export default class UnknownShape extends Shape {
   }
   fillThirdQuarterColor(color: string) {
     this.ctx.beginPath();
-    this.ctx.moveTo(this.pedigree.x + this.pedigree.size + Camera.OffsetX, this.pedigree.y + this.pedigree.size / 2 + Camera.OffsetY);
-    this.ctx.lineTo(this.pedigree.x + this.pedigree.size / 2 + Camera.OffsetX, this.pedigree.y + this.pedigree.size + Camera.OffsetY);
+    this.ctx.moveTo(
+      this.pedigree.getX() + this.pedigree.size,
+      this.pedigree.getMidY()
+    );
     this.ctx.lineTo(
-      this.pedigree.x + this.pedigree.size / 2 + Camera.OffsetX,
-      this.pedigree.y + this.pedigree.size / 2 + Camera.OffsetY
+      this.pedigree.getMidX(),
+      this.pedigree.getY() + this.pedigree.size,
+    );
+    this.ctx.lineTo(
+      this.pedigree.getMidX(),
+      this.pedigree.getMidY()
     );
     this.ctx.fillStyle = color;
     this.ctx.fill();
@@ -40,11 +43,17 @@ export default class UnknownShape extends Shape {
   }
   fillFourthQuarterColor(color: string) {
     this.ctx.beginPath();
-    this.ctx.moveTo(this.pedigree.x + Camera.OffsetX, this.pedigree.y + this.pedigree.size / 2 + Camera.OffsetY);
-    this.ctx.lineTo(this.pedigree.x + this.pedigree.size / 2 + Camera.OffsetX, this.pedigree.y + this.pedigree.size + Camera.OffsetY);
+    this.ctx.moveTo(
+      this.pedigree.getX(),
+      this.pedigree.getMidY()
+    );
     this.ctx.lineTo(
-      this.pedigree.x + this.pedigree.size / 2 + Camera.OffsetX,
-      this.pedigree.y + this.pedigree.size / 2 + Camera.OffsetY
+      this.pedigree.getMidX(),
+      this.pedigree.getY()+ this.pedigree.size
+    );
+    this.ctx.lineTo(
+      this.pedigree.getMidX(),
+      this.pedigree.getMidY()
     );
     this.ctx.fillStyle = color;
     this.ctx.fill();

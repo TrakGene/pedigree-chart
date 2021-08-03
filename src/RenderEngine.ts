@@ -8,68 +8,110 @@ import eventBus from "./EventBus";
 
 export default class RenderEngine {
   diagram: HTMLCanvasElement;
+  diagramId: string;
   ctx: CanvasRenderingContext2D;
-  diagramWrapper: HTMLElement;
   pedigrees: Array<BasePedigree> = [];
-
+  config = {
+    width: 1200,
+    height: 600,
+    dragEnabled: false,
+    panEnabled: false,
+    scaleType: "none",
+    minScale: 0.5,
+    maxScale: 2,
+    font: "16px Arial"
+  }
   connectionManager: ConnectionManager;
   pedigreeManager: PedigreeManager;
   dragHandler: DragHandler;
 
   scaleFactor = 1;
 
-  constructor(id: string) {
-    this.diagramWrapper = document.getElementById(id) as HTMLElement;
-    this.diagram = document.createElement("canvas");
-    this.ctx = this.diagram.getContext("2d");
-    this.initDiagramEditor();
-    this.initEvents();
-    setTimeout(() => this.draw());
+  private recreateDiagram() {
+    this.diagram.width = this.config.width
+    this.diagram.height = this.config.height
+    this.ctx.font = this.config.font
+    if(this.config.dragEnabled || this.config.panEnabled) {
+      this.dragHandler = new DragHandler(this.diagram, this);
+      this.config.dragEnabled ? this.dragHandler.dragEnabled = true : null
+      this.config.panEnabled ? this.dragHandler.panEnabled = true : null
+    }
+    if(this.config.scaleType === "none") return;
+    if(this.config.scaleType === "pointer") this.scaleWithPointer();
+    if(this.config.scaleType === "scroll") this.scaleWithScroll();
+    this.draw()
   }
-
-  private initDiagramEditor() {
-    this.diagram.width = window.innerWidth;
-    this.diagram.height = window.innerHeight;
-    this.diagramWrapper.style.border = "3px solid black";
-    this.diagramWrapper.style.overflow = "hidden";
-    this.ctx.font = "16px Arial";
-    this.diagramWrapper.appendChild(this.diagram);
-    this.connectionManager = new ConnectionManager(this.diagram);
-    this.pedigreeManager = new PedigreeManager(this.diagram, this);
-    this.dragHandler = new DragHandler(this.diagram, this);
-  }
-  private initEvents() {
-    EventBus.on("redraw", () => this.draw());
-    window.addEventListener("resize", () => {
-      this.resizeDiagramWidth();
-    });
+  private scaleWithScroll() {
     this.diagram.addEventListener("wheel", (event) => {
-      this.scaleFactor += event.deltaY * 0.001;
+      if((this.scaleFactor > this.config.maxScale)) {
+        if(event.deltaY > 0) return;
+        if(event.deltaY < 0) this.scaleFactor += event.deltaY * 0.001;
+      }
+      if((this.scaleFactor < this.config.minScale)) {
+        if(event.deltaY < 0) return;
+        if(event.deltaY > 0) this.scaleFactor += event.deltaY * 0.001;
+      }
+      this.scale(event.deltaY * 0.001, 0, 0);
+      event.preventDefault();
+    });
+  }
+  private scaleWithPointer() {
+    this.diagram.addEventListener("wheel", (event) => {
+      if((this.scaleFactor > this.config.maxScale)) {
+        if(event.deltaY > 0) return;
+        if(event.deltaY < 0) this.scaleFactor += event.deltaY * 0.001;
+      }
+      if((this.scaleFactor < this.config.minScale)) {
+        if(event.deltaY < 0) return;
+        if(event.deltaY > 0) this.scaleFactor += event.deltaY * 0.001;
+      }
       this.scale(event.deltaY * 0.001, event.clientX, event.clientY);
       event.preventDefault();
     });
   }
-  private resizeDiagramWidth() {
-    this.diagram.width = window.innerWidth;
-    this.diagram.height = window.innerHeight;
-    this.draw();
+  private scale(scale, cursorX, cursorY) {
+    this.scaleFactor = this.scaleFactor * (scale + 1);
+    this.ctx.translate(cursorX, cursorY);
+    this.ctx.scale(scale + 1, scale + 1);
+    this.ctx.translate(-cursorX, -cursorY);
+    setTimeout(() => eventBus.emit('redraw'));
   }
   private draw() {
     this.ctx.clearRect(
-      -10000,
-      -10000,
-      window.innerWidth * 1000,
-      window.innerHeight * 1000
+      0,
+      0,
+      this.config.width*this.config.maxScale,
+      this.config.height*this.config.maxScale
     );
     this.connectionManager.drawConnections();
     this.pedigreeManager.drawPedigrees();
+  }
+  public setDiagram(diagramId: string) {
+    this.diagramId = diagramId
+    this.diagram = document.getElementById(diagramId) as HTMLCanvasElement;
+    this.diagram.width = this.config.width
+    this.diagram.height = this.config.height
+    this.diagram.style.border = "4px solid black";
+    this.diagram.style.overflow = "hidden";
+    this.ctx = this.diagram.getContext("2d");
+    this.ctx.font = this.config.font
+    this.connectionManager = new ConnectionManager(this.diagram);
+    this.pedigreeManager = new PedigreeManager(this.diagram, this);
+    EventBus.on("redraw", () => this.draw());
+    EventBus.emit("redraw")
+  }
+  public setConfig(configObject: any) {
+    Object.keys(configObject).forEach(key=>{
+      this.config[key] = configObject[key]
+    })
+    this.recreateDiagram()
   }
   public create(sex, x = 0, y = 0) {
     const pedigree = this.pedigreeManager.createPedigree(sex, x, y);
     return pedigree;
   }
   public connect(pedigreeA, pedigreeB, lineType) {
-    if (lineType === "marriage" || lineType === "separation") {
+    if (lineType === "partnership" || lineType === "separation") {
       pedigreeA.marriagePartner = pedigreeB;
       pedigreeB.marriagePartner = pedigreeA;
     }
@@ -85,19 +127,11 @@ export default class RenderEngine {
     twinB.twin = twinA;
     this.connectionManager.createTwinsConnection(parent, twinA, twinB, type);
   }
-  public scale(scale, cursorX, cursorY) {
-    this.scaleFactor = this.scaleFactor * (scale + 1);
-    this.ctx.translate(cursorX, cursorY);
-    this.ctx.scale(scale + 1, scale + 1);
-    this.ctx.translate(-cursorX, -cursorY);
-    setTimeout(() => eventBus.emit('redraw'));
-  }
-  public deletePedigree(id) {
+  public delete(id) {
+    this.pedigrees = this.pedigrees.filter(pedigree => pedigree.id !== id)
     this.pedigreeManager.deletePedigree(id);
     this.connectionManager.removeConnection(id);
-    setTimeout(() => {
-      this.draw();
-    });
+    EventBus.emit("redraw")
   }
   public createLegend(x, y) {
     return new LegendTable(this.ctx, x, y)

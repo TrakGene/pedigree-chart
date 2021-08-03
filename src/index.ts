@@ -1,3 +1,3 @@
-import Engine from "./RenderEngine"
+import PedigreeChart from "./RenderEngine"
 
-export { Engine }
+export default PedigreeChart
