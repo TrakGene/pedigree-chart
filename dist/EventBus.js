@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class EventBus {
     constructor() {
         this.eventHandlers = {};
-        this.initBuiltInEvents();
     }
     on(eventName, eventHandler) {
         if (!this.eventHandlers[eventName]) {
@@ -20,9 +19,6 @@ class EventBus {
                 func(props);
             });
         }
-    }
-    initBuiltInEvents() {
-        this.eventHandlers["click"] = [];
     }
 }
 const eventBus = new EventBus();

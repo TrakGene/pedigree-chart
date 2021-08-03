@@ -1,5 +1,5 @@
 class IdGenerator {
-  private availableId = 1
+  private availableId = 0
 
   public getId() {
       this.availableId += 1
