@@ -10,6 +10,7 @@ class BasePedigree {
         this.isMarried = false;
         this.isPregnant = false;
         this.isDeceased = false;
+        this.isProband = false;
         this.id = null;
         this.fillColor = "white";
         this.dragEnabled = false;
@@ -30,6 +31,8 @@ class BasePedigree {
                 this.drawPregnant();
             if (this.isDeceased)
                 this.drawDeceased();
+            if (this.isProband)
+                this.drawProband();
         });
         setTimeout(() => EventBus_1.default.emit('redraw'), 1);
     }
@@ -40,6 +43,17 @@ class BasePedigree {
         this.ctx.beginPath();
         this.ctx.moveTo(this.getX() - 10, this.getY() - 10);
         this.ctx.lineTo(this.getX() + this.size + 10, this.getY() + this.size + 10);
+        this.ctx.stroke();
+        this.ctx.closePath();
+    }
+    drawProband() {
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.getX() - 24, this.getY() + 100);
+        this.ctx.lineTo(this.getX(), this.getY() + 70);
+        this.ctx.moveTo(this.getX(), this.getY() + 70);
+        this.ctx.lineTo(this.getX() - 16, this.getY() + 75);
+        this.ctx.moveTo(this.getX(), this.getY() + 70);
+        this.ctx.lineTo(this.getX() - 1, this.getY() + 86);
         this.ctx.stroke();
         this.ctx.closePath();
     }
@@ -113,6 +127,9 @@ class BasePedigree {
     }
     setDeceased(value) {
         this.isDeceased = value;
+    }
+    setProband(value) {
+        this.isProband = value;
     }
 }
 exports.default = BasePedigree;

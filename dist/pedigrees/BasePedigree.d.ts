@@ -12,6 +12,7 @@ export default abstract class BasePedigree {
     protected isMarried: boolean;
     private isPregnant;
     private isDeceased;
+    private isProband;
     private storage;
     id: number;
     fillColor: string;
@@ -26,6 +27,7 @@ export default abstract class BasePedigree {
     constructor(ctx: CanvasRenderingContext2D, x: number, y: number);
     private drawPregnant;
     private drawDeceased;
+    private drawProband;
     protected drawDiseaseShape(): void;
     setLabel(obj: any): void;
     setStorage(obj: any): void;
@@ -43,6 +45,7 @@ export default abstract class BasePedigree {
     on(eventName: any, eventHandler: any): void;
     setPregnacy(value: boolean): void;
     setDeceased(value: boolean): void;
+    setProband(value: boolean): void;
     abstract initShape(): any;
     abstract addDiseaseShape(shape: any, color: any): any;
 }

@@ -17,6 +17,7 @@ export default abstract class BasePedigree {
   protected isMarried = false;
   private isPregnant = false;
   private isDeceased = false;
+  private isProband = false;
   private storage: any;
   id: number = null;
   fillColor = "white"
@@ -38,6 +39,7 @@ export default abstract class BasePedigree {
     EventBus.on('redraw', ()=>{
       if(this.isPregnant) this.drawPregnant();
       if(this.isDeceased) this.drawDeceased();
+      if(this.isProband) this.drawProband();
     })
     setTimeout(()=>EventBus.emit('redraw'), 1)
   }
@@ -52,6 +54,17 @@ export default abstract class BasePedigree {
     this.ctx.beginPath()
     this.ctx.moveTo(this.getX()-10, this.getY()-10)
     this.ctx.lineTo(this.getX()+this.size+10, this.getY()+this.size+10)
+    this.ctx.stroke();
+    this.ctx.closePath();
+  }
+  private drawProband() {
+    this.ctx.beginPath()
+    this.ctx.moveTo(this.getX()-24, this.getY()+100)
+    this.ctx.lineTo(this.getX(), this.getY()+70)
+    this.ctx.moveTo(this.getX(), this.getY()+70)
+    this.ctx.lineTo(this.getX()-16, this.getY()+75)
+    this.ctx.moveTo(this.getX(), this.getY()+70)
+    this.ctx.lineTo(this.getX()-1, this.getY()+86)
     this.ctx.stroke();
     this.ctx.closePath();
   }
@@ -125,6 +138,9 @@ export default abstract class BasePedigree {
   }
   public setDeceased(value: boolean) {
     this.isDeceased = value
+  }
+  public setProband(value: boolean) {
+    this.isProband = value
   }
   abstract initShape();
   abstract addDiseaseShape(shape, color);
