@@ -11,6 +11,8 @@ class BasePedigree {
         this.isPregnant = false;
         this.isDeceased = false;
         this.isProband = false;
+        this.isMultiple = false;
+        this.multipleIndividuals = 0;
         this.id = null;
         this.fillColor = "white";
         this.dragEnabled = false;
@@ -33,11 +35,16 @@ class BasePedigree {
                 this.drawDeceased();
             if (this.isProband)
                 this.drawProband();
+            if (this.isMultiple)
+                this.drawMultiple();
         });
         setTimeout(() => EventBus_1.default.emit('redraw'), 1);
     }
     drawPregnant() {
         this.ctx.fillText(`P`, this.getMidX() - this.ctx.measureText('P').width / 2, this.getMidY() + this.ctx.measureText('P').width / 2);
+    }
+    drawMultiple() {
+        this.ctx.fillText(`${this.multipleIndividuals}`, this.getMidX() - this.ctx.measureText(`${this.multipleIndividuals}`).width / 2, this.getMidY() + this.ctx.measureText(`${this.multipleIndividuals}`).width / 2);
     }
     drawDeceased() {
         this.ctx.beginPath();
@@ -130,6 +137,10 @@ class BasePedigree {
     }
     setProband(value) {
         this.isProband = value;
+    }
+    setMulitpleIndividuals(value, count) {
+        this.isMultiple = value;
+        this.multipleIndividuals = count;
     }
 }
 exports.default = BasePedigree;

@@ -18,6 +18,8 @@ export default abstract class BasePedigree {
   private isPregnant = false;
   private isDeceased = false;
   private isProband = false;
+  private isMultiple = false;
+  private multipleIndividuals = 0;
   private storage: any;
   id: number = null;
   fillColor = "white"
@@ -40,6 +42,7 @@ export default abstract class BasePedigree {
       if(this.isPregnant) this.drawPregnant();
       if(this.isDeceased) this.drawDeceased();
       if(this.isProband) this.drawProband();
+      if(this.isMultiple) this.drawMultiple();
     })
     setTimeout(()=>EventBus.emit('redraw'), 1)
   }
@@ -48,6 +51,13 @@ export default abstract class BasePedigree {
       `P`,
       this.getMidX()-this.ctx.measureText('P').width/2,
       this.getMidY()+this.ctx.measureText('P').width/2
+    );
+  }
+  private drawMultiple() {
+    this.ctx.fillText(
+      `${this.multipleIndividuals}`,
+      this.getMidX()-this.ctx.measureText(`${this.multipleIndividuals}`).width/2,
+      this.getMidY()+this.ctx.measureText(`${this.multipleIndividuals}`).width/2
     );
   }
   private drawDeceased() {
@@ -141,6 +151,10 @@ export default abstract class BasePedigree {
   }
   public setProband(value: boolean) {
     this.isProband = value
+  }
+  public setMulitpleIndividuals(value: boolean, count: number) {
+    this.isMultiple = value
+    this.multipleIndividuals = count
   }
   abstract initShape();
   abstract addDiseaseShape(shape, color);
