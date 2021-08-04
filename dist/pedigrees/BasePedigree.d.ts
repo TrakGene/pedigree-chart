@@ -46,7 +46,7 @@ export default abstract class BasePedigree {
     };
     clearShapes(): void;
     on(eventName: any, eventHandler: any): void;
-    setPregnacy(value: boolean): void;
+    setPregnancy(value: boolean): void;
     setDeceased(value: boolean): void;
     setProband(value: boolean): void;
     setMulitpleIndividuals(value: boolean, count: number): void;

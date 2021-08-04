@@ -129,7 +129,7 @@ class BasePedigree {
     on(eventName, eventHandler) {
         EventBus_1.default.on(`${eventName}${this}`, () => eventHandler(this));
     }
-    setPregnacy(value) {
+    setPregnancy(value) {
         this.isPregnant = value;
     }
     setDeceased(value) {

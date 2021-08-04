@@ -143,7 +143,7 @@ export default abstract class BasePedigree {
   public on(eventName, eventHandler) {
     EventBus.on(`${eventName}${this}`, () => eventHandler(this));
   }
-  public setPregnacy(value: boolean) {
+  public setPregnancy(value: boolean) {
     this.isPregnant = value
   }
   public setDeceased(value: boolean) {
