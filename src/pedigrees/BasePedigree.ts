@@ -15,6 +15,11 @@ export default abstract class BasePedigree {
   protected shapes: ShapeProps[] = [];
   protected ctx: CanvasRenderingContext2D;
   protected isMarried = false;
+  private isPregnant = false;
+  private isDeceased = false;
+  private isProband = false;
+  private isMultiple = false;
+  private multipleIndividuals = 0;
   private storage: any;
   id: number = null;
   fillColor = "white"
@@ -33,6 +38,45 @@ export default abstract class BasePedigree {
     this.x = x;
     this.y = y;
     this.label = new Label(ctx, this);
+    EventBus.on('redraw', ()=>{
+      if(this.isPregnant) this.drawPregnant();
+      if(this.isDeceased) this.drawDeceased();
+      if(this.isProband) this.drawProband();
+      if(this.isMultiple) this.drawMultiple();
+    })
+    setTimeout(()=>EventBus.emit('redraw'), 1)
+  }
+  private drawPregnant() {
+    this.ctx.fillText(
+      `P`,
+      this.getMidX()-this.ctx.measureText('P').width/2,
+      this.getMidY()+this.ctx.measureText('P').width/2
+    );
+  }
+  private drawMultiple() {
+    this.ctx.fillText(
+      `${this.multipleIndividuals}`,
+      this.getMidX()-this.ctx.measureText(`${this.multipleIndividuals}`).width/2,
+      this.getMidY()+this.ctx.measureText(`${this.multipleIndividuals}`).width/2
+    );
+  }
+  private drawDeceased() {
+    this.ctx.beginPath()
+    this.ctx.moveTo(this.getX()-10, this.getY()-10)
+    this.ctx.lineTo(this.getX()+this.size+10, this.getY()+this.size+10)
+    this.ctx.stroke();
+    this.ctx.closePath();
+  }
+  private drawProband() {
+    this.ctx.beginPath()
+    this.ctx.moveTo(this.getX()-24, this.getY()+100)
+    this.ctx.lineTo(this.getX(), this.getY()+70)
+    this.ctx.moveTo(this.getX(), this.getY()+70)
+    this.ctx.lineTo(this.getX()-16, this.getY()+75)
+    this.ctx.moveTo(this.getX(), this.getY()+70)
+    this.ctx.lineTo(this.getX()-1, this.getY()+86)
+    this.ctx.stroke();
+    this.ctx.closePath();
   }
   protected drawDiseaseShape() {
     if (this.shapes.length > 0) {
@@ -98,6 +142,19 @@ export default abstract class BasePedigree {
   }
   public on(eventName, eventHandler) {
     EventBus.on(`${eventName}${this}`, () => eventHandler(this));
+  }
+  public setPregnacy(value: boolean) {
+    this.isPregnant = value
+  }
+  public setDeceased(value: boolean) {
+    this.isDeceased = value
+  }
+  public setProband(value: boolean) {
+    this.isProband = value
+  }
+  public setMulitpleIndividuals(value: boolean, count: number) {
+    this.isMultiple = value
+    this.multipleIndividuals = count
   }
   abstract initShape();
   abstract addDiseaseShape(shape, color);

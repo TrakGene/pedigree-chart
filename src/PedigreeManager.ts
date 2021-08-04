@@ -3,6 +3,9 @@ import MalePedigree from "./pedigrees/MalePedigree";
 import FemalePedigree from "./pedigrees/FemalePedigree";
 import UnknownPedigree from "./pedigrees/UnknownPedigree";
 import BasePedigree from "./pedigrees/BasePedigree";
+import FemaleMiscarriage from "./pedigrees/FemaleMisCarriage";
+import MaleMiscarriage from "./pedigrees/MaleMiscarriage";
+import UnknownMiscarriage from "./pedigrees/UnknownMiscarriage";
 
 export default class PedigreeManager {
   private ctx: CanvasRenderingContext2D;
@@ -28,6 +31,15 @@ export default class PedigreeManager {
         break;
       case "unknown":
         pedigree = new UnknownPedigree(this.ctx, x, y);
+        break;
+      case "male-miscarriage":
+        pedigree = new MaleMiscarriage(this.ctx, x, y);
+        break;
+      case "female-miscarriage":
+        pedigree = new FemaleMiscarriage(this.ctx, x, y);
+        break;
+      case "unknown-miscarriage":
+        pedigree = new UnknownMiscarriage(this.ctx, x, y);
         break;
     }
     this.renderEngine.pedigrees.push(pedigree);

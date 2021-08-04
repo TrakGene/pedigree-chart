@@ -8,6 +8,11 @@ class BasePedigree {
     constructor(ctx, x, y) {
         this.shapes = [];
         this.isMarried = false;
+        this.isPregnant = false;
+        this.isDeceased = false;
+        this.isProband = false;
+        this.isMultiple = false;
+        this.multipleIndividuals = 0;
         this.id = null;
         this.fillColor = "white";
         this.dragEnabled = false;
@@ -23,6 +28,41 @@ class BasePedigree {
         this.x = x;
         this.y = y;
         this.label = new Label_1.default(ctx, this);
+        EventBus_1.default.on('redraw', () => {
+            if (this.isPregnant)
+                this.drawPregnant();
+            if (this.isDeceased)
+                this.drawDeceased();
+            if (this.isProband)
+                this.drawProband();
+            if (this.isMultiple)
+                this.drawMultiple();
+        });
+        setTimeout(() => EventBus_1.default.emit('redraw'), 1);
+    }
+    drawPregnant() {
+        this.ctx.fillText(`P`, this.getMidX() - this.ctx.measureText('P').width / 2, this.getMidY() + this.ctx.measureText('P').width / 2);
+    }
+    drawMultiple() {
+        this.ctx.fillText(`${this.multipleIndividuals}`, this.getMidX() - this.ctx.measureText(`${this.multipleIndividuals}`).width / 2, this.getMidY() + this.ctx.measureText(`${this.multipleIndividuals}`).width / 2);
+    }
+    drawDeceased() {
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.getX() - 10, this.getY() - 10);
+        this.ctx.lineTo(this.getX() + this.size + 10, this.getY() + this.size + 10);
+        this.ctx.stroke();
+        this.ctx.closePath();
+    }
+    drawProband() {
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.getX() - 24, this.getY() + 100);
+        this.ctx.lineTo(this.getX(), this.getY() + 70);
+        this.ctx.moveTo(this.getX(), this.getY() + 70);
+        this.ctx.lineTo(this.getX() - 16, this.getY() + 75);
+        this.ctx.moveTo(this.getX(), this.getY() + 70);
+        this.ctx.lineTo(this.getX() - 1, this.getY() + 86);
+        this.ctx.stroke();
+        this.ctx.closePath();
     }
     drawDiseaseShape() {
         if (this.shapes.length > 0) {
@@ -88,6 +128,19 @@ class BasePedigree {
     }
     on(eventName, eventHandler) {
         EventBus_1.default.on(`${eventName}${this}`, () => eventHandler(this));
+    }
+    setPregnacy(value) {
+        this.isPregnant = value;
+    }
+    setDeceased(value) {
+        this.isDeceased = value;
+    }
+    setProband(value) {
+        this.isProband = value;
+    }
+    setMulitpleIndividuals(value, count) {
+        this.isMultiple = value;
+        this.multipleIndividuals = count;
     }
 }
 exports.default = BasePedigree;

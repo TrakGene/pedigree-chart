@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const MalePedigree_1 = require("./pedigrees/MalePedigree");
 const FemalePedigree_1 = require("./pedigrees/FemalePedigree");
 const UnknownPedigree_1 = require("./pedigrees/UnknownPedigree");
+const FemaleMisCarriage_1 = require("./pedigrees/FemaleMisCarriage");
+const MaleMiscarriage_1 = require("./pedigrees/MaleMiscarriage");
+const UnknownMiscarriage_1 = require("./pedigrees/UnknownMiscarriage");
 class PedigreeManager {
     constructor(diagram, renderEngine) {
         this.renderEngine = renderEngine;
@@ -19,6 +22,15 @@ class PedigreeManager {
                 break;
             case "unknown":
                 pedigree = new UnknownPedigree_1.default(this.ctx, x, y);
+                break;
+            case "male-miscarriage":
+                pedigree = new MaleMiscarriage_1.default(this.ctx, x, y);
+                break;
+            case "female-miscarriage":
+                pedigree = new FemaleMisCarriage_1.default(this.ctx, x, y);
+                break;
+            case "unknown-miscarriage":
+                pedigree = new UnknownMiscarriage_1.default(this.ctx, x, y);
                 break;
         }
         this.renderEngine.pedigrees.push(pedigree);
