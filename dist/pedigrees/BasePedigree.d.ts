@@ -16,12 +16,14 @@ export default abstract class BasePedigree {
     dragEnabled: boolean;
     isInLegend: boolean;
     twin: any;
+    isPregnant: boolean;
     marriagePartner: any;
     size: number;
     border: number;
     x: number;
     y: number;
     constructor(ctx: CanvasRenderingContext2D, x: number, y: number);
+    private drawPregnant;
     protected drawDiseaseShape(): void;
     setLabel(obj: any): void;
     setStorage(obj: any): void;
@@ -37,6 +39,7 @@ export default abstract class BasePedigree {
     };
     clearShapes(): void;
     on(eventName: any, eventHandler: any): void;
+    setPregnacy(value: boolean): void;
     abstract initShape(): any;
     abstract addDiseaseShape(shape: any, color: any): any;
 }

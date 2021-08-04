@@ -13,6 +13,7 @@ class BasePedigree {
         this.dragEnabled = false;
         this.isInLegend = false;
         this.twin = null;
+        this.isPregnant = false;
         this.marriagePartner = null;
         this.size = 60;
         this.border = 3;
@@ -23,6 +24,14 @@ class BasePedigree {
         this.x = x;
         this.y = y;
         this.label = new Label_1.default(ctx, this);
+        EventBus_1.default.on('redraw', () => {
+            if (this.isPregnant)
+                this.drawPregnant();
+        });
+        setTimeout(() => EventBus_1.default.emit('redraw'), 1);
+    }
+    drawPregnant() {
+        this.ctx.fillText(`P`, this.getMidX() - this.ctx.measureText('P').width / 2, this.getMidY() + this.ctx.measureText('P').width / 2);
     }
     drawDiseaseShape() {
         if (this.shapes.length > 0) {
@@ -88,6 +97,9 @@ class BasePedigree {
     }
     on(eventName, eventHandler) {
         EventBus_1.default.on(`${eventName}${this}`, () => eventHandler(this));
+    }
+    setPregnacy(value) {
+        this.isPregnant = true;
     }
 }
 exports.default = BasePedigree;

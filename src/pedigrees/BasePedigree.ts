@@ -21,6 +21,7 @@ export default abstract class BasePedigree {
   dragEnabled = false;
   isInLegend = false;
   twin = null;
+  isPregnant = false;
   marriagePartner = null;
   size = 60;
   border = 3;
@@ -33,6 +34,17 @@ export default abstract class BasePedigree {
     this.x = x;
     this.y = y;
     this.label = new Label(ctx, this);
+    EventBus.on('redraw', ()=>{
+      if(this.isPregnant) this.drawPregnant();
+    })
+    setTimeout(()=>EventBus.emit('redraw'), 1)
+  }
+  private drawPregnant() {
+    this.ctx.fillText(
+      `P`,
+      this.getMidX()-this.ctx.measureText('P').width/2,
+      this.getMidY()+this.ctx.measureText('P').width/2
+    );
   }
   protected drawDiseaseShape() {
     if (this.shapes.length > 0) {
@@ -98,6 +110,9 @@ export default abstract class BasePedigree {
   }
   public on(eventName, eventHandler) {
     EventBus.on(`${eventName}${this}`, () => eventHandler(this));
+  }
+  public setPregnacy(value: boolean) {
+    this.isPregnant = true
   }
   abstract initShape();
   abstract addDiseaseShape(shape, color);
