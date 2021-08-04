@@ -1,6 +1,6 @@
 {
   "name": "pedigree-chart",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Pedigree chart library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,14 +14,13 @@
     "type": "git",
     "url": "git+https://github.com/TrakGene/react-pedigree-chart-library.git"
   },
-  "author": "",
+  "author": "Kamil Albrycht",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/TrakGene/react-pedigree-chart-library/issues"
   },
   "homepage": "https://github.com/TrakGene/react-pedigree-chart-library#readme",
   "dependencies": {
-    "typescript": "^4.2.4",
-    "vue": "^2.6.14"
+    "typescript": "^4.2.4"
   }
 }
