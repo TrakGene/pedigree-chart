@@ -8,12 +8,13 @@ class BasePedigree {
     constructor(ctx, x, y) {
         this.shapes = [];
         this.isMarried = false;
+        this.isPregnant = false;
+        this.isDeceased = false;
         this.id = null;
         this.fillColor = "white";
         this.dragEnabled = false;
         this.isInLegend = false;
         this.twin = null;
-        this.isPregnant = false;
         this.marriagePartner = null;
         this.size = 60;
         this.border = 3;
@@ -27,11 +28,20 @@ class BasePedigree {
         EventBus_1.default.on('redraw', () => {
             if (this.isPregnant)
                 this.drawPregnant();
+            if (this.isDeceased)
+                this.drawDeceased();
         });
         setTimeout(() => EventBus_1.default.emit('redraw'), 1);
     }
     drawPregnant() {
         this.ctx.fillText(`P`, this.getMidX() - this.ctx.measureText('P').width / 2, this.getMidY() + this.ctx.measureText('P').width / 2);
+    }
+    drawDeceased() {
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.getX() - 10, this.getY() - 10);
+        this.ctx.lineTo(this.getX() + this.size + 10, this.getY() + this.size + 10);
+        this.ctx.stroke();
+        this.ctx.closePath();
     }
     drawDiseaseShape() {
         if (this.shapes.length > 0) {
@@ -99,7 +109,10 @@ class BasePedigree {
         EventBus_1.default.on(`${eventName}${this}`, () => eventHandler(this));
     }
     setPregnacy(value) {
-        this.isPregnant = true;
+        this.isPregnant = value;
+    }
+    setDeceased(value) {
+        this.isDeceased = value;
     }
 }
 exports.default = BasePedigree;
