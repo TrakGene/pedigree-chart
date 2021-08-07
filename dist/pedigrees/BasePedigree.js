@@ -28,23 +28,16 @@ class BasePedigree {
         this.x = x;
         this.y = y;
         this.label = new Label_1.default(ctx, this);
-        EventBus_1.default.on('redraw', () => {
-            if (this.isPregnant)
-                this.drawPregnant();
-            if (this.isDeceased)
-                this.drawDeceased();
-            if (this.isProband)
-                this.drawProband();
-            if (this.isMultiple)
-                this.drawMultiple();
-        });
-        setTimeout(() => EventBus_1.default.emit('redraw'), 1);
     }
     drawPregnant() {
-        this.ctx.fillText(`P`, this.getMidX() - this.ctx.measureText('P').width / 2, this.getMidY() + this.ctx.measureText('P').width / 2);
+        this.ctx.fillStyle = "black";
+        this.ctx.fillText(`P`, this.getMidX() - this.ctx.measureText("P").width / 2, this.getMidY() + this.ctx.measureText("P").width / 2);
     }
     drawMultiple() {
-        this.ctx.fillText(`${this.multipleIndividuals}`, this.getMidX() - this.ctx.measureText(`${this.multipleIndividuals}`).width / 2, this.getMidY() + this.ctx.measureText(`${this.multipleIndividuals}`).width / 2);
+        this.ctx.fillStyle = "black";
+        this.ctx.fillText(`${this.multipleIndividuals}`, this.getMidX() -
+            this.ctx.measureText(`${this.multipleIndividuals}`).width / 2, this.getMidY() +
+            this.ctx.measureText(`${this.multipleIndividuals}`).width / 2);
     }
     drawDeceased() {
         this.ctx.beginPath();
@@ -63,6 +56,16 @@ class BasePedigree {
         this.ctx.lineTo(this.getX() - 1, this.getY() + 86);
         this.ctx.stroke();
         this.ctx.closePath();
+    }
+    drawTypes() {
+        if (this.isPregnant)
+            this.drawPregnant();
+        if (this.isDeceased)
+            this.drawDeceased();
+        if (this.isProband)
+            this.drawProband();
+        if (this.isMultiple)
+            this.drawMultiple();
     }
     drawDiseaseShape() {
         if (this.shapes.length > 0) {
@@ -102,6 +105,7 @@ class BasePedigree {
     draw() {
         this.initShape();
         this.drawDiseaseShape();
+        this.drawTypes();
         this.label.drawLabel();
     }
     getMidX() {
@@ -115,6 +119,12 @@ class BasePedigree {
     }
     getY() {
         return this.y + Camera_1.default.OffsetY;
+    }
+    getRawX() {
+        return this.x;
+    }
+    getRawY() {
+        return this.y;
     }
     calculateMiddle() {
         return {
@@ -138,7 +148,7 @@ class BasePedigree {
     setProband(value) {
         this.isProband = value;
     }
-    setMulitpleIndividuals(value, count) {
+    setMultipleIndividuals(value, count) {
         this.isMultiple = value;
         this.multipleIndividuals = count;
     }

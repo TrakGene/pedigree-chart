@@ -25,8 +25,8 @@ class RenderEngine {
         this.diagram.width = this.config.width;
         this.diagram.height = this.config.height;
         this.ctx.font = this.config.font;
+        this.dragHandler = new DragHandler_1.default(this.diagram, this);
         if (this.config.dragEnabled || this.config.panEnabled) {
-            this.dragHandler = new DragHandler_1.default(this.diagram, this);
             this.config.dragEnabled ? this.dragHandler.dragEnabled = true : null;
             this.config.panEnabled ? this.dragHandler.panEnabled = true : null;
         }

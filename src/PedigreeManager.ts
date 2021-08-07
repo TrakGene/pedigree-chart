@@ -16,11 +16,7 @@ export default class PedigreeManager {
     this.ctx = diagram.getContext("2d");
   }
 
-  createPedigree(
-    sex: string,
-    x: number,
-    y: number
-  ): BasePedigree {
+  createPedigree(sex: string, x: number, y: number): BasePedigree {
     let pedigree;
     switch (sex) {
       case "male":
