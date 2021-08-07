@@ -134,5 +134,8 @@ class RenderEngine {
     on(eventName, eventHandler) {
         EventBus_1.default.on(eventName, eventHandler);
     }
+    remove(eventName) {
+        EventBus_1.default.remove(eventName);
+    }
 }
 exports.default = RenderEngine;

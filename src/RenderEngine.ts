@@ -139,4 +139,7 @@ export default class RenderEngine {
   public on(eventName: "pedigree-click", eventHandler) {
     EventBus.on(eventName, eventHandler);
   }
+  public remove(eventName: string) {
+    EventBus.remove(eventName)
+  }
 }
