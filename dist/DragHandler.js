@@ -46,11 +46,15 @@ class DragHandler {
                 this.panDiagram = false;
                 EventBus_1.default.emit(`pedigree-click`, pedigree);
             }
+            else {
+                EventBus_1.default.emit("diagram-click");
+            }
         });
         if (this.panDiagram) {
             this.firstCursorX = e.clientX;
             this.firstCursorY = e.clientY;
         }
+        EventBus_1.default.emit("redraw");
     }
     drag(e) {
         if (this.panDiagram) {
@@ -68,6 +72,7 @@ class DragHandler {
         this.deltaY = (e.clientY - this.firstCursorY) / scale;
         Camera_1.default.OffsetX = this.initialCameraOffsetX + this.deltaX;
         Camera_1.default.OffsetY = this.initialCameraOffsetY + this.deltaY;
+        EventBus_1.default.emit("diagram-click");
         EventBus_1.default.emit("redraw");
     }
     dragPedigree(e) {
@@ -85,6 +90,7 @@ class DragHandler {
             if (pedigree.dragEnabled) {
                 pedigree.x = Math.round((mouseX / scale - this.mouseOffsetX) / 15) * 15;
                 pedigree.y = Math.round((mouseY / scale - this.mouseOffsetY) / 15) * 15;
+                EventBus_1.default.emit("pedigree-drag", pedigree);
                 if (pedigree.twin) {
                     pedigree.twin.y =
                         Math.round((mouseY / scale - this.mouseOffsetY) / 15) * 15;

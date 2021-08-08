@@ -55,6 +55,8 @@ export default class DragHandler {
         this.mouseOffsetY = mouseY / scale - pedigree.y;
         this.panDiagram = false;
         EventBus.emit(`pedigree-click`, pedigree);
+      } else {
+        EventBus.emit("diagram-click");
       }
     });
 
@@ -62,6 +64,8 @@ export default class DragHandler {
       this.firstCursorX = e.clientX;
       this.firstCursorY = e.clientY;
     }
+
+    EventBus.emit("redraw")
   }
 
   private drag(e: MouseEvent): void {
@@ -79,6 +83,7 @@ export default class DragHandler {
     this.deltaY = (e.clientY - this.firstCursorY) / scale;
     Camera.OffsetX = this.initialCameraOffsetX + this.deltaX;
     Camera.OffsetY = this.initialCameraOffsetY + this.deltaY;
+    EventBus.emit("diagram-click");
     EventBus.emit("redraw");
   }
 
@@ -96,6 +101,7 @@ export default class DragHandler {
       if (pedigree.dragEnabled) {
         pedigree.x = Math.round((mouseX / scale - this.mouseOffsetX) / 15) * 15;
         pedigree.y = Math.round((mouseY / scale - this.mouseOffsetY) / 15) * 15;
+        EventBus.emit("pedigree-drag", pedigree);
         if (pedigree.twin) {
           pedigree.twin.y =
             Math.round((mouseY / scale - this.mouseOffsetY) / 15) * 15;

@@ -35,4 +35,5 @@ export default class RenderEngine {
     delete(id: any): void;
     createLegend(x: any, y: any): LegendTable;
     on(eventName: "pedigree-click", eventHandler: any): void;
+    remove(eventName: string): void;
 }

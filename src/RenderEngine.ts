@@ -31,8 +31,9 @@ export default class RenderEngine {
     this.diagram.width = this.config.width
     this.diagram.height = this.config.height
     this.ctx.font = this.config.font
+    this.dragHandler = new DragHandler(this.diagram, this);
+
     if(this.config.dragEnabled || this.config.panEnabled) {
-      this.dragHandler = new DragHandler(this.diagram, this);
       this.config.dragEnabled ? this.dragHandler.dragEnabled = true : null
       this.config.panEnabled ? this.dragHandler.panEnabled = true : null
     }
@@ -138,5 +139,8 @@ export default class RenderEngine {
   }
   public on(eventName: "pedigree-click", eventHandler) {
     EventBus.on(eventName, eventHandler);
+  }
+  public remove(eventName: string) {
+    EventBus.remove(eventName)
   }
 }

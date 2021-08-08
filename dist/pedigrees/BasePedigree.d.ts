@@ -31,6 +31,7 @@ export default abstract class BasePedigree {
     private drawMultiple;
     private drawDeceased;
     private drawProband;
+    protected drawTypes(): void;
     protected drawDiseaseShape(): void;
     setLabel(obj: any): void;
     setStorage(obj: any): void;
@@ -40,6 +41,8 @@ export default abstract class BasePedigree {
     getMidY(): number;
     getX(): number;
     getY(): number;
+    getRawX(): number;
+    getRawY(): number;
     calculateMiddle(): {
         x: number;
         y: number;
@@ -49,7 +52,7 @@ export default abstract class BasePedigree {
     setPregnancy(value: boolean): void;
     setDeceased(value: boolean): void;
     setProband(value: boolean): void;
-    setMulitpleIndividuals(value: boolean, count: number): void;
+    setMultipleIndividuals(value: boolean, count: number): void;
     abstract initShape(): any;
     abstract addDiseaseShape(shape: any, color: any): any;
 }

@@ -68,7 +68,7 @@ export default class ConnectionsManager {
 
   drawConnections() {
     this.linesToRender.forEach((connection) => {
-      if (connection.type == "marriage") {
+      if (connection.type == "partnership") {
         this.drawMarriageLines(connection);
       }
       if (connection.type == "sibling") {

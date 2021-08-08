@@ -15,6 +15,11 @@ class EventBus {
       });
     }
   }
+  remove(eventName) {
+    if(this.eventHandlers[eventName]) {
+      this.eventHandlers[eventName] = []
+    }
+  }
 }
 const eventBus = new EventBus();
 export default eventBus;
