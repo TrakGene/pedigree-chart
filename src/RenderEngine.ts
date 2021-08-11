@@ -111,7 +111,11 @@ export default class RenderEngine {
     const pedigree = this.pedigreeManager.createPedigree(sex, x, y);
     return pedigree;
   }
-  public connect(pedigreeA, pedigreeB, lineType) {
+  public connect(
+    pedigreeA: BasePedigree,
+    pedigreeB: BasePedigree,
+    lineType: string
+  ) {
     if (lineType === "partnership" || lineType === "separation") {
       pedigreeA.marriagePartner = pedigreeB;
       pedigreeB.marriagePartner = pedigreeA;
@@ -130,35 +134,51 @@ export default class RenderEngine {
     this.connectionManager.createTwinsConnection(parent, twinA, twinB, type);
     EventBus.emit("redraw");
   }
-  public delete(id) {
+  public delete(id: number) {
     this.pedigrees = this.pedigrees.filter((pedigree) => pedigree.id !== id);
     this.pedigreeManager.deletePedigree(id);
     this.connectionManager.removeConnection(id);
     EventBus.emit("redraw");
   }
-  public replace(id, newPedigree: BasePedigree) {
+  public replace(id: number, newPedigree: BasePedigree) {
     const index = this.pedigrees.findIndex((pedigree) => pedigree.id === id);
     if (index >= 0) {
       const connectionsToReplace = this.connectionManager.getConnections(id);
-      const twinConnectionsToReplace = this.connectionManager.getTwinsConnections(id);
+      const twinConnectionsToReplace =
+        this.connectionManager.getTwinsConnections(id);
       this.connectionManager.removeConnection(id);
       connectionsToReplace.forEach((connection) => {
-        if(connection.pedigreeA.id === id) {
+        if (connection.pedigreeA.id === id) {
           this.connect(newPedigree, connection.pedigreeB, connection.type);
         }
-        if(connection.pedigreeB.id === id) {
+        if (connection.pedigreeB.id === id) {
           this.connect(connection.pedigreeA, newPedigree, connection.type);
         }
       });
       twinConnectionsToReplace.forEach((connection) => {
-        if(connection.twinA.id === id) {
-          this.connectTwins(newPedigree, connection.twinB, connection.parent, connection.type);
+        if (connection.twinA.id === id) {
+          this.connectTwins(
+            newPedigree,
+            connection.twinB,
+            connection.parent,
+            connection.type
+          );
         }
-        if(connection.twinB.id === id) {
-          this.connectTwins(connection.twinA, newPedigree, connection.parent, connection.type);
+        if (connection.twinB.id === id) {
+          this.connectTwins(
+            connection.twinA,
+            newPedigree,
+            connection.parent,
+            connection.type
+          );
         }
-        if(connection.parent.id === id) {
-          this.connectTwins(connection.twinA, connection.twinB, newPedigree, connection.type);
+        if (connection.parent.id === id) {
+          this.connectTwins(
+            connection.twinA,
+            connection.twinB,
+            newPedigree,
+            connection.type
+          );
         }
       });
       this.pedigrees = this.pedigrees.filter((pedigree) => pedigree.id !== id);
@@ -168,7 +188,7 @@ export default class RenderEngine {
     }
     EventBus.emit("redraw");
   }
-  public createLegend(x, y) {
+  public createLegend(x: number, y: number) {
     return new LegendTable(this.ctx, x, y);
   }
   public on(eventName: "pedigree-click", eventHandler) {
