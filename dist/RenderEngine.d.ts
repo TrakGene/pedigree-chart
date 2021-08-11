@@ -33,6 +33,7 @@ export default class RenderEngine {
     connect(pedigreeA: any, pedigreeB: any, lineType: any): void;
     connectTwins(parent: BasePedigree, twinA: BasePedigree, twinB: BasePedigree, type: any): void;
     delete(id: any): void;
+    replace(id: any, newPedigree: BasePedigree): void;
     createLegend(x: any, y: any): LegendTable;
     on(eventName: "pedigree-click", eventHandler: any): void;
     remove(eventName: string): void;
