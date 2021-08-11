@@ -17,7 +17,7 @@ class RenderEngine {
             scaleType: "none",
             minScale: 0.5,
             maxScale: 2,
-            font: "16px Arial"
+            font: "16px Arial",
         };
         this.scaleFactor = 1;
     }
@@ -27,8 +27,8 @@ class RenderEngine {
         this.ctx.font = this.config.font;
         this.dragHandler = new DragHandler_1.default(this.diagram, this);
         if (this.config.dragEnabled || this.config.panEnabled) {
-            this.config.dragEnabled ? this.dragHandler.dragEnabled = true : null;
-            this.config.panEnabled ? this.dragHandler.panEnabled = true : null;
+            this.config.dragEnabled ? (this.dragHandler.dragEnabled = true) : null;
+            this.config.panEnabled ? (this.dragHandler.panEnabled = true) : null;
         }
         if (this.config.scaleType === "none")
             return;
@@ -40,13 +40,13 @@ class RenderEngine {
     }
     scaleWithScroll() {
         this.diagram.addEventListener("wheel", (event) => {
-            if ((this.scaleFactor > this.config.maxScale)) {
+            if (this.scaleFactor > this.config.maxScale) {
                 if (event.deltaY > 0)
                     return;
                 if (event.deltaY < 0)
                     this.scaleFactor += event.deltaY * 0.001;
             }
-            if ((this.scaleFactor < this.config.minScale)) {
+            if (this.scaleFactor < this.config.minScale) {
                 if (event.deltaY < 0)
                     return;
                 if (event.deltaY > 0)
@@ -58,13 +58,13 @@ class RenderEngine {
     }
     scaleWithPointer() {
         this.diagram.addEventListener("wheel", (event) => {
-            if ((this.scaleFactor > this.config.maxScale)) {
+            if (this.scaleFactor > this.config.maxScale) {
                 if (event.deltaY > 0)
                     return;
                 if (event.deltaY < 0)
                     this.scaleFactor += event.deltaY * 0.001;
             }
-            if ((this.scaleFactor < this.config.minScale)) {
+            if (this.scaleFactor < this.config.minScale) {
                 if (event.deltaY < 0)
                     return;
                 if (event.deltaY > 0)
@@ -79,7 +79,7 @@ class RenderEngine {
         this.ctx.translate(cursorX, cursorY);
         this.ctx.scale(scale + 1, scale + 1);
         this.ctx.translate(-cursorX, -cursorY);
-        setTimeout(() => EventBus_2.default.emit('redraw'));
+        setTimeout(() => EventBus_2.default.emit("redraw"));
     }
     draw() {
         this.ctx.clearRect(0, 0, this.config.width * this.config.maxScale, this.config.height * this.config.maxScale);
@@ -101,7 +101,7 @@ class RenderEngine {
         EventBus_1.default.emit("redraw");
     }
     setConfig(configObject) {
-        Object.keys(configObject).forEach(key => {
+        Object.keys(configObject).forEach((key) => {
             this.config[key] = configObject[key];
         });
         this.recreateDiagram();
@@ -116,16 +116,50 @@ class RenderEngine {
             pedigreeB.marriagePartner = pedigreeA;
         }
         this.connectionManager.createConnection(pedigreeA, pedigreeB, lineType);
+        EventBus_1.default.emit("redraw");
     }
     connectTwins(parent, twinA, twinB, type) {
         twinA.twin = twinB;
         twinB.twin = twinA;
         this.connectionManager.createTwinsConnection(parent, twinA, twinB, type);
+        EventBus_1.default.emit("redraw");
     }
     delete(id) {
-        this.pedigrees = this.pedigrees.filter(pedigree => pedigree.id !== id);
+        this.pedigrees = this.pedigrees.filter((pedigree) => pedigree.id !== id);
         this.pedigreeManager.deletePedigree(id);
         this.connectionManager.removeConnection(id);
+        EventBus_1.default.emit("redraw");
+    }
+    replace(id, newPedigree) {
+        const index = this.pedigrees.findIndex((pedigree) => pedigree.id === id);
+        if (index >= 0) {
+            const connectionsToReplace = this.connectionManager.getConnections(id);
+            const twinConnectionsToReplace = this.connectionManager.getTwinsConnections(id);
+            this.connectionManager.removeConnection(id);
+            connectionsToReplace.forEach((connection) => {
+                if (connection.pedigreeA.id === id) {
+                    this.connect(newPedigree, connection.pedigreeB, connection.type);
+                }
+                if (connection.pedigreeB.id === id) {
+                    this.connect(connection.pedigreeA, newPedigree, connection.type);
+                }
+            });
+            twinConnectionsToReplace.forEach((connection) => {
+                if (connection.twinA.id === id) {
+                    this.connectTwins(newPedigree, connection.twinB, connection.parent, connection.type);
+                }
+                if (connection.twinB.id === id) {
+                    this.connectTwins(connection.twinA, newPedigree, connection.parent, connection.type);
+                }
+                if (connection.parent.id === id) {
+                    this.connectTwins(connection.twinA, connection.twinB, newPedigree, connection.type);
+                }
+            });
+            this.pedigrees = this.pedigrees.filter((pedigree) => pedigree.id !== id);
+            this.pedigreeManager.deletePedigree(id);
+            newPedigree.id = id;
+            this.pedigrees.push(newPedigree);
+        }
         EventBus_1.default.emit("redraw");
     }
     createLegend(x, y) {

@@ -91,6 +91,21 @@ export default class ConnectionsManager {
     });
   }
 
+  getConnections(id: number) {
+    return this.linesToRender.filter((line)=>{
+      if(line.pedigreeA.id === id || line.pedigreeB.id === id) {
+        return line
+      } 
+    })
+  }
+  getTwinsConnections(id: number) {
+    return this.twinLinesToRender.filter((line)=>{
+      if(line.pedigreeA.id === id || line.pedigreeB.id === id) {
+        return line
+      } 
+    })
+  }
+
   drawMarriageLines(connection: Connection) {
     const nodeA: BasePedigree = connection.pedigreeA;
     const nodeB: BasePedigree = connection.pedigreeB;

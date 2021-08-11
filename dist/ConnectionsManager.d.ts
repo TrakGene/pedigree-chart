@@ -21,6 +21,8 @@ export default class ConnectionsManager {
     createTwinsConnection(parent: any, twinA: any, twinB: any, type: any): void;
     removeConnection(id: any): void;
     drawConnections(): void;
+    getConnections(id: number): Connection[];
+    getTwinsConnections(id: number): TwinConnection[];
     drawMarriageLines(connection: Connection): void;
     drawConsanguineousLines(connection: Connection): void;
     drawSeparationLines(connection: Connection): void;

@@ -63,6 +63,20 @@ class ConnectionsManager {
             }
         });
     }
+    getConnections(id) {
+        return this.linesToRender.filter((line) => {
+            if (line.pedigreeA.id === id || line.pedigreeB.id === id) {
+                return line;
+            }
+        });
+    }
+    getTwinsConnections(id) {
+        return this.twinLinesToRender.filter((line) => {
+            if (line.pedigreeA.id === id || line.pedigreeB.id === id) {
+                return line;
+            }
+        });
+    }
     drawMarriageLines(connection) {
         const nodeA = connection.pedigreeA;
         const nodeB = connection.pedigreeB;
