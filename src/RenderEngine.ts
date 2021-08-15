@@ -6,6 +6,15 @@ import BasePedigree from "./pedigrees/BasePedigree";
 import LegendTable from "./Legend";
 import eventBus from "./EventBus";
 
+/**
+ * Creates a RenderEngine instance that is whole pedigree-chart manager
+ *
+ * It holds other classes as dependencies. Dependencies often have access to this instance
+ * so they can refer to its variables.
+ *
+ * Treat is as a sort of fasade. In hiddes all complicated mechanisms, resulting in easy-to-use api.
+ */
+
 export default class RenderEngine {
   diagram: HTMLCanvasElement;
   diagramId: string;
@@ -42,6 +51,9 @@ export default class RenderEngine {
     if (this.config.scaleType === "scroll") this.scaleWithScroll();
     this.draw();
   }
+  /**
+   * Resize diagram with scroll.
+   */
   private scaleWithScroll() {
     this.diagram.addEventListener("wheel", (event) => {
       if (this.scaleFactor > this.config.maxScale) {
@@ -56,6 +68,10 @@ export default class RenderEngine {
       event.preventDefault();
     });
   }
+  /**
+   * Resize diagram with scroll and pointer.
+   * It moves the diagram closer to user pointer position
+   */
   private scaleWithPointer() {
     this.diagram.addEventListener("wheel", (event) => {
       if (this.scaleFactor > this.config.maxScale) {
@@ -77,6 +93,9 @@ export default class RenderEngine {
     this.ctx.translate(-cursorX, -cursorY);
     setTimeout(() => eventBus.emit("redraw"));
   }
+  /**
+   * Clear and draw pedigrees and connections
+   */
   private draw() {
     this.ctx.clearRect(
       0,
@@ -111,6 +130,9 @@ export default class RenderEngine {
     const pedigree = this.pedigreeManager.createPedigree(sex, x, y);
     return pedigree;
   }
+  /**
+   * Tell @class ConnectionManager whitch connections user want to create
+   */
   public connect(
     pedigreeA: BasePedigree,
     pedigreeB: BasePedigree,
@@ -123,6 +145,9 @@ export default class RenderEngine {
     this.connectionManager.createConnection(pedigreeA, pedigreeB, lineType);
     EventBus.emit("redraw");
   }
+  /**
+   * Tell @class ConnectionManager which twins-connections user want to create
+   */
   public connectTwins(
     parent: BasePedigree,
     twinA: BasePedigree,
@@ -140,6 +165,10 @@ export default class RenderEngine {
     this.connectionManager.removeConnection(id);
     EventBus.emit("redraw");
   }
+  /**
+   * Replace pedigree with new one. It recreates all connections that previous one had.
+   * Done with help of @class ConnectionManager
+   */
   public replace(id: number, newPedigree: BasePedigree) {
     const index = this.pedigrees.findIndex((pedigree) => pedigree.id === id);
     if (index >= 0) {
