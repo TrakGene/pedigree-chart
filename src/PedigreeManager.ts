@@ -7,6 +7,12 @@ import FemaleMiscarriage from "./pedigrees/FemaleMisCarriage";
 import MaleMiscarriage from "./pedigrees/MaleMiscarriage";
 import UnknownMiscarriage from "./pedigrees/UnknownMiscarriage";
 
+/**
+ * Managing pedigrees stored in @class RenderEngine
+ * 
+ * Allows adding new ones, deleting and drawing thier shapes
+ */
+
 export default class PedigreeManager {
   private ctx: CanvasRenderingContext2D;
   private renderEngine: RenderEngine;

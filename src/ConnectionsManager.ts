@@ -22,6 +22,13 @@ interface TwinConnection {
   type: string;
 }
 
+/**
+ * Drawing and managing connections between pedigrees
+ * 
+ * draw methods are calculating all necessary points for connection to be hold.
+ * After calculations, it is passed to to special Line class
+ */
+
 export default class ConnectionsManager {
   pedigreeDiagram: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
@@ -100,7 +107,7 @@ export default class ConnectionsManager {
   }
   getTwinsConnections(id: number) {
     return this.twinLinesToRender.filter((line)=>{
-      if(line.pedigreeA.id === id || line.pedigreeB.id === id) {
+      if(line.twinA.id === id || line.twinB.id === id || line.parent.id === id) {
         return line
       } 
     })

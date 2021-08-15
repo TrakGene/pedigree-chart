@@ -2,6 +2,13 @@ import EventBus from "./EventBus";
 import Camera from "./Camera";
 import RenderEngine from "./RenderEngine";
 
+/**
+ * Used for moving pedigees on mouse click or panning the diagram.
+ * 
+ * DragHandler is alse emiting many events, accesible for developers, 
+ * after resolving user intentions.
+ */
+
 export default class DragHandler {
   diagram: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
