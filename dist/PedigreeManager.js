@@ -6,6 +6,11 @@ const UnknownPedigree_1 = require("./pedigrees/UnknownPedigree");
 const FemaleMisCarriage_1 = require("./pedigrees/FemaleMisCarriage");
 const MaleMiscarriage_1 = require("./pedigrees/MaleMiscarriage");
 const UnknownMiscarriage_1 = require("./pedigrees/UnknownMiscarriage");
+/**
+ * Managing pedigrees stored in @class RenderEngine
+ *
+ * Allows adding new ones, deleting and drawing thier shapes
+ */
 class PedigreeManager {
     constructor(diagram, renderEngine) {
         this.renderEngine = renderEngine;

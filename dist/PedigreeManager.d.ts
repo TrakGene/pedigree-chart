@@ -1,5 +1,10 @@
 import RenderEngine from "./RenderEngine";
 import BasePedigree from "./pedigrees/BasePedigree";
+/**
+ * Managing pedigrees stored in @class RenderEngine
+ *
+ * Allows adding new ones, deleting and drawing thier shapes
+ */
 export default class PedigreeManager {
     private ctx;
     private renderEngine;

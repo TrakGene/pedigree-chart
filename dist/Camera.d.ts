@@ -1,3 +1,6 @@
+/**
+ * Used for navigaton. Append points by offset to achieve diagram panning functionality.
+ */
 declare class Camera {
     OffsetX: number;
     OffsetY: number;

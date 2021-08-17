@@ -54,6 +54,7 @@ export default class DragHandler {
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
     this.panDiagram = true;
+    let wasPedigreeClicked = false
     this.renderEngine.pedigrees.forEach((pedigree) => {
       pedigree.initShape();
       if (this.ctx.isPointInPath(mouseX, mouseY)) {
@@ -62,14 +63,17 @@ export default class DragHandler {
         this.mouseOffsetY = mouseY / scale - pedigree.y;
         this.panDiagram = false;
         EventBus.emit(`pedigree-click`, pedigree);
-      } else {
-        EventBus.emit("diagram-click");
+        wasPedigreeClicked = true
       }
     });
 
     if (this.panDiagram) {
       this.firstCursorX = e.clientX;
       this.firstCursorY = e.clientY;
+    }
+
+    if(!wasPedigreeClicked) {
+      EventBus.emit("diagram-click");
     }
 
     EventBus.emit("redraw")

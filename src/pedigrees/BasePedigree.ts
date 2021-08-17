@@ -145,11 +145,23 @@ export default abstract class BasePedigree {
   public getY() {
     return this.y + camera.OffsetY;
   }
+  public getScaledX() {
+    return this.x/this.ctx.getTransform().a + camera.OffsetX;
+  }
+  public getScaledY() {
+    return this.y/this.ctx.getTransform().a + camera.OffsetY;
+  }
   public getRawX() {
     return this.x;
   }
   public getRawY() {
     return this.y;
+  }
+  public getScaledRawX() {
+    return this.x/this.ctx.getTransform().a;
+  }
+  public getScaledRawY() {
+    return this.y/this.ctx.getTransform().a;
   }
   public calculateMiddle() {
     return {

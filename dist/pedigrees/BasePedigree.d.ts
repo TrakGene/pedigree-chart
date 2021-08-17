@@ -5,6 +5,15 @@ interface ShapeProps {
     diseaseShape: string;
     diseaseColor: string;
 }
+/**
+ * Basic class from other pedigree classes are inheriting
+ *
+ * It has its own config and common methods for all classes.
+ * There are abstract methods.
+ *
+ * For example, every sex have different shape, so commands for drawing those shapes are unique
+ * for each one. No matter of sex, every pedigree acts the same thanks to the BasePedigree
+ */
 export default abstract class BasePedigree {
     protected label: Label;
     protected shapes: ShapeProps[];
@@ -41,8 +50,12 @@ export default abstract class BasePedigree {
     getMidY(): number;
     getX(): number;
     getY(): number;
+    getScaledX(): number;
+    getScaledY(): number;
     getRawX(): number;
     getRawY(): number;
+    getScaledRawX(): number;
+    getScaledRawY(): number;
     calculateMiddle(): {
         x: number;
         y: number;

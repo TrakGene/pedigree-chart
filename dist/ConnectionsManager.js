@@ -2,6 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Lines_1 = require("./Lines");
 const Camera_1 = require("./Camera");
+/**
+ * Drawing and managing connections between pedigrees
+ *
+ * draw methods are calculating all necessary points for connection to be hold.
+ * After calculations, it is passed to to special Line class
+ */
 class ConnectionsManager {
     constructor(diagram) {
         this.linesToRender = [];
@@ -72,7 +78,7 @@ class ConnectionsManager {
     }
     getTwinsConnections(id) {
         return this.twinLinesToRender.filter((line) => {
-            if (line.pedigreeA.id === id || line.pedigreeB.id === id) {
+            if (line.twinA.id === id || line.twinB.id === id || line.parent.id === id) {
                 return line;
             }
         });

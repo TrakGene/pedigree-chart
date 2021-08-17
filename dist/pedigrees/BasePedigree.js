@@ -4,6 +4,15 @@ const EventBus_1 = require("../EventBus");
 const Label_1 = require("./Label");
 const Camera_1 = require("../Camera");
 const IdGenerator_1 = require("../IdGenerator");
+/**
+ * Basic class from other pedigree classes are inheriting
+ *
+ * It has its own config and common methods for all classes.
+ * There are abstract methods.
+ *
+ * For example, every sex have different shape, so commands for drawing those shapes are unique
+ * for each one. No matter of sex, every pedigree acts the same thanks to the BasePedigree
+ */
 class BasePedigree {
     constructor(ctx, x, y) {
         this.shapes = [];
@@ -120,11 +129,23 @@ class BasePedigree {
     getY() {
         return this.y + Camera_1.default.OffsetY;
     }
+    getScaledX() {
+        return this.x / this.ctx.getTransform().a + Camera_1.default.OffsetX;
+    }
+    getScaledY() {
+        return this.y / this.ctx.getTransform().a + Camera_1.default.OffsetY;
+    }
     getRawX() {
         return this.x;
     }
     getRawY() {
         return this.y;
+    }
+    getScaledRawX() {
+        return this.x / this.ctx.getTransform().a;
+    }
+    getScaledRawY() {
+        return this.y / this.ctx.getTransform().a;
     }
     calculateMiddle() {
         return {
