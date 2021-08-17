@@ -2,6 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const EventBus_1 = require("./EventBus");
 const Camera_1 = require("./Camera");
+/**
+ * Used for moving pedigees on mouse click or panning the diagram.
+ *
+ * DragHandler is alse emiting many events, accesible for developers,
+ * after resolving user intentions.
+ */
 class DragHandler {
     constructor(diagram, renderEngine) {
         this.mouseOffsetX = 0;

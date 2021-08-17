@@ -1,3 +1,9 @@
+/**
+ * Event bus pattern to sync actions between other classes.
+ *
+ * Mostly emitted event is 'redraw'. Its purpose is to make diagram draw once again,
+ * to apply any updates or changes.
+ */
 declare class EventBus {
     private eventHandlers;
     on(eventName: any, eventHandler: any): void;

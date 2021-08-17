@@ -6,6 +6,14 @@ const EventBus_1 = require("./EventBus");
 const DragHandler_1 = require("./DragHandler");
 const Legend_1 = require("./Legend");
 const EventBus_2 = require("./EventBus");
+/**
+ * Creates a RenderEngine instance that is whole pedigree-chart manager
+ *
+ * It holds other classes as dependencies. Dependencies often have access to this instance
+ * so they can refer to its variables.
+ *
+ * Treat is as a sort of fasade. In hiddes all complicated mechanisms, resulting in easy-to-use api.
+ */
 class RenderEngine {
     constructor() {
         this.pedigrees = [];
@@ -38,6 +46,9 @@ class RenderEngine {
             this.scaleWithScroll();
         this.draw();
     }
+    /**
+     * Resize diagram with scroll.
+     */
     scaleWithScroll() {
         this.diagram.addEventListener("wheel", (event) => {
             if (this.scaleFactor > this.config.maxScale) {
@@ -56,6 +67,10 @@ class RenderEngine {
             event.preventDefault();
         });
     }
+    /**
+     * Resize diagram with scroll and pointer.
+     * It moves the diagram closer to user pointer position
+     */
     scaleWithPointer() {
         this.diagram.addEventListener("wheel", (event) => {
             if (this.scaleFactor > this.config.maxScale) {
@@ -81,6 +96,9 @@ class RenderEngine {
         this.ctx.translate(-cursorX, -cursorY);
         setTimeout(() => EventBus_2.default.emit("redraw"));
     }
+    /**
+     * Clear and draw pedigrees and connections
+     */
     draw() {
         this.ctx.clearRect(0, 0, this.config.width * this.config.maxScale, this.config.height * this.config.maxScale);
         this.connectionManager.drawConnections();
@@ -110,6 +128,9 @@ class RenderEngine {
         const pedigree = this.pedigreeManager.createPedigree(sex, x, y);
         return pedigree;
     }
+    /**
+     * Tell @class ConnectionManager whitch connections user want to create
+     */
     connect(pedigreeA, pedigreeB, lineType) {
         if (lineType === "partnership" || lineType === "separation") {
             pedigreeA.marriagePartner = pedigreeB;
@@ -118,6 +139,9 @@ class RenderEngine {
         this.connectionManager.createConnection(pedigreeA, pedigreeB, lineType);
         EventBus_1.default.emit("redraw");
     }
+    /**
+     * Tell @class ConnectionManager which twins-connections user want to create
+     */
     connectTwins(parent, twinA, twinB, type) {
         twinA.twin = twinB;
         twinB.twin = twinA;
@@ -130,6 +154,10 @@ class RenderEngine {
         this.connectionManager.removeConnection(id);
         EventBus_1.default.emit("redraw");
     }
+    /**
+     * Replace pedigree with new one. It recreates all connections that previous one had.
+     * Done with help of @class ConnectionManager
+     */
     replace(id, newPedigree) {
         const index = this.pedigrees.findIndex((pedigree) => pedigree.id === id);
         if (index >= 0) {

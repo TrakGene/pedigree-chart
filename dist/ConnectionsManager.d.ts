@@ -10,6 +10,12 @@ interface TwinConnection {
     twinB: BasePedigree;
     type: string;
 }
+/**
+ * Drawing and managing connections between pedigrees
+ *
+ * draw methods are calculating all necessary points for connection to be hold.
+ * After calculations, it is passed to to special Line class
+ */
 export default class ConnectionsManager {
     pedigreeDiagram: HTMLCanvasElement;
     ctx: CanvasRenderingContext2D;
