@@ -1,4 +1,8 @@
 import BasePedigree from "./BasePedigree";
+interface LabelData {
+    value: string;
+    order: number;
+}
 export default class Label {
     private ctx;
     private pedigree;
@@ -10,5 +14,6 @@ export default class Label {
     private longestStringCenter;
     private calculateBackgroundHeight;
     drawLabel(): void;
-    setLabel(newState: any): void;
+    setLabel(newData: LabelData[]): void;
 }
+export {};
