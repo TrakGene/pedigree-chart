@@ -69,14 +69,14 @@ class ConnectionsManager {
             }
         });
     }
-    getConnections(id) {
+    queryConnections(id) {
         return this.linesToRender.filter((line) => {
             if (line.pedigreeA.id === id || line.pedigreeB.id === id) {
                 return line;
             }
         });
     }
-    getTwinsConnections(id) {
+    queryTwinsConnections(id) {
         return this.twinLinesToRender.filter((line) => {
             if (line.twinA.id === id || line.twinB.id === id || line.parent.id === id) {
                 return line;
