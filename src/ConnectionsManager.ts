@@ -98,14 +98,14 @@ export default class ConnectionsManager {
     });
   }
 
-  getConnections(id: number) {
+  queryConnections(id: number) {
     return this.linesToRender.filter((line)=>{
       if(line.pedigreeA.id === id || line.pedigreeB.id === id) {
         return line
       } 
     })
   }
-  getTwinsConnections(id: number) {
+  queryTwinsConnections(id: number) {
     return this.twinLinesToRender.filter((line)=>{
       if(line.twinA.id === id || line.twinB.id === id || line.parent.id === id) {
         return line

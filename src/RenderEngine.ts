@@ -25,10 +25,12 @@ export default class RenderEngine {
     height: 600,
     dragEnabled: false,
     panEnabled: false,
+    cursorPointer: false,
     scaleType: "none",
     minScale: 0.5,
     maxScale: 2,
     font: "16px Arial",
+    backgroundColor: "#FFFFFF"
   };
   connectionManager: ConnectionManager;
   pedigreeManager: PedigreeManager;
@@ -86,13 +88,6 @@ export default class RenderEngine {
       event.preventDefault();
     });
   }
-  private scale(scale, cursorX, cursorY) {
-    this.scaleFactor = this.scaleFactor * (scale + 1);
-    this.ctx.translate(cursorX, cursorY);
-    this.ctx.scale(scale + 1, scale + 1);
-    this.ctx.translate(-cursorX, -cursorY);
-    setTimeout(() => eventBus.emit("redraw"));
-  }
   /**
    * Clear and draw pedigrees and connections
    */
@@ -103,6 +98,13 @@ export default class RenderEngine {
       this.config.width * this.config.maxScale,
       this.config.height * this.config.maxScale
     );
+    this.ctx.fillStyle = this.config.backgroundColor
+    this.ctx.fillRect(
+      0,
+      0,
+      this.config.width,
+      this.config.height
+    )
     this.connectionManager.drawConnections();
     this.pedigreeManager.drawPedigrees();
   }
@@ -125,6 +127,13 @@ export default class RenderEngine {
       this.config[key] = configObject[key];
     });
     this.recreateDiagram();
+  }
+  public scale(scale, cursorX, cursorY) {
+    this.scaleFactor = this.scaleFactor * (scale + 1);
+    this.ctx.translate(cursorX, cursorY);
+    this.ctx.scale(scale + 1, scale + 1);
+    this.ctx.translate(-cursorX, -cursorY);
+    setTimeout(() => eventBus.emit("redraw"));
   }
   public create(sex, x = 0, y = 0) {
     const pedigree = this.pedigreeManager.createPedigree(sex, x, y);
@@ -172,9 +181,9 @@ export default class RenderEngine {
   public replace(id: number, newPedigree: BasePedigree) {
     const index = this.pedigrees.findIndex((pedigree) => pedigree.id === id);
     if (index >= 0) {
-      const connectionsToReplace = this.connectionManager.getConnections(id);
+      const connectionsToReplace = this.connectionManager.queryConnections(id);
       const twinConnectionsToReplace =
-        this.connectionManager.getTwinsConnections(id);
+        this.connectionManager.queryTwinsConnections(id);
       this.connectionManager.removeConnection(id);
       connectionsToReplace.forEach((connection) => {
         if (connection.pedigreeA.id === id) {
@@ -216,6 +225,12 @@ export default class RenderEngine {
       this.pedigrees.push(newPedigree);
     }
     EventBus.emit("redraw");
+  }
+  public getTwinsConnections(id: number) {
+    return this.connectionManager.queryTwinsConnections(id);
+  }
+  public getConnections(id: number) {
+    return this.connectionManager.queryConnections(id);
   }
   public createLegend(x: number, y: number) {
     return new LegendTable(this.ctx, x, y);

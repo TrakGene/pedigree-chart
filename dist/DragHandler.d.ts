@@ -22,6 +22,7 @@ export default class DragHandler {
     panEnabled: boolean;
     constructor(diagram: any, renderEngine: any);
     private initEvents;
+    private cursorHover;
     private setUserIntention;
     private drag;
     private dragDiagram;

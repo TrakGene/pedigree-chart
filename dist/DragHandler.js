@@ -32,10 +32,24 @@ class DragHandler {
         };
         this.diagram.onmousemove = (e) => {
             this.drag(e);
+            if (this.renderEngine.config.cursorPointer)
+                this.cursorHover(e);
         };
         this.diagram.onmouseup = (e) => {
             this.stopDrag();
         };
+    }
+    cursorHover(e) {
+        const rect = this.diagram.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        this.diagram.style.cursor = "default";
+        this.renderEngine.pedigrees.forEach((pedigree) => {
+            pedigree.initShape();
+            if (this.ctx.isPointInPath(mouseX, mouseY)) {
+                this.diagram.style.cursor = "pointer";
+            }
+        });
     }
     setUserIntention(e) {
         const rect = this.diagram.getBoundingClientRect();
