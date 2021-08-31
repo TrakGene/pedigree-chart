@@ -77,12 +77,14 @@ export default abstract class BasePedigree {
   }
   private drawProband() {
     this.ctx.beginPath();
-    this.ctx.moveTo(this.getX() - 24, this.getY() + 100);
-    this.ctx.lineTo(this.getX(), this.getY() + 70);
-    this.ctx.moveTo(this.getX(), this.getY() + 70);
-    this.ctx.lineTo(this.getX() - 16, this.getY() + 75);
-    this.ctx.moveTo(this.getX(), this.getY() + 70);
-    this.ctx.lineTo(this.getX() - 1, this.getY() + 86);
+    this.ctx.moveTo(this.getX()-30, this.getY() + 70);
+    this.ctx.lineTo(this.getX()-15, this.getY() + 55);
+    this.ctx.lineTo(this.getX()-15, this.getY() + 65);
+    this.ctx.moveTo(this.getX()-15, this.getY() + 54);
+    this.ctx.lineTo(this.getX()-26, this.getY() + 56);
+    // this.ctx.lineTo(this.getX() - 16, this.getY() + 75);
+    // this.ctx.moveTo(this.getX(), this.getY() + 70);
+    // this.ctx.lineTo(this.getX() - 1, this.getY() + 86);
     this.ctx.stroke();
     this.ctx.closePath();
   }
