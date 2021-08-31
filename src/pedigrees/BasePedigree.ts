@@ -82,9 +82,6 @@ export default abstract class BasePedigree {
     this.ctx.lineTo(this.getX()-15, this.getY() + 65);
     this.ctx.moveTo(this.getX()-15, this.getY() + 54);
     this.ctx.lineTo(this.getX()-26, this.getY() + 56);
-    // this.ctx.lineTo(this.getX() - 16, this.getY() + 75);
-    // this.ctx.moveTo(this.getX(), this.getY() + 70);
-    // this.ctx.lineTo(this.getX() - 1, this.getY() + 86);
     this.ctx.stroke();
     this.ctx.closePath();
   }
