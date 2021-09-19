@@ -97,7 +97,7 @@ class RenderEngine {
     draw() {
         this.ctx.clearRect(0, 0, this.config.width * this.config.maxScale, this.config.height * this.config.maxScale);
         this.ctx.fillStyle = this.config.backgroundColor;
-        this.ctx.fillRect(0, 0, this.config.width, this.config.height);
+        this.ctx.fillRect(0, 0, this.config.width * this.config.maxScale, this.config.height * this.config.maxScale);
         this.connectionManager.drawConnections();
         this.pedigreeManager.drawPedigrees();
     }

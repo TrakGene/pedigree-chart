@@ -102,8 +102,8 @@ export default class RenderEngine {
     this.ctx.fillRect(
       0,
       0,
-      this.config.width,
-      this.config.height
+      this.config.width * this.config.maxScale,
+      this.config.height * this.config.maxScale,
     )
     this.connectionManager.drawConnections();
     this.pedigreeManager.drawPedigrees();
